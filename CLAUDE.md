@@ -11,19 +11,20 @@ O **Croma** é a versão pessoal do Jellyfin do usuário: um servidor de mídia 
 
 ## Repositórios
 
-Esta pasta é o **hub** (`Cintriano/Croma`): só documentação geral (`CLAUDE.md`, `CROMA.md`, `README.md`) e especificações (`specs/`). Cada subpasta abaixo é um repositório git próprio, fica no `.gitignore` do hub e é privado no GitHub:
+Esta pasta é o **hub** (`Croma-plataform/Croma`): só documentação geral (`CLAUDE.md`, `CROMA.md`, `README.md`) e especificações (`specs/`). Todos os repositórios ficam na organização **`Croma-plataform`** do GitHub (o usuário é admin). Cada subpasta abaixo é um repositório git próprio, fica no `.gitignore` do hub e é privado (só o hub é público):
 
 | Pasta | Repositório | O que é | Branch |
 |---|---|---|---|
-| `croma-identidade/` | `Cintriano/croma-identidade` | Identidade visual, logos e scripts geradores | `main` |
-| `croma-servidor/` | `Cintriano/croma-servidor` | Scripts e configuração do servidor; futuros plugins C# | `main` |
-| `croma-web/` | `Cintriano/croma-web` | Fork do jellyfin-web `release-12.z` (v12.4): a interface | `croma` |
-| `croma-desktop/` | `Cintriano/croma-desktop` | Fork do jellyfin-desktop `master` (Qt WebEngine + mpv) | `croma` |
-| `croma-tizen/` | `Cintriano/croma-tizen` | Fork do jellyfin-tizen `master` | `croma` |
-| `croma-v1/` | `Cintriano/croma-v1` | Croma v1, **arquivado** no GitHub (só leitura) | `main` |
+| `croma-identidade/` | `Croma-plataform/croma-identidade` | Identidade visual, logos e scripts geradores | `main` |
+| `croma-servidor/` | `Croma-plataform/croma-servidor` | Scripts e configuração do servidor; futuros plugins C# | `main` |
+| `croma-web/` | `Croma-plataform/croma-web` | Fork do jellyfin-web `release-12.z` (v12.4): a interface | `croma` |
+| `croma-desktop/` | `Croma-plataform/croma-desktop` | Fork do jellyfin-desktop `master` (Qt WebEngine + mpv) | `croma` |
+| `croma-tizen/` | `Croma-plataform/croma-tizen` | Fork do jellyfin-tizen `master` | `croma` |
+| `croma-android/` | `Croma-plataform/croma-android` | Fork do jellyfin-android `master` (v2.7.1); criado, ainda não implementado | `croma` |
+| `croma-v1/` | `Croma-plataform/croma-v1` | Croma v1, **arquivado** no GitHub (só leitura) | `main` |
 | `jellyfin-server/` | jellyfin/jellyfin, tag `v12.4` | Só referência; o servidor roda com o binário oficial | — |
 
-- Os forks são repositórios comuns (não forks do GitHub), com o Jellyfin como remote `upstream` e o GitHub do usuário como `origin`.
+- Os forks são repositórios comuns (não forks do GitHub), com o Jellyfin como remote `upstream` e a organização como `origin`. O GitHub Actions está desativado nos forks.
 - O `croma-identidade` e o `croma-servidor` têm `CLAUDE.md` próprios.
 - **Clonar tudo numa máquina nova:** `CROMA.md`, seção "Clonar os repositórios".
 - **Git:** só faça commit ou push quando o usuário pedir. Cada commit vai para o repositório da pasta em que foi feito; confira com `git -C <pasta> status` antes.
@@ -44,7 +45,7 @@ croma-identidade (manual, logos, ícones)
 - **Licença:** o código é GPL, e o nome e o logo "Jellyfin" não podem ser usados no produto.
 - **Máquinas:** o projeto roda em mais de uma máquina.
   - **CintraMan (Windows):** servidor portátil instalado. A conexão é lenta: downloads grandes levam dezenas de minutos, então prefira espelhos rápidos e `curl -C -` para retomar. O .NET SDK não está instalado.
-  - **Linux (Fedora, usuário `cintra_man`, pasta `~/Documentos/Projetos/Codes/Croma`):** tem `gh` (logado como Cintriano), Node, git, Chrome, o runtime do .NET (mas não o SDK) e o `git-filter-repo` (em `~/.local/bin`, instalado com `pip --user`). O git global está como "Your Name": cada repositório do projeto tem `user.name Cintriano` e o e-mail do usuário configurados localmente; faça o mesmo num clone novo. O servidor ainda não foi instalado aqui. A conexão é razoável (os clones completos levaram poucos minutos).
+  - **Linux (Fedora, usuário `cintra_man`, pasta `~/Documentos/Projetos/Codes/Croma-plataform`):** tem `gh` (logado como Cintriano), Node, git, Chrome, o runtime do .NET (mas não o SDK) e o `git-filter-repo` (em `~/.local/bin`, instalado com `pip --user`). O git global está como "Your Name": cada repositório do projeto tem `user.name Cintriano` e o e-mail do usuário configurados localmente; faça o mesmo num clone novo. O servidor ainda não foi instalado aqui. A conexão é razoável (os clones completos levaram poucos minutos).
 
 ## Identidade visual oficial: v0.1 "Barras"
 
@@ -86,15 +87,17 @@ Resumo das regras:
 | Tags e editor de tags (vindos do v1) | Avaliado, com decisões em aberto | `specs/tags.md` |
 | Varredura estruturada (com níveis) das bibliotecas caseiras | Formato em desenvolvimento pelo usuário | `specs/bibliotecas-caseiras.md` |
 | `croma-tizen` e `croma-desktop` | Não iniciados (ícones, nomes, empacotamento) | `croma-tizen/`, `croma-desktop/` |
+| `croma-android` | Criado (fork sem mudanças), implementação adiada | `croma-android/` |
+| Repositórios na organização `Croma-plataform` | Feito (07/11/2026) | veja "Repositórios" |
 
-**Última sessão (05–06/11/2026, máquina Linux):** o projeto foi dividido em repositórios próprios (decisões do usuário: hub em `Cintriano/Croma`, v1 em repositório arquivado, forks como repositórios comuns e privados). Todos os repositórios estão limpos e sincronizados com o GitHub.
+**Última sessão (07/11/2026, máquina Linux):** os repositórios foram transferidos da conta `Cintriano` para a organização `Croma-plataform`, a pasta do projeto passou a se chamar `Croma-plataform` e foi criado o `croma-android`. Antes (05–06/11) o projeto foi dividido em repositórios próprios (v1 arquivado, forks como repositórios comuns e privados).
 
 **Próximos passos:**
 1. O usuário conclui o assistente em http://localhost:8096: cria a conta de administrador (a senha é dele) e adiciona uma biblioteca de teste.
 2. Implementar as coleções por biblioteca (`specs/colecoes.md`).
 3. Implementar as tags (`specs/tags.md`), depois que o usuário responder às decisões em aberto.
 
-**Na máquina CintraMan:** a pasta antiga ainda tem o layout anterior (`repos/`, `servidor/`, `identidade/`). Para migrar: dê `git pull` no hub, mova `repos/croma-*` para a raiz do hub (ajustando o `origin` para os repositórios do GitHub), mova `servidor/jellyfin` e `servidor/dados` para dentro do `croma-servidor` e apague `repos/`, `servidor/` e `patches/`.
+**Na máquina CintraMan:** a pasta antiga ainda tem o layout anterior (`repos/`, `servidor/`, `identidade/`). Para migrar: dê `git pull` no hub, mova `repos/croma-*` para a raiz do hub (ajustando o `origin` para `https://github.com/Croma-plataform/<repo>.git`; o hub também muda de `origin`), renomeie a pasta para `Croma-plataform`, mova `servidor/jellyfin` e `servidor/dados` para dentro do `croma-servidor` e apague `repos/`, `servidor/` e `patches/`.
 
 ## Convenções
 

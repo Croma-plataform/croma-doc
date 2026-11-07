@@ -4,16 +4,17 @@ Versão pessoal do Jellyfin com identidade visual própria. Foco inicial: **Desk
 
 ## Repositórios
 
-O projeto é dividido em repositórios próprios. Este (`Cintriano/Croma`) é o **hub**: visão geral, arquitetura e especificações. Os demais são clonados **dentro da pasta do hub**, cada um com git próprio (ficam no `.gitignore` do hub).
+O projeto é dividido em repositórios próprios, todos na organização [`Croma-plataform`](https://github.com/Croma-plataform) do GitHub. Este (`Croma-plataform/Croma`) é o **hub**: visão geral, arquitetura e especificações. Os demais são clonados **dentro da pasta do hub**, cada um com git próprio (ficam no `.gitignore` do hub).
 
 | Pasta | Repositório (privado) | O que é | Branch |
 |---|---|---|---|
-| `croma-identidade/` | https://github.com/Cintriano/croma-identidade | Identidade visual (v0.1 "Barras" oficial), logos e scripts geradores | `main` |
-| `croma-servidor/` | https://github.com/Cintriano/croma-servidor | Scripts e configuração do servidor; futuros plugins C# | `main` |
-| `croma-web/` | https://github.com/Cintriano/croma-web | Interface web compartilhada (fork do jellyfin-web) | `croma` |
-| `croma-desktop/` | https://github.com/Cintriano/croma-desktop | App desktop (fork do jellyfin-desktop) | `croma` |
-| `croma-tizen/` | https://github.com/Cintriano/croma-tizen | App da TV Samsung (fork do jellyfin-tizen) | `croma` |
-| `croma-v1/` | https://github.com/Cintriano/croma-v1 | Croma v1, arquivado (referência para as tags) | `main` |
+| `croma-identidade/` | https://github.com/Croma-plataform/croma-identidade | Identidade visual (v0.1 "Barras" oficial), logos e scripts geradores | `main` |
+| `croma-servidor/` | https://github.com/Croma-plataform/croma-servidor | Scripts e configuração do servidor; futuros plugins C# | `main` |
+| `croma-web/` | https://github.com/Croma-plataform/croma-web | Interface web compartilhada (fork do jellyfin-web) | `croma` |
+| `croma-desktop/` | https://github.com/Croma-plataform/croma-desktop | App desktop (fork do jellyfin-desktop) | `croma` |
+| `croma-tizen/` | https://github.com/Croma-plataform/croma-tizen | App da TV Samsung (fork do jellyfin-tizen) | `croma` |
+| `croma-android/` | https://github.com/Croma-plataform/croma-android | App Android (fork do jellyfin-android); criado, ainda não implementado | `croma` |
+| `croma-v1/` | https://github.com/Croma-plataform/croma-v1 | Croma v1, arquivado (referência para as tags) | `main` |
 | `jellyfin-server/` | https://github.com/jellyfin/jellyfin | Código do servidor oficial, só para consulta | tag `v12.4` |
 
 ## Base de versões dos forks
@@ -23,6 +24,9 @@ O projeto é dividido em repositórios próprios. Este (`Cintriano/Croma`) é o 
 | `croma-web` | https://github.com/jellyfin/jellyfin-web | `release-12.z` (v12.4) | `0a580ce8d` |
 | `croma-tizen` | https://github.com/jellyfin/jellyfin-tizen | `master` | `31408c1` |
 | `croma-desktop` | https://github.com/jellyfin/jellyfin-desktop | `master` | `51807f8` |
+| `croma-android` | https://github.com/jellyfin/jellyfin-android | `master` (v2.7.1) | `6c5ab875` |
+
+O GitHub Actions está desativado nos forks, para os workflows herdados do Jellyfin não rodarem.
 
 Regra: a versão do web **sempre** casa com a do servidor (v12.4). Para atualizar: `git fetch upstream` + rebase da `croma`.
 
@@ -31,19 +35,21 @@ Regra: a versão do web **sempre** casa com a do servidor (v12.4). Para atualiza
 Em uma máquina nova, clone o hub e, dentro dele, os demais:
 
 ```
-git clone https://github.com/Cintriano/Croma.git
-cd Croma
-git clone https://github.com/Cintriano/croma-identidade.git
-git clone https://github.com/Cintriano/croma-servidor.git
-git clone https://github.com/Cintriano/croma-v1.git
-git clone https://github.com/Cintriano/croma-web.git
-git clone https://github.com/Cintriano/croma-desktop.git
-git clone https://github.com/Cintriano/croma-tizen.git
+git clone https://github.com/Croma-plataform/Croma.git Croma-plataform
+cd Croma-plataform
+git clone https://github.com/Croma-plataform/croma-identidade.git
+git clone https://github.com/Croma-plataform/croma-servidor.git
+git clone https://github.com/Croma-plataform/croma-v1.git
+git clone https://github.com/Croma-plataform/croma-web.git
+git clone https://github.com/Croma-plataform/croma-desktop.git
+git clone https://github.com/Croma-plataform/croma-tizen.git
+git clone https://github.com/Croma-plataform/croma-android.git
 git clone --filter=blob:none -o upstream https://github.com/jellyfin/jellyfin.git jellyfin-server
 
 git -C croma-web     remote add upstream https://github.com/jellyfin/jellyfin-web.git
 git -C croma-desktop remote add upstream https://github.com/jellyfin/jellyfin-desktop.git
 git -C croma-tizen   remote add upstream https://github.com/jellyfin/jellyfin-tizen.git
+git -C croma-android remote add upstream https://github.com/jellyfin/jellyfin-android.git
 git -C jellyfin-server checkout v12.4
 ```
 
@@ -53,7 +59,7 @@ git -C jellyfin-server checkout v12.4
 
 ### Servidor local
 
-O passo a passo (binário oficial portátil, build do `croma-web` e script de inicialização) fica no [README do `croma-servidor`](https://github.com/Cintriano/croma-servidor).
+O passo a passo (binário oficial portátil, build do `croma-web` e script de inicialização) fica no [README do `croma-servidor`](https://github.com/Croma-plataform/croma-servidor).
 
 ### Outros repositórios de referência
 
@@ -119,6 +125,6 @@ croma-web (fork do jellyfin-web)  ← a identidade aplicada na interface mora aq
 
 ## Identidade visual
 
-A identidade oficial é a **v0.1 "Barras"**, decidida em 05/11/2026, e mora no [`croma-identidade`](https://github.com/Cintriano/croma-identidade). O manual é `croma-identidade/v0.1-barras/MANUAL.md`, e os arquivos prontos para uso ficam em `croma-identidade/v0.1-barras/logos/` (logotipo, símbolo, ícones das bibliotecas e `app/` com os ícones de cada plataforma). A v0.2 "CAPRA" fica arquivada no mesmo repositório.
+A identidade oficial é a **v0.1 "Barras"**, decidida em 05/11/2026, e mora no [`croma-identidade`](https://github.com/Croma-plataform/croma-identidade). O manual é `croma-identidade/v0.1-barras/MANUAL.md`, e os arquivos prontos para uso ficam em `croma-identidade/v0.1-barras/logos/` (logotipo, símbolo, ícones das bibliotecas e `app/` com os ícones de cada plataforma). A v0.2 "CAPRA" fica arquivada no mesmo repositório.
 
 Canvas com todas as pranchas: https://claude.ai/artifact/AUKTY2yvnHh4ZYk1c7qpLi (páginas "v0.1 Barras" e "v0.2 Direções CAPRA").
