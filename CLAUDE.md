@@ -11,7 +11,7 @@ O **Croma** é a versão pessoal do Jellyfin do usuário: um servidor de mídia 
 
 ## Repositórios
 
-Esta pasta é o **hub** (`Croma-plataform/Croma`): só documentação geral (`CLAUDE.md`, `CROMA.md`, `README.md`) e especificações (`specs/`). Todos os repositórios ficam na organização **`Croma-plataform`** do GitHub (o usuário é admin). Cada subpasta abaixo é um repositório git próprio, fica no `.gitignore` do hub e é privado (só o hub é público):
+Esta pasta é o **hub**, a documentação do projeto (repositório `Croma-plataform/croma-doc`; a pasta local se chama `Croma-plataform`): só documentação geral (`CLAUDE.md`, `CROMA.md`, `README.md`) e especificações (`specs/`). Todos os repositórios ficam na organização **`Croma-plataform`** do GitHub (o usuário é admin). Cada subpasta abaixo é um repositório git próprio, fica no `.gitignore` do hub e é privado (só o `croma-doc` e o `.github` são públicos):
 
 | Pasta | Repositório | O que é | Branch |
 |---|---|---|---|
@@ -22,6 +22,7 @@ Esta pasta é o **hub** (`Croma-plataform/Croma`): só documentação geral (`CL
 | `croma-tizen/` | `Croma-plataform/croma-tizen` | Fork do jellyfin-tizen `master` | `croma` |
 | `croma-android/` | `Croma-plataform/croma-android` | Fork do jellyfin-android `master` (v2.7.1); criado, ainda não implementado | `croma` |
 | `croma-v1/` | `Croma-plataform/croma-v1` | Croma v1, **arquivado** no GitHub (só leitura) | `main` |
+| `croma-org/` | `Croma-plataform/.github` | Página de perfil da organização (`profile/README.md`), com logo copiado do `croma-identidade` | `main` |
 | `jellyfin-server/` | jellyfin/jellyfin, tag `v12.4` | Só referência; o servidor roda com o binário oficial | — |
 
 - Os forks são repositórios comuns (não forks do GitHub), com o Jellyfin como remote `upstream` e a organização como `origin`. O GitHub Actions está desativado nos forks.
@@ -37,7 +38,8 @@ O desktop e o Tizen rodam a **mesma interface web**. A marca nasce no `croma-ide
 croma-identidade (manual, logos, ícones)
    └─ copiado para → croma-web (fork jellyfin-web, release-12.z / v12.4)
                        ├─ build → croma-servidor serve via --webdir → croma-desktop (carrega a UI do servidor)
-                       └─ build → croma-tizen empacota o dist/ no .wgt
+                       ├─ build → croma-tizen empacota o dist/ no .wgt
+                       └─ (futuro) croma-android carrega a UI do servidor
 ```
 
 - **Versões casadas:** a versão do web precisa bater com a do servidor (v12.4).
@@ -88,9 +90,9 @@ Resumo das regras:
 | Varredura estruturada (com níveis) das bibliotecas caseiras | Formato em desenvolvimento pelo usuário | `specs/bibliotecas-caseiras.md` |
 | `croma-tizen` e `croma-desktop` | Não iniciados (ícones, nomes, empacotamento) | `croma-tizen/`, `croma-desktop/` |
 | `croma-android` | Criado (fork sem mudanças), implementação adiada | `croma-android/` |
-| Repositórios na organização `Croma-plataform` | Feito (07/11/2026) | veja "Repositórios" |
+| Repositórios na organização `Croma-plataform`, perfil `.github` e hub renomeado para `croma-doc` | Feito (07/11/2026) | veja "Repositórios" |
 
-**Última sessão (07/11/2026, máquina Linux):** os repositórios foram transferidos da conta `Cintriano` para a organização `Croma-plataform`, a pasta do projeto passou a se chamar `Croma-plataform` e foi criado o `croma-android`. Antes (05–06/11) o projeto foi dividido em repositórios próprios (v1 arquivado, forks como repositórios comuns e privados).
+**Última sessão (07/11/2026, máquina Linux):** os repositórios foram transferidos da conta `Cintriano` para a organização `Croma-plataform`, a pasta do projeto passou a se chamar `Croma-plataform` foi criado o `croma-android`, o perfil da organização (`.github`, pasta `croma-org/`) foi publicado e o hub foi renomeado para `croma-doc`. Falta o usuário trocar o avatar da organização pelo site (ícone `croma-identidade/v0.1-barras/logos/app/mobile/icone-1024.png`). Antes (05–06/11) o projeto foi dividido em repositórios próprios (v1 arquivado, forks como repositórios comuns e privados).
 
 **Próximos passos:**
 1. O usuário conclui o assistente em http://localhost:8096: cria a conta de administrador (a senha é dele) e adiciona uma biblioteca de teste.

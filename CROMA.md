@@ -1,10 +1,10 @@
-# Croma
+# Croma — documentação
 
 Versão pessoal do Jellyfin com identidade visual própria. Foco inicial: **Desktop** e **TV Samsung QN90B (Tizen 6.5)**.
 
 ## Repositórios
 
-O projeto é dividido em repositórios próprios, todos na organização [`Croma-plataform`](https://github.com/Croma-plataform) do GitHub. Este (`Croma-plataform/Croma`) é o **hub**: visão geral, arquitetura e especificações. Os demais são clonados **dentro da pasta do hub**, cada um com git próprio (ficam no `.gitignore` do hub).
+O projeto é dividido em repositórios próprios, todos na organização [`Croma-plataform`](https://github.com/Croma-plataform) do GitHub. Este (`Croma-plataform/croma-doc`, público) é a **documentação**, o hub: visão geral, arquitetura e especificações. A pasta local do hub se chama `Croma-plataform`. Os demais são clonados **dentro da pasta do hub**, cada um com git próprio (ficam no `.gitignore` do hub).
 
 | Pasta | Repositório (privado) | O que é | Branch |
 |---|---|---|---|
@@ -15,6 +15,7 @@ O projeto é dividido em repositórios próprios, todos na organização [`Croma
 | `croma-tizen/` | https://github.com/Croma-plataform/croma-tizen | App da TV Samsung (fork do jellyfin-tizen) | `croma` |
 | `croma-android/` | https://github.com/Croma-plataform/croma-android | App Android (fork do jellyfin-android); criado, ainda não implementado | `croma` |
 | `croma-v1/` | https://github.com/Croma-plataform/croma-v1 | Croma v1, arquivado (referência para as tags) | `main` |
+| `croma-org/` | https://github.com/Croma-plataform/.github (público) | Página de perfil da organização (`profile/README.md`) | `main` |
 | `jellyfin-server/` | https://github.com/jellyfin/jellyfin | Código do servidor oficial, só para consulta | tag `v12.4` |
 
 ## Base de versões dos forks
@@ -35,7 +36,7 @@ Regra: a versão do web **sempre** casa com a do servidor (v12.4). Para atualiza
 Em uma máquina nova, clone o hub e, dentro dele, os demais:
 
 ```
-git clone https://github.com/Croma-plataform/Croma.git Croma-plataform
+git clone https://github.com/Croma-plataform/croma-doc.git Croma-plataform
 cd Croma-plataform
 git clone https://github.com/Croma-plataform/croma-identidade.git
 git clone https://github.com/Croma-plataform/croma-servidor.git
@@ -44,6 +45,7 @@ git clone https://github.com/Croma-plataform/croma-web.git
 git clone https://github.com/Croma-plataform/croma-desktop.git
 git clone https://github.com/Croma-plataform/croma-tizen.git
 git clone https://github.com/Croma-plataform/croma-android.git
+git clone https://github.com/Croma-plataform/.github.git croma-org
 git clone --filter=blob:none -o upstream https://github.com/jellyfin/jellyfin.git jellyfin-server
 
 git -C croma-web     remote add upstream https://github.com/jellyfin/jellyfin-web.git
@@ -55,7 +57,7 @@ git -C jellyfin-server checkout v12.4
 
 - No Windows, rode também `git -C jellyfin-server config core.longpaths true` antes do checkout.
 - O `--filter=blob:none` baixa o conteúdo dos arquivos sob demanda, o que deixa o clone de referência bem mais leve.
-- Os repositórios são privados: o `git clone` pede login no GitHub (`gh auth login` resolve).
+- Quase todos os repositórios são privados (só o `croma-doc` e o `.github` são públicos): o `git clone` pede login no GitHub (`gh auth login` resolve).
 
 ### Servidor local
 
@@ -66,7 +68,6 @@ O passo a passo (binário oficial portátil, build do `croma-web` e script de in
 | Repositório | Para quê |
 |---|---|
 | https://github.com/jellyfin/jellyfin-androidtv | App de Android TV (fase futura) |
-| https://github.com/jellyfin/jellyfin-android | App de Android (fase futura) |
 | https://github.com/jellyfin/jellyfin-vue | Cliente web alternativo (não usado: não tem layout de TV) |
 | https://github.com/jellyfin/jellyfin-ffmpeg | FFmpeg usado pelo servidor |
 | https://github.com/jellyfin/jellyfin-kodi | Integração com o Kodi |
@@ -81,18 +82,19 @@ croma-identidade  ← fonte da verdade da marca (manual, logos, ícones)
    ▼
 croma-web (fork do jellyfin-web)  ← a identidade aplicada na interface mora aqui
    ├─ build → croma-servidor serve via --webdir → croma-desktop (carrega a UI do servidor) + navegador
-   └─ build → croma-tizen empacota o dist/ → .wgt na TV
+   ├─ build → croma-tizen empacota o dist/ → .wgt na TV
+   └─ (futuro) croma-android carrega a UI do servidor numa WebView
 ```
 
 ## Mapa do croma-web (onde mexer)
 
-- **Paleta base:** `src/themes/_base/_palette.scss` (cor primária hoje `#00a4dc`), `src/themes/_base/theme.ts`
-- **Registro de temas (MUI):** `src/themes/index.ts`; tema padrão em `src/config.json` → `themes[].default`
-- **Tema Croma:** criar `src/themes/croma/{index.ts,theme.scss}`, registrar em `index.ts` e `config.json`
-- **Logos:** vêm do pacote `@jellyfin/ux-web`; referências em `src/styles/site.scss`, `src/themes/_base/_theme.scss`,
+- **Tema Croma (padrão):** `src/themes/croma/index.ts` (MUI) e `src/themes/croma/theme.scss` (paleta, cores das bibliotecas, cantos vivos, foco); registrado em `src/themes/index.ts` e marcado como padrão em `src/config.json` → `themes[]`
+- **Paleta base do Jellyfin:** `src/themes/_base/_palette.scss` (ainda `#00a4dc`; o tema Croma sobrescreve) e `src/themes/_base/theme.ts`
+- **Fontes:** `src/styles/fonts.croma.scss` (Archivo Variable e IBM Plex Mono, empacotadas pelo npm)
+- **Logos e ícones:** `src/assets/img/croma/` (cópias do `croma-identidade`); usados em `src/styles/site.scss`, `src/themes/_base/_theme.scss`,
   `src/apps/modern/components/drawers/DrawerHeaderLink.tsx`, `src/components/toolbar/ServerButton.tsx`,
   `src/plugins/logoScreensaver/plugin.js`
-- **Nome do app:** `src/index.html` (`<title>`, `application-name`), `src/manifest.json`, strings em `src/strings/`
+- **Nome do app:** `src/index.html` (`<title>`, `application-name`), `src/manifest.json`, strings em `src/strings/` (pt-br, pt-pt, pt e en-us já dizem "Croma")
 - **Layouts:** `src/apps/modern` (React, desktop) e `src/apps/legacy` (controllers antigos, inclusive vários usados no modo TV)
 - **Modo TV:** classe `.layout-tv` (CSS) + `layoutManager.tv` (JS). Testar toda mudança visual nesse modo
 
@@ -101,6 +103,9 @@ croma-web (fork do jellyfin-web)  ← a identidade aplicada na interface mora aq
 - **Tizen:** `config.xml` (nome, ids `AprZAARz4r.Jellyfin`, `widget id`), `icon.png`
 - **Desktop:** `CMakeModules/NameConfiguration.cmake`, `resources/images`, `native/find-webclient.*` (tela de conexão),
   `bundle/win/JellyfinDesktop.iss.in` (instalador Windows)
+- **Android:** `app/build.gradle.kts` (`namespace = "org.jellyfin.mobile"`), `app/src/main/res/values/strings_donottranslate.xml` (`app_name`), ícones em `app/src/main/res/mipmap-*`
+
+Nenhuma casca foi alterada ainda: as três seguem com nome, ids e ícones do Jellyfin.
 
 ## Pendências
 
@@ -108,9 +113,12 @@ croma-web (fork do jellyfin-web)  ← a identidade aplicada na interface mora aq
 - [ ] Servidor no Linux: script de inicialização equivalente ao `.ps1`
 - [x] Tema "Croma" e marca no `croma-web` (paleta, fontes, cantos vivos, foco, logos, nome e ícones): commit `e5f1c1a4c` na branch `croma`
 - [x] Dividir o projeto em repositórios próprios e publicá-los no GitHub (05/11/2026)
+- [x] Mover os repositórios para a organização `Croma-plataform`, criar o perfil (`.github`) e renomear o hub para `croma-doc` (07/11/2026)
 - [ ] Tizen Studio + certificado Samsung + Developer Mode na TV
 - [x] Identidade visual: v0.1 "Barras" definida como oficial (05/11/2026)
-- [ ] Implementar a v0.1 no `croma-web` (tema, logos, ícones e telas), no `croma-tizen` (ícone e tile) e no `croma-desktop` (ícone `.ico`)
+- [ ] Telas e componentes especiais da v0.1 no `croma-web` (capa gerada, calibração, sem sinal, espectro no player)
+- [ ] Marca nas cascas: `croma-tizen` (nome, ids, ícone e tile) e `croma-desktop` (nome e ícone `.ico`)
+- [ ] `croma-android`: criado (07/11/2026), implementação adiada
 - [x] Detalhar a dinâmica das coleções (especificada em 05/11/2026; veja `specs/colecoes.md`)
 - [ ] Implementar coleções por biblioteca e modo de exibição
 - [ ] Definir o formato estruturado das bibliotecas caseiras (o usuário está desenvolvendo)
