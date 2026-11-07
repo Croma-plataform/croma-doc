@@ -4,9 +4,10 @@ Responda sempre em português do Brasil.
 
 ## O que é
 
-O **Croma** é a versão pessoal do Jellyfin do usuário: um servidor de mídia que reúne filmes, séries, música, fotos, TV ao vivo e livros. É para uso pessoal, com identidade visual própria.
+O **Croma** é a versão pessoal do Jellyfin do usuário: um servidor de mídia organizado em seções: **Audiovisual** (filmes, séries, documentários), **Áudios** (músicas, podcasts, audiolivros), **Leitura** (livros, HQs, mangás) e **Fotos**. A **TV ao vivo está fora do escopo** por enquanto: segue documentada, mas sai da interface (`specs/secoes.md`). É para uso pessoal, com identidade visual própria.
 
 - **Plataformas iniciais:** desktop e TV Samsung **QN90B** (2022, Tizen 6.5, Chromium 85). Android, Android TV e outras ficam para depois.
+- **Plano de desenvolvimento (fases e pendências):** `PLANO.md`.
 - **Visão geral, repositórios, versões e mapa do código:** `CROMA.md`. Leia esse arquivo antes de mexer nos repositórios.
 
 ## Repositórios
@@ -16,14 +17,14 @@ Esta pasta é o **hub**, a documentação do projeto (repositório `Croma-plataf
 | Pasta | Repositório | O que é | Branch |
 |---|---|---|---|
 | `croma-identidade/` | `Croma-plataform/croma-identidade` | Identidade visual, logos e scripts geradores | `main` |
-| `croma-servidor/` | `Croma-plataform/croma-servidor` | Scripts e configuração do servidor; futuros plugins C# | `main` |
+| `croma-servidor/` | `Croma-plataform/croma-servidor` | Fork do servidor do Jellyfin (tag `v12.4`); scripts e documentação do Croma em `croma/` | `croma` |
 | `croma-web/` | `Croma-plataform/croma-web` | Fork do jellyfin-web `release-12.z` (v12.4): a interface | `croma` |
 | `croma-desktop/` | `Croma-plataform/croma-desktop` | Fork do jellyfin-desktop `master` (Qt WebEngine + mpv) | `croma` |
 | `croma-tizen/` | `Croma-plataform/croma-tizen` | Fork do jellyfin-tizen `master` | `croma` |
 | `croma-android/` | `Croma-plataform/croma-android` | Fork do jellyfin-android `master` (v2.7.1); criado, ainda não implementado | `croma` |
 | `croma-v1/` | `Croma-plataform/croma-v1` | Croma v1, **arquivado** no GitHub (só leitura) | `main` |
 | `croma-org/` | `Croma-plataform/.github` | Página de perfil da organização (`profile/README.md`), com logo copiado do `croma-identidade` | `main` |
-| `jellyfin-server/` | jellyfin/jellyfin, tag `v12.4` | Só referência; o servidor roda com o binário oficial | — |
+| `jellyfin-server/` | jellyfin/jellyfin, tag `v12.4` | Clone de referência antigo; **não é mais necessário** (o código está no `croma-servidor`) e pode ser apagado | — |
 
 - Os forks são repositórios comuns (não forks do GitHub), com o Jellyfin como remote `upstream` e a organização como `origin`. O GitHub Actions está desativado nos forks.
 - O `croma-identidade` e o `croma-servidor` têm `CLAUDE.md` próprios.
@@ -58,7 +59,7 @@ Resumo das regras:
 - **Formas:** cantos vivos em tudo, e a moldura grossa emoldura imagens. A única curva é a máscara de ícone do sistema.
 - **Cores:**
   - **neutros:** Sinal `#0B0B0C` (fundo), Grafite `#17181A`, Linha `#2A2B2E`, Cinza médio `#8A8B8E`, Névoa `#A3A3A0`, Fósforo `#F2F2F0`;
-  - **barras de 75%, uma por biblioteca:** Início `#C0C0C0`, Filmes `#C0C000`, Séries `#00C0C0`, Música `#00C000`, Fotos `#C000C0`, TV ao vivo `#C00000`, Livros `#0000C0` (use `#3B3BFF` em elementos pequenos).
+  - **barras de 75%, uma por seção** (decidido em 07/11/2026; o manual ainda fala em bibliotecas e será revisado): Início `#C0C0C0`, Audiovisual `#C0C000`, Áudios `#00C000`, Fotos `#C000C0`, Leitura `#0000C0` (use `#3B3BFF` em elementos pequenos), TV ao vivo `#C00000` (reservado, fora do escopo), ciano `#00C0C0` livre).
   - A cor da biblioteca só aparece em sinais pequenos. O foco é sempre Fósforo.
 - **Tipografia:** Archivo Expandida 800 em títulos, Archivo na interface, IBM Plex Mono em dados, tempos e rótulos (estes em caixa alta).
 - **TV:** escala 2×, margem segura de 96 px nas laterais e 54 px em cima e embaixo, foco com borda Fósforo de 8 px.
@@ -82,11 +83,12 @@ Resumo das regras:
 | Projeto dividido em repositórios próprios e publicados (privados) | Feito (05/11/2026) | veja "Repositórios" |
 | Identidade v0.1 "Barras" | **Oficial** (05/11/2026): manual, logotipo em curvas, ícones do app e pranchas | `croma-identidade/v0.1-barras/` |
 | Identidade v0.2 (CAPRA, direções A, B e C) | Arquivada | `croma-identidade/v0.2-capra/` |
-| Servidor Jellyfin v12.4 portátil | Instalado e rodando na máquina CintraMan (Windows); o assistente inicial ainda não foi concluído. No Linux, não instalado | `croma-servidor/` |
+| Servidor | `croma-servidor` virou fork do Jellyfin (branch `croma` na tag `v12.4`, 07/11/2026), ainda sem mudanças no código. Compilar exige o .NET SDK 10, não instalado. Na máquina CintraMan roda o binário oficial v12.4 (assistente inicial não concluído); no Linux, nada instalado | `croma-servidor/` |
 | Tema "Croma" e marca no `croma-web` | Feito: paleta, fontes Archivo e IBM Plex Mono, cantos vivos, foco, logos, ícones, nome e textos | commit `e5f1c1a4c` na branch `croma`, publicado |
 | Componentes e telas especiais da v0.1 (capa gerada, calibração, sem sinal, espectro no player) | Não iniciado | `croma-web` |
 | Coleções por biblioteca e modo de exibição | Especificado, não implementado | `specs/colecoes.md` |
 | Tags e editor de tags (vindos do v1) | Avaliado, com decisões em aberto | `specs/tags.md` |
+| Seções Audiovisual, Áudios e Leitura; TV ao vivo fora do escopo | Estrutura decidida pelo usuário (07/11/2026); D1–D4 decididas (D4: subtipo como campo da biblioteca no servidor, com fork do Jellyfin), D5 adiada; vai exigir revisão do manual | `specs/secoes.md` |
 | Varredura estruturada (com níveis) das bibliotecas caseiras | Formato em desenvolvimento pelo usuário | `specs/bibliotecas-caseiras.md` |
 | `croma-tizen` e `croma-desktop` | Não iniciados (ícones, nomes, empacotamento) | `croma-tizen/`, `croma-desktop/` |
 | `croma-android` | Criado (fork sem mudanças), implementação adiada | `croma-android/` |
@@ -94,16 +96,14 @@ Resumo das regras:
 
 **Última sessão (07/11/2026, máquina Linux):** os repositórios foram transferidos da conta `Cintriano` para a organização `Croma-plataform`, a pasta do projeto passou a se chamar `Croma-plataform` foi criado o `croma-android`, o perfil da organização (`.github`, pasta `croma-org/`) foi publicado e o hub foi renomeado para `croma-doc`. Falta o usuário trocar o avatar da organização pelo site (ícone `croma-identidade/v0.1-barras/logos/app/mobile/icone-1024.png`). Antes (05–06/11) o projeto foi dividido em repositórios próprios (v1 arquivado, forks como repositórios comuns e privados).
 
-**Próximos passos:**
-1. O usuário conclui o assistente em http://localhost:8096: cria a conta de administrador (a senha é dele) e adiciona uma biblioteca de teste.
-2. Implementar as coleções por biblioteca (`specs/colecoes.md`).
-3. Implementar as tags (`specs/tags.md`), depois que o usuário responder às decisões em aberto.
+**Próximos passos:** estão no `PLANO.md` (fases 1 a 9). O mais imediato: o usuário conclui o assistente em http://localhost:8096 e instala o .NET SDK 10 (Linux: `sudo dnf install dotnet-sdk-10.0`) para compilar o servidor.
 
-**Na máquina CintraMan:** a pasta antiga ainda tem o layout anterior (`repos/`, `servidor/`, `identidade/`). Para migrar: dê `git pull` no hub, mova `repos/croma-*` para a raiz do hub (ajustando o `origin` para `https://github.com/Croma-plataform/<repo>.git`; o hub também muda de `origin`), renomeie a pasta para `Croma-plataform`, mova `servidor/jellyfin` e `servidor/dados` para dentro do `croma-servidor` e apague `repos/`, `servidor/` e `patches/`.
+**Na máquina CintraMan:** a pasta antiga ainda tem o layout anterior (`repos/`, `servidor/`, `identidade/`). Para migrar: dê `git pull` no hub, mova `repos/croma-*` para a raiz do hub (ajustando o `origin` para `https://github.com/Croma-plataform/<repo>.git`; o hub também muda de `origin`), renomeie a pasta para `Croma-plataform`, mova `servidor/jellyfin` e `servidor/dados` para dentro do `croma-servidor` e apague `repos/`, `servidor/` e `patches/`. No `croma-servidor`, rode `git config core.longpaths true`, `git fetch` e `git switch croma`; o script passou para `croma/scripts/iniciar-servidor.ps1` (com o binário oficial: `-Servidor jellyfin`).
 
 ## Convenções
 
-- **Especificações** de funcionalidades ficam em `specs/`, no hub, uma por arquivo. Detalhes de implementação ficam no README do repositório onde o código mora.
+- **Boas práticas, sem gambiarras (decisão do usuário, 07/11/2026):** implemente do jeito certo, mesmo que exija mudar o núcleo do servidor ou do web. Um dado que pertence a um objeto do servidor (como o subtipo de uma biblioteca) fica no modelo desse objeto, não em configurações paralelas dos clientes. Plugin é usado quando é o mecanismo certo (funcionalidade independente que o Jellyfin prevê como extensão), não para evitar mexer no núcleo. Nos forks, mantenha as mudanças pequenas, isoladas e em commits por funcionalidade, para o rebase nas versões novas do Jellyfin continuar viável.
+- **Plano:** o `PLANO.md` é o roteiro; marque as tarefas feitas lá. **Especificações** de funcionalidades ficam em `specs/`, no hub, uma por arquivo. Detalhes de implementação ficam no README do repositório onde o código mora.
 - **Identidade:** convenções de pastas, scripts geradores e renderização de pranchas estão no `croma-identidade/README.md`. Arquivos gerados por script não são editados à mão.
 - **Croma v1 (`croma-v1`):** é só referência. Não o evolua; leve as funções para o v2. Para rodá-lo, entre na pasta, depois `npm install` e `npm run dev`. Os caminhos dele são relativos à raiz dele, inclusive `dados/`.
 - **Não altere o repositório CAPRA** sem pedido explícito.
