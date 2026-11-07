@@ -215,12 +215,26 @@ Tipos novos obrigariam a mexer em dezenas de pontos do servidor que decidem pelo
 
 - O servidor passa a ser um **fork do Jellyfin** a partir da tag `v12.4`, com a branch `croma`, como os outros forks. O binário oficial deixa de ser usado.
 - Regras para o fork continuar fácil de atualizar:
-  - mudanças pequenas e localizadas; o que for novo fica em arquivos e namespaces próprios do Croma;
+  - mudanças pequenas e localizadas; o que for novo fica em arquivos próprios (nos namespaces do Jellyfin correspondentes);
   - commits separados por funcionalidade, com mensagem clara;
   - a cada versão nova do Jellyfin, a branch `croma` é rebaseada na tag nova e o `croma-web` sobe junto (as versões continuam casadas).
 - Os campos novos não existem nos tipos do SDK do Jellyfin usado pelo `croma-web` (`@jellyfin/sdk`). O `croma-web` estende esses tipos num arquivo próprio, em vez de usar `any`.
 - **Núcleo ou plugin:** muda-se o núcleo quando muda o modelo de dados ou um comportamento central (como o subtipo). Funcionalidades independentes que o Jellyfin prevê como extensão continuam como plugin, porque esse é o mecanismo certo para elas (por exemplo, a assinatura de podcasts, que é uma tarefa agendada que baixa arquivos).
-- **Exige o .NET SDK 10** (o `global.json` do servidor v12.4 pede a versão 10.0). Hoje só o runtime está instalado no Linux, e nada no Windows.
+- **Exige o .NET SDK 10 mais recente** (detalhes em `croma-servidor/croma/README.md`).
+
+### Implementação (07/11/2026)
+
+Feito no `croma-servidor`, com testes. Nomes na API (em inglês, como o resto do Jellyfin):
+
+- subtipos: `Movies`, `Series`, `Documentaries`, `Music`, `Podcasts`, `Audiobooks`, `Books`, `Comics`, `Manga`, `Photos`;
+- seções: `Audiovisual`, `Audio`, `Reading`, `Photos`;
+- `LibraryOptions.Subtype` (opções da biblioteca), `BaseItemDto.LibrarySubtype` e `BaseItemDto.LibrarySection` (visões do usuário), `GET /Library/Subtypes` (catálogo).
+
+Descobertas da implementação:
+
+- O Jellyfin não tem tipo "fotos" para criar biblioteca: as fotos usam `homevideos` ("vídeos caseiros e fotos"). Por enquanto o padrão de `homevideos` é Fotos; os vídeos caseiros continuam adiados (D5).
+- O agrupamento de bibliotecas (a opção do usuário que junta várias bibliotecas de filmes numa visão "Filmes") só considera bibliotecas com o subtipo padrão. Sem isso, uma biblioteca de documentários do tipo `movies` entraria na visão agrupada de filmes.
+- Podcasts são aceitos em bibliotecas `books` (recomendado, porque o Jellyfin trata os arquivos como audiolivros, com posição salva) ou `music`.
 
 ## Decisões
 

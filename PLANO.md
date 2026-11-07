@@ -26,7 +26,7 @@ Objetivo: ter o Croma funcionando com um pouco de cada tipo de mídia, para test
 - [ ] Concluir o assistente em http://localhost:8096 (conta de administrador; a senha é do usuário)
 - [ ] Montar uma pasta de mídia de teste com um pouco de cada subtipo: filmes, uma série, um documentário, álbuns, um podcast, um audiolivro (M4B com capítulos), livros EPUB e PDF, uma HQ e um mangá (CBZ), fotos
 - [ ] Criar uma biblioteca por subtipo (veja `specs/secoes.md`)
-- [ ] Build do `croma-web` servido pelo servidor (`--webdir`, passo a passo em `croma-servidor/croma/README.md`)
+- [ ] Build do `croma-web` servido pelo servidor (`--webdir`, passo a passo em `croma-servidor/croma/README.md`). O `croma-web` v12.4 exige **Node 24 e npm 11**; no Linux há só o Node 22 (`sudo dnf install nodejs24 nodejs24-npm`)
 - [ ] Servidor no Linux: script de inicialização equivalente ao `.ps1`, para desenvolver nas duas máquinas
 
 ### Fase 2 — Seções e revisão da identidade
@@ -54,12 +54,15 @@ Objetivo: ver o Croma rodando na QN90B o quanto antes, porque tudo precisa ser t
 
 Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. Desenho em `specs/secoes.md`, "Modelo no servidor".
 
-- [ ] Instalar o .NET SDK 10 (Linux e Windows)
+- [x] Instalar o .NET SDK 10 no Linux (10.0.403 em `~/.dotnet`, 07/11/2026)
+- [ ] Instalar o .NET SDK 10 mais recente no Windows (máquina CintraMan)
 - [x] Criar o fork do Jellyfin a partir da tag `v12.4`, branch `croma`, no `croma-servidor` (07/11/2026)
-- [ ] Build e execução do servidor compilado nas duas máquinas, no lugar do binário oficial (com o `jellyfin-ffmpeg`)
-- [ ] Catálogo de seções e subtipos, campo do subtipo nas opções da biblioteca, validação e padrão por tipo
-- [ ] Subtipo e seção nas visões do usuário e endpoint do catálogo
-- [ ] Testes do servidor para o catálogo, a validação e a API
+- [x] Build, testes e execução do servidor compilado no Linux (07/11/2026)
+- [ ] Build e execução na máquina CintraMan, no lugar do binário oficial (com o `jellyfin-ffmpeg`)
+- [ ] Script de inicialização no Linux (com o `jellyfin-ffmpeg`)
+- [x] Catálogo de seções e subtipos, campo do subtipo nas opções da biblioteca, validação e padrão por tipo (07/11/2026)
+- [x] Subtipo e seção nas visões do usuário, regra de agrupamento e endpoint do catálogo (07/11/2026)
+- [x] Testes do servidor para o catálogo, a gravação, a validação e a API (07/11/2026)
 
 ### Fase 5 — Seções no `croma-web`
 

@@ -48,7 +48,7 @@ croma-identidade (manual, logos, ícones)
 - **Licença:** o código é GPL, e o nome e o logo "Jellyfin" não podem ser usados no produto.
 - **Máquinas:** o projeto roda em mais de uma máquina.
   - **CintraMan (Windows):** servidor portátil instalado. A conexão é lenta: downloads grandes levam dezenas de minutos, então prefira espelhos rápidos e `curl -C -` para retomar. O .NET SDK não está instalado.
-  - **Linux (Fedora, usuário `cintra_man`, pasta `~/Documentos/Projetos/Codes/Croma-plataform`):** tem `gh` (logado como Cintriano), Node, git, Chrome, o runtime do .NET (mas não o SDK) e o `git-filter-repo` (em `~/.local/bin`, instalado com `pip --user`). O git global está como "Your Name": cada repositório do projeto tem `user.name Cintriano` e o e-mail do usuário configurados localmente; faça o mesmo num clone novo. O servidor ainda não foi instalado aqui. A conexão é razoável (os clones completos levaram poucos minutos).
+  - **Linux (Fedora, usuário `cintra_man`, pasta `~/Documentos/Projetos/Codes/Croma-plataform`):** tem `gh` (logado como Cintriano), Node 22 (o `croma-web` v12.4 exige Node 24 e npm 11: `sudo dnf install nodejs24 nodejs24-npm`), git, Chrome, o .NET SDK 10.0.403 em `~/.dotnet` (o pacote do Fedora é antigo demais para o Jellyfin; use `export DOTNET_ROOT=$HOME/.dotnet PATH=$HOME/.dotnet:$PATH`) e o `git-filter-repo` (em `~/.local/bin`, instalado com `pip --user`). O git global está como "Your Name": cada repositório do projeto tem `user.name Cintriano` e o e-mail do usuário configurados localmente; faça o mesmo num clone novo. O servidor ainda não foi instalado aqui. A conexão é razoável (os clones completos levaram poucos minutos).
 
 ## Identidade visual oficial: v0.1 "Barras"
 
@@ -83,7 +83,7 @@ Resumo das regras:
 | Projeto dividido em repositórios próprios e publicados (privados) | Feito (05/11/2026) | veja "Repositórios" |
 | Identidade v0.1 "Barras" | **Oficial** (05/11/2026): manual, logotipo em curvas, ícones do app e pranchas | `croma-identidade/v0.1-barras/` |
 | Identidade v0.2 (CAPRA, direções A, B e C) | Arquivada | `croma-identidade/v0.2-capra/` |
-| Servidor | `croma-servidor` virou fork do Jellyfin (branch `croma` na tag `v12.4`, 07/11/2026), ainda sem mudanças no código. Compilar exige o .NET SDK 10, não instalado. Na máquina CintraMan roda o binário oficial v12.4 (assistente inicial não concluído); no Linux, nada instalado | `croma-servidor/` |
+| Servidor | `croma-servidor` é fork do Jellyfin (branch `croma` na tag `v12.4`). **Subtipo da biblioteca implementado** no servidor (07/11/2026, sem commit até o usuário pedir), com testes; compila e roda no Linux. Na máquina CintraMan roda o binário oficial v12.4 (assistente inicial não concluído) | `croma-servidor/` |
 | Tema "Croma" e marca no `croma-web` | Feito: paleta, fontes Archivo e IBM Plex Mono, cantos vivos, foco, logos, ícones, nome e textos | commit `e5f1c1a4c` na branch `croma`, publicado |
 | Componentes e telas especiais da v0.1 (capa gerada, calibração, sem sinal, espectro no player) | Não iniciado | `croma-web` |
 | Coleções por biblioteca e modo de exibição | Especificado, não implementado | `specs/colecoes.md` |
@@ -96,7 +96,7 @@ Resumo das regras:
 
 **Última sessão (07/11/2026, máquina Linux):** os repositórios foram transferidos da conta `Cintriano` para a organização `Croma-plataform`, a pasta do projeto passou a se chamar `Croma-plataform` foi criado o `croma-android`, o perfil da organização (`.github`, pasta `croma-org/`) foi publicado e o hub foi renomeado para `croma-doc`. Falta o usuário trocar o avatar da organização pelo site (ícone `croma-identidade/v0.1-barras/logos/app/mobile/icone-1024.png`). Antes (05–06/11) o projeto foi dividido em repositórios próprios (v1 arquivado, forks como repositórios comuns e privados).
 
-**Próximos passos:** estão no `PLANO.md` (fases 1 a 9). O mais imediato: o usuário conclui o assistente em http://localhost:8096 e instala o .NET SDK 10 (Linux: `sudo dnf install dotnet-sdk-10.0`) para compilar o servidor.
+**Próximos passos:** estão no `PLANO.md` (fases 1 a 9). O mais imediato: o usuário conclui o assistente em http://localhost:8096 e instala o Node 24 no Linux para o build do `croma-web`. Depois: campo "Subtipo" no diálogo de biblioteca do `croma-web` e as seções na interface (`PLANO.md`, fase 5).
 
 **Na máquina CintraMan:** a pasta antiga ainda tem o layout anterior (`repos/`, `servidor/`, `identidade/`). Para migrar: dê `git pull` no hub, mova `repos/croma-*` para a raiz do hub (ajustando o `origin` para `https://github.com/Croma-plataform/<repo>.git`; o hub também muda de `origin`), renomeie a pasta para `Croma-plataform`, mova `servidor/jellyfin` e `servidor/dados` para dentro do `croma-servidor` e apague `repos/`, `servidor/` e `patches/`. No `croma-servidor`, rode `git config core.longpaths true`, `git fetch` e `git switch croma`; o script passou para `croma/scripts/iniciar-servidor.ps1` (com o binário oficial: `-Servidor jellyfin`).
 
