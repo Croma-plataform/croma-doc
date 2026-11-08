@@ -64,3 +64,13 @@ No `croma-servidor`, em `MediaBrowser.Providers/Bau/` (arquivos novos), mais uma
 | `MediaBrowser.Controller/Providers/IAuthoritativeMetadataProvider.cs`, `MediaBrowser.Providers/Manager/MetadataService.cs` | **Núcleo:** listas completas de um leitor local (acima) |
 
 Testes em `tests/Jellyfin.Providers.Tests/Bau/` e `tests/Jellyfin.Providers.Tests/Manager/AuthoritativeMetadataProviderTests.cs`.
+
+## Incidente: fundos apagados (08/11/2026)
+
+A instrução de atualizar os metadados com "Substituir as imagens existentes" fez o Jellyfin apagar do acervo os 160 `metadata/images/background.jpg`. No original, ao substituir os fundos, ele apaga os arquivos antigos, mesmo os que estão na pasta da mídia. O PhotoRec recuperou 7, idênticos pelo `sha256` de `files[]` (*Chumbo Grosso*, *Clube da Luta*, *Gangues de Nova York*, *Herói*, *John Wick – De Volta ao Jogo*, *O Grande Truque*, *Sim Senhor*). Os outros 153 foram sobrescritos. O usuário decidiu deixar como está; os 7 não foram copiados de volta (o disco ficou montado só leitura). Pôsteres, `extra`, legendas, vídeos e JSON ficaram intactos.
+
+Correção no `croma-servidor` (`ItemImageProvider.cs`, veja o README dele). Regras daqui em diante:
+
+- O servidor nunca grava nem apaga nada no acervo. Toda opção do Jellyfin que mexe em arquivos é verificada no código antes de ser indicada ao usuário.
+- Opções destrutivas são testadas antes numa cópia pequena do acervo, nunca no acervo real.
+- Enquanto o Croma estiver em desenvolvimento, o disco do acervo fica montado só leitura; o usuário remonta para gravação quando for usar o DL_HERMES.

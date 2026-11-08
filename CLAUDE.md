@@ -97,7 +97,7 @@ Resumo das regras:
 
 **Última sessão (07/11/2026, máquina Linux):** os repositórios foram transferidos da conta `Cintriano` para a organização `Croma-plataform`, a pasta do projeto passou a se chamar `Croma-plataform` foi criado o `croma-android`, o perfil da organização (`.github`, pasta `croma-org/`) foi publicado e o hub foi renomeado para `croma-doc`. Falta o usuário trocar o avatar da organização pelo site (ícone `croma-identidade/v0.1-barras/logos/app/mobile/icone-1024.png`). Antes (05–06/11) o projeto foi dividido em repositórios próprios (v1 arquivado, forks como repositórios comuns e privados).
 
-**Sessão de 08/11/2026 (Linux):** assistente concluído, biblioteca de Filmes com o acervo real e leitura do padrão Baú no servidor (decisões do usuário: `favorite` não é importado, `edition` vira tag e etiqueta no título, `extra.jpg` vira segundo fundo).
+**Sessão de 08/11/2026 (Linux):** assistente concluído, biblioteca de Filmes com o acervo real e leitura do padrão Baú no servidor (decisões do usuário: `favorite` não é importado, `edition` vira tag e etiqueta no título, `extra.jpg` vira segundo fundo). Incidente: "Substituir as imagens existentes" apagou os 160 `background.jpg` do acervo; 7 recuperáveis, 153 perdidos (o usuário decidiu deixar como está). Correção no `ItemImageProvider` publicada em `compilado/`, ainda sem commit.
 
 **Próximos passos:** estão no `PLANO.md` (fases 1 a 9). O próximo é a **fase 2**: revisão do manual para as seções (cores, ícones das seções e subtipos, navegação nas três plataformas, TV ao vivo fora do escopo) e as pranchas novas. Depois, as páginas das seções no `croma-web` (fase 5). Servidor no Linux: `croma-servidor/croma/scripts/iniciar-servidor.sh --ffmpeg /usr/bin/ffmpeg`. Atualizar metadados não roda as tarefas pós-varredura (coleções do Baú): para isso, escanear a biblioteca.
 
@@ -110,3 +110,4 @@ Resumo das regras:
 - **Identidade:** convenções de pastas, scripts geradores e renderização de pranchas estão no `croma-identidade/README.md`. Arquivos gerados por script não são editados à mão.
 - **Croma v1 (`croma-v1`):** é só referência. Não o evolua; leve as funções para o v2. Para rodá-lo, entre na pasta, depois `npm install` e `npm run dev`. Os caminhos dele são relativos à raiz dele, inclusive `dados/`.
 - **Não altere o repositório CAPRA** sem pedido explícito.
+- **O acervo do usuário é intocável (incidente de 08/11/2026, `specs/varredura-bau.md`):** antes de indicar qualquer ação do servidor que grave ou apague arquivos (substituir imagens, salvar NFO, trickplay, legendas), confirme no código o que ela faz e teste numa cópia; nunca no acervo real. Durante o desenvolvimento o disco do acervo fica montado só leitura.
