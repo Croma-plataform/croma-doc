@@ -179,7 +179,15 @@ Três caminhos. Decidido (D2): **caminho 1 agora, caminho 3 depois.**
   - as fileiras "No ar agora" e "Gravações" da tela inicial e das opções da tela inicial;
   - os grupos de canais e programas na busca;
   - a seção "TV ao vivo" do painel de administração (sintonizadores e guia).
-- No servidor, basta não configurar sintonizador nem guia.
+- No servidor, basta não configurar sintonizador nem guia: sem sintonizador, o servidor não devolve a visão "TV ao vivo".
+
+**Implementado (07/11/2026)** no `croma-web` com um interruptor só, `cromaFeatures.liveTv = false` (`src/constants/cromaFeatures.ts`). O código da TV ao vivo continua lá; desligado, o interruptor esconde:
+
+- a seção "TV ao vivo" do painel de administração (sintonizadores, guia e gravações). Sem ela não dá para configurar um sintonizador, e o servidor nunca devolve a visão de TV ao vivo para o menu, a tela inicial e a busca;
+- as fileiras "TV ao vivo" e "Gravações ativas" da tela inicial;
+- essas duas opções nas preferências da tela inicial.
+
+Para a TV ao vivo voltar: `liveTv: true`.
 - A barra vermelha fica reservada para ela.
 
 ## Modelo no servidor (D4, decidido)

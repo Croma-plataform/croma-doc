@@ -66,7 +66,7 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 
 ### Fase 5 — Seções no `croma-web`
 
-- [ ] Tirar a TV ao vivo da interface: menu, fileiras da tela inicial, busca e painel de administração (`specs/secoes.md`, seção "TV ao vivo")
+- [x] Tirar a TV ao vivo da interface, com o interruptor `cromaFeatures.liveTv` (`specs/secoes.md`, seção "TV ao vivo", 07/11/2026)
 - [ ] Mapa "biblioteca → seção e subtipo", gravado no servidor, e a tela de ajuste
 - [ ] Menu da TV, barra lateral do desktop e abas do celular com as seções
 - [ ] Página de seção: resumo ("Continuar" e novidades) e abas por subtipo
