@@ -94,8 +94,20 @@ croma-web (fork do jellyfin-web)  ← a identidade aplicada na interface mora aq
   `src/apps/modern/components/drawers/DrawerHeaderLink.tsx`, `src/components/toolbar/ServerButton.tsx`,
   `src/plugins/logoScreensaver/plugin.js`
 - **Nome do app:** `src/index.html` (`<title>`, `application-name`), `src/manifest.json`, strings em `src/strings/` (pt-br, pt-pt, pt e en-us já dizem "Croma")
+- **Seções (08/11/2026):**
+  - `src/apps/modern/features/sections/sections.ts`: seções, cores, ícones e agrupamento das bibliotecas;
+  - `src/apps/modern/components/drawers/SectionLinks.tsx`: seções na barra lateral;
+  - `src/apps/modern/features/sections/components/SectionTabs.tsx`: cabeçalho e abas, usado pelo `LibraryViewMenu.tsx` quando a biblioteca tem seção;
+  - `src/apps/modern/features/libraries/constants/libraryRoutes.ts`: o Resumo (Sugestões) é a aba padrão dos filmes.
+- **Edição do filme:** `src/utils/editions.ts` (lista e `getEdition`); etiqueta nos cartões em `components/cardbuilder/Card/` (`badge` na linha do ano) e em `cardBuilder.js`; no detalhe, `renderName` em `apps/legacy/controllers/itemDetails/index.js`; estilos `.cardEdition` (`card.scss`) e `.detailEdition` (`themes/croma/theme.scss`). A tag precisa vir na lista: o campo `Tags` foi pedido em `utils/items.ts`, `SuggestionsSectionView.tsx` e nas seções `resume`/`recentlyAdded`
+- **Detalhe do item:** ainda é o controller legado `apps/legacy/controllers/itemDetails/` (index.html e index.js, 2.200 linhas); mudanças pequenas e isoladas
 - **Layouts:** `src/apps/modern` (React, desktop) e `src/apps/legacy` (controllers antigos, inclusive vários usados no modo TV)
 - **Modo TV:** classe `.layout-tv` (CSS) + `layoutManager.tv` (JS). Testar toda mudança visual nesse modo
+
+## Ferramentas
+
+- [`ferramentas/web_capturas.py`](ferramentas/web_capturas.py): entra no Croma web com a conta de teste e salva capturas de tela (Playwright). Uso: `python3 ferramentas/web_capturas.py <pasta> "<rota>|<nome>" ...`. Para capturar é preciso o servidor no ar e o build do `croma-web`.
+- **Build do `croma-web` no Linux:** o `node` do sistema ainda é o 22. Sem trocar o pacote, crie links temporários (`ln -sf /usr/bin/node-24 <pasta>/node` e o mesmo para `npm-24`), ponha a pasta no começo do `PATH` e rode `npm run build:production` (leva de 1 a 2 minutos). Lint e tipos: `npx eslint <caminhos>` e `npx tsc --noEmit`.
 
 ## Mapa das cascas
 

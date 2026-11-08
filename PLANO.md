@@ -71,13 +71,15 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 
 - [x] Tirar a TV ao vivo da interface, com o interruptor `cromaFeatures.liveTv` (`specs/secoes.md`, seção "TV ao vivo", 07/11/2026)
 - [ ] Mapa "biblioteca → seção e subtipo", gravado no servidor, e a tela de ajuste
-- [ ] Menu da TV, barra lateral do desktop e abas do celular com as seções
-- [ ] Página de seção: resumo ("Continuar" e novidades) e abas por subtipo
+- [ ] Menu da TV, barra lateral do desktop e abas do celular com as seções. **Barra lateral do desktop feita** (08/11/2026, `SectionLinks.tsx`); faltam TV e celular
+- [ ] Página de seção: resumo ("Continuar" e novidades) e abas por subtipo. **Feita só para Filmes** (08/11/2026, `SectionTabs.tsx`): cabeçalho com a barra da seção e as abas Resumo, Filmes, Coleções e Gêneros. Falta juntar as bibliotecas da seção (Séries, Documentários) no Resumo, nas Coleções e nos Gêneros
 - [ ] **Audiovisual:** abas Filmes, Séries e Documentários (filmes e séries documentais juntos), detalhe do filme, detalhe da série com a fita de episódios
+  - [x] Filmes: aba com grade e filtros (a do Jellyfin, sob o cabeçalho da seção)
+  - [ ] Detalhe do filme no visual do manual (prancha 28). **Feito:** moldura Fósforo no pôster e edição ao lado do título. **Falta:** botões Assistir, Do início e Trailer + ações em quadrados Grafite de 64 px; *kicker* em mono ("■ FILME · GÊNEROS") e título em Archivo Expandida; progresso "parou em X · faltam Y"; faixa de baixo (Ficha técnica, Arquivo, Parecidos na biblioteca); destacar a seção na barra lateral quando se está no detalhe
 - [ ] **Áudios:** músicas (tocando agora com analisador), página de programa de podcast, audiolivros, player falado (pulos de 15/30 s, velocidade, capítulos, temporizador para dormir)
 - [ ] **Leitura:** leitores com o visual do manual; mangá da direita para a esquerda por padrão
 - [x] Campo "Conteúdo" (o subtipo) no diálogo de biblioteca do painel; tipos do SDK estendidos em `src/types/librarySubtype.ts` e `src/utils/librarySubtypes.ts` (07/11/2026)
-- [ ] Edição do filme (tag do Baú, por exemplo `Estendida`) como etiqueta ao lado do título, nos cartões e no detalhe (`specs/varredura-bau.md`)
+- [x] Edição do filme (tag do Baú, por exemplo `Estendida`) como etiqueta ao lado do título, nos cartões (na linha do ano) e no detalhe (`specs/varredura-bau.md`, 08/11/2026). Lista de edições reconhecidas em `src/utils/editions.ts` (hoje só `Estendida`)
 - [ ] Busca agrupada por seção
 
 ### Fase 6 — Coleções e tags

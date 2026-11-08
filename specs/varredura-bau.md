@@ -44,7 +44,7 @@ Biblioteca do tipo `movies` apontando para `Filmes/movies/` (como no Plex). Cada
 | Campo | Decisão | Como está |
 |---|---|---|
 | `favorite` (13 filmes) | **Não importar.** No Croma, favorito é de cada usuário e se marca na tela | O leitor ignora o campo |
-| `edition` (`Estendida`, 4 filmes) | **Tag e etiqueta no título** | Servidor: vira a tag `Estendida` (feito). Interface: etiqueta ao lado do título nos cartões e no detalhe (fase 5; a interface reconhece a edição pela tag) |
+| `edition` (`Estendida`, 4 filmes) | **Tag e etiqueta no título** | Servidor: vira a tag `Estendida` (feito). Interface: **feita** (08/11/2026). A etiqueta aparece ao lado do título no detalhe e ao lado do ano nos cartões (o título do cartão corta com reticências). A interface reconhece a edição pela tag, com a lista fechada de `src/utils/editions.ts`; edição nova no JSON precisa entrar nessa lista |
 | `metadata/images/extra.*` | É uma foto sem papel definido; imagens a mais podem ser vários pôsteres ou fundos | Entra como **segundo fundo**, depois do `background`. Quando o DL_HERMES definir nomes para vários pôsteres e fundos, o `BauLayout.ImageFiles` ganha esses nomes |
 | Dados técnicos de `files` (`sha256`, faixas…) | Não lidos | O servidor já lê o próprio arquivo com o ffprobe. Os hashes servem ao Baú, não à interface |
 

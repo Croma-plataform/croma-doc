@@ -261,7 +261,7 @@ Adiada:
 ## Implementação (resumo)
 
 - **Servidor (fork do Jellyfin):** catálogo de seções e subtipos, campo do subtipo nas opções da biblioteca, validação, subtipo e seção nas visões do usuário, endpoint do catálogo.
-- **`croma-web`:**
+- **`croma-web`** (feito até 08/11/2026: TV ao vivo fora, campo do subtipo no painel, barra lateral das seções e cabeçalho com abas da seção para Filmes; o resto está em aberto):
   - tirar a TV ao vivo da interface;
   - campo "Subtipo" no diálogo de biblioteca do painel e os tipos do SDK estendidos;
   - menu da TV, barra lateral e abas do celular com as seções;
