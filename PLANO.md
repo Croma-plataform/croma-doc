@@ -38,7 +38,7 @@ Objetivo: fechar a nova organização e atualizar o manual antes de desenhar tel
 - [x] Decisões D1 (uma barra por seção), D2 (podcasts por pasta local), D3 (documentários em biblioteca própria); D5 (vídeos caseiros) adiada (07/11/2026)
 - [x] D4: o subtipo é um campo da biblioteca no próprio servidor, com mudança no núcleo (07/11/2026)
 - [x] O fork do servidor fica no próprio `croma-servidor` (07/11/2026)
-- [ ] Revisão do manual: cores por seção, ícones novos (seções e subtipos), navegação nas três plataformas, TV ao vivo marcada como fora do escopo
+- [x] Revisão do manual: cores por seção, ícones novos (seções e subtipos), navegação nas três plataformas, TV ao vivo marcada como fora do escopo; pranchas de ícones, desktop, mobile, música no mobile, início na TV e estados refeitas (08/11/2026)
 - [ ] Pranchas novas: páginas das três seções (inclusive Documentários e a página de programa de podcast), player falado, leitor de HQ e mangá
 - [ ] Copiar os ícones novos para o `croma-web`
 

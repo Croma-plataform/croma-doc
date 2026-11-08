@@ -14,7 +14,7 @@ O manual v0.1 tem uma página por tipo de biblioteca: Filmes, Séries, Música, 
 - **Fotos** continua como seção própria, como está no manual.
 - **TV ao vivo fica fora do escopo** por enquanto: continua documentada, mas sai da interface (veja "TV ao vivo" no fim).
 
-O manual (`croma-identidade/v0.1-barras/MANUAL.md`) precisa de uma revisão para refletir isto (cores, ícones, navegação e as telas novas). Até lá, esta spec vale onde os dois discordarem.
+O manual (`croma-identidade/v0.1-barras/MANUAL.md`) foi revisto para refletir isto em 08/11/2026 (cores, ícones e navegação). As telas novas (páginas das seções, podcast, player falado, leitores) ainda vão ganhar pranchas; até lá, esta spec vale para elas.
 
 ## Conceito: seção, subtipo e biblioteca
 
