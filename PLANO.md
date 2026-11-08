@@ -26,7 +26,7 @@ Objetivo: ter o Croma funcionando com um pouco de cada tipo de mídia, para test
 - [ ] Concluir o assistente em http://localhost:8096 (conta de administrador; a senha é do usuário)
 - [ ] Montar uma pasta de mídia de teste com um pouco de cada subtipo: filmes, uma série, um documentário, álbuns, um podcast, um audiolivro (M4B com capítulos), livros EPUB e PDF, uma HQ e um mangá (CBZ), fotos
 - [ ] Criar uma biblioteca por subtipo (veja `specs/secoes.md`)
-- [ ] Build do `croma-web` servido pelo servidor (`--webdir`, passo a passo em `croma-servidor/croma/README.md`). O `croma-web` v12.4 exige **Node 24 e npm 11**; no Linux há só o Node 22 (`sudo dnf install nodejs24 nodejs24-npm`)
+- [ ] Build do `croma-web` servido pelo servidor (`--webdir`, passo a passo em `croma-servidor/croma/README.md`). O `croma-web` v12.4 exige **Node 24 e npm 11**. No Linux o Node 24 está instalado (`node-24`), mas o comando `node` ainda aponta para o 22: `sudo dnf swap nodejs22-bin nodejs24-bin` resolve. Build e servidor juntos já funcionam no Linux (07/11/2026)
 - [ ] Servidor no Linux: script de inicialização equivalente ao `.ps1`, para desenvolver nas duas máquinas
 
 ### Fase 2 — Seções e revisão da identidade
@@ -59,7 +59,7 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 - [x] Criar o fork do Jellyfin a partir da tag `v12.4`, branch `croma`, no `croma-servidor` (07/11/2026)
 - [x] Build, testes e execução do servidor compilado no Linux (07/11/2026)
 - [ ] Build e execução na máquina CintraMan, no lugar do binário oficial (com o `jellyfin-ffmpeg`)
-- [ ] Script de inicialização no Linux (com o `jellyfin-ffmpeg`)
+- [x] Script de inicialização no Linux (`croma/scripts/iniciar-servidor.sh`, 07/11/2026). Falta baixar o `jellyfin-ffmpeg`; por enquanto roda com o ffmpeg do sistema
 - [x] Catálogo de seções e subtipos, campo do subtipo nas opções da biblioteca, validação e padrão por tipo (07/11/2026)
 - [x] Subtipo e seção nas visões do usuário, regra de agrupamento e endpoint do catálogo (07/11/2026)
 - [x] Testes do servidor para o catálogo, a gravação, a validação e a API (07/11/2026)
@@ -73,7 +73,7 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 - [ ] **Audiovisual:** abas Filmes, Séries e Documentários (filmes e séries documentais juntos), detalhe do filme, detalhe da série com a fita de episódios
 - [ ] **Áudios:** músicas (tocando agora com analisador), página de programa de podcast, audiolivros, player falado (pulos de 15/30 s, velocidade, capítulos, temporizador para dormir)
 - [ ] **Leitura:** leitores com o visual do manual; mangá da direita para a esquerda por padrão
-- [ ] Campo "Subtipo" no diálogo de biblioteca do painel; tipos do SDK estendidos
+- [x] Campo "Conteúdo" (o subtipo) no diálogo de biblioteca do painel; tipos do SDK estendidos em `src/types/librarySubtype.ts` e `src/utils/librarySubtypes.ts` (07/11/2026). Falta conferir na tela, depois do assistente
 - [ ] Busca agrupada por seção
 
 ### Fase 6 — Coleções e tags
