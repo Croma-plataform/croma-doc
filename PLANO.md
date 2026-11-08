@@ -40,7 +40,7 @@ Objetivo: fechar a nova organização e atualizar o manual antes de desenhar tel
 - [x] O fork do servidor fica no próprio `croma-servidor` (07/11/2026)
 - [x] Revisão do manual: cores por seção, ícones novos (seções e subtipos), navegação nas três plataformas, TV ao vivo marcada como fora do escopo; pranchas de ícones, desktop, mobile, música no mobile, início na TV e estados refeitas (08/11/2026)
 - [ ] Pranchas novas: páginas das três seções (inclusive Documentários e a página de programa de podcast), player falado, leitor de HQ e mangá
-- [ ] Copiar os ícones novos para o `croma-web`
+- [x] Copiar os ícones novos para o `croma-web` (`src/assets/img/croma/icones/`, 08/11/2026)
 
 ### Fase 3 — Croma na TV
 
