@@ -17,4 +17,4 @@ Este repositório (`croma-doc`) é a **documentação** do projeto, o hub: visã
 
 - [`PLANO.md`](PLANO.md): plano de desenvolvimento (onde estamos e próximas fases).
 - [`CROMA.md`](CROMA.md): repositórios, versões, arquitetura, mapa do código e como clonar tudo.
-- [`specs/`](specs/): especificações (seções, coleções, tags, bibliotecas caseiras).
+- [`specs/`](specs/): especificações (seções, varredura do padrão Baú, coleções, tags, bibliotecas caseiras).

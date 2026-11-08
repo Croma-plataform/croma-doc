@@ -83,20 +83,23 @@ Resumo das regras:
 | Projeto dividido em repositórios próprios e publicados (privados) | Feito (05/11/2026) | veja "Repositórios" |
 | Identidade v0.1 "Barras" | **Oficial** (05/11/2026): manual, logotipo em curvas, ícones do app e pranchas | `croma-identidade/v0.1-barras/` |
 | Identidade v0.2 (CAPRA, direções A, B e C) | Arquivada | `croma-identidade/v0.2-capra/` |
-| Servidor | `croma-servidor` é fork do Jellyfin (branch `croma` na tag `v12.4`). **Subtipo da biblioteca implementado** no servidor (07/11/2026, sem commit até o usuário pedir), com testes; compila e roda no Linux. Na máquina CintraMan roda o binário oficial v12.4 (assistente inicial não concluído) | `croma-servidor/` |
+| Servidor | `croma-servidor` é fork do Jellyfin (branch `croma` na tag `v12.4`). **Subtipo da biblioteca** (07/11/2026) e **leitura do padrão Baú** (08/11/2026) implementados, com testes; compila e roda no Linux com a biblioteca de Filmes real (`~/Arquivos_de_programas/Plex/Black_hole/Filmes/movies`). Na máquina CintraMan roda o binário oficial v12.4 (assistente inicial não concluído) | `croma-servidor/` |
 | Tema "Croma" e marca no `croma-web` | Feito: paleta, fontes Archivo e IBM Plex Mono, cantos vivos, foco, logos, ícones, nome e textos | commit `e5f1c1a4c` na branch `croma`, publicado |
 | Componentes e telas especiais da v0.1 (capa gerada, calibração, sem sinal, espectro no player) | Não iniciado | `croma-web` |
 | Coleções por biblioteca e modo de exibição | Especificado, não implementado | `specs/colecoes.md` |
 | Tags e editor de tags (vindos do v1) | Avaliado, com decisões em aberto | `specs/tags.md` |
 | Seções Audiovisual, Áudios e Leitura; TV ao vivo fora do escopo | Estrutura decidida pelo usuário (07/11/2026); D1–D4 decididas (D4: subtipo como campo da biblioteca no servidor, com fork do Jellyfin), D5 adiada; vai exigir revisão do manual | `specs/secoes.md` |
-| Varredura estruturada (com níveis) das bibliotecas caseiras | Formato em desenvolvimento pelo usuário | `specs/bibliotecas-caseiras.md` |
+| Varredura do padrão Baú (acervo do usuário, documentado no repositório DL_HERMES em `~/Documentos/Projetos/Codes/DL_HERMES`) | **Filmes implementado** (08/11/2026): metadados, imagens, legendas e coleções, testado com os 160 filmes. Séries, Músicas, Vídeos e Galeria quando os documentos do DL_HERMES forem aprovados | `specs/varredura-bau.md` |
+| Varredura estruturada (com níveis) das bibliotecas caseiras | Vai seguir o padrão Baú (formato em desenvolvimento pelo usuário) | `specs/bibliotecas-caseiras.md` |
 | `croma-tizen` e `croma-desktop` | Não iniciados (ícones, nomes, empacotamento) | `croma-tizen/`, `croma-desktop/` |
 | `croma-android` | Criado (fork sem mudanças), implementação adiada | `croma-android/` |
 | Repositórios na organização `Croma-plataform`, perfil `.github` e hub renomeado para `croma-doc` | Feito (07/11/2026) | veja "Repositórios" |
 
 **Última sessão (07/11/2026, máquina Linux):** os repositórios foram transferidos da conta `Cintriano` para a organização `Croma-plataform`, a pasta do projeto passou a se chamar `Croma-plataform` foi criado o `croma-android`, o perfil da organização (`.github`, pasta `croma-org/`) foi publicado e o hub foi renomeado para `croma-doc`. Falta o usuário trocar o avatar da organização pelo site (ícone `croma-identidade/v0.1-barras/logos/app/mobile/icone-1024.png`). Antes (05–06/11) o projeto foi dividido em repositórios próprios (v1 arquivado, forks como repositórios comuns e privados).
 
-**Próximos passos:** estão no `PLANO.md` (fases 1 a 9). O mais imediato: o usuário conclui o assistente em http://localhost:8096 no servidor do Linux (`croma-servidor/croma/scripts/iniciar-servidor.sh --ffmpeg /usr/bin/ffmpeg`) e confere o campo "Conteúdo" ao criar uma biblioteca. Depois: revisão do manual para as seções (fase 2) e as páginas das seções no `croma-web` (fase 5). A TV ao vivo já saiu da interface (interruptor `cromaFeatures.liveTv` no `croma-web`).
+**Sessão de 08/11/2026 (Linux):** assistente concluído, biblioteca de Filmes com o acervo real e leitura do padrão Baú no servidor (decisões do usuário: `favorite` não é importado, `edition` vira tag e etiqueta no título, `extra.jpg` vira segundo fundo).
+
+**Próximos passos:** estão no `PLANO.md` (fases 1 a 9). O próximo é a **fase 2**: revisão do manual para as seções (cores, ícones das seções e subtipos, navegação nas três plataformas, TV ao vivo fora do escopo) e as pranchas novas. Depois, as páginas das seções no `croma-web` (fase 5). Servidor no Linux: `croma-servidor/croma/scripts/iniciar-servidor.sh --ffmpeg /usr/bin/ffmpeg`. Atualizar metadados não roda as tarefas pós-varredura (coleções do Baú): para isso, escanear a biblioteca.
 
 **Na máquina CintraMan:** a pasta antiga ainda tem o layout anterior (`repos/`, `servidor/`, `identidade/`). Para migrar: dê `git pull` no hub, mova `repos/croma-*` para a raiz do hub (ajustando o `origin` para `https://github.com/Croma-plataform/<repo>.git`; o hub também muda de `origin`), renomeie a pasta para `Croma-plataform`, mova `servidor/jellyfin` e `servidor/dados` para dentro do `croma-servidor` e apague `repos/`, `servidor/` e `patches/`. No `croma-servidor`, rode `git config core.longpaths true`, `git fetch` e `git switch croma`; o script passou para `croma/scripts/iniciar-servidor.ps1` (com o binário oficial: `-Servidor jellyfin`).
 

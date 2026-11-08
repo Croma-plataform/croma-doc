@@ -1,6 +1,6 @@
 # Plano de desenvolvimento
 
-Atualizado em 07/11/2026. Este é o roteiro do Croma: o que já foi feito, onde estamos e a ordem das próximas etapas. As especificações de cada funcionalidade ficam em `specs/`.
+Atualizado em 08/11/2026. Este é o roteiro do Croma: o que já foi feito, onde estamos e a ordem das próximas etapas. As especificações de cada funcionalidade ficam em `specs/`.
 
 ## Onde estamos
 
@@ -8,14 +8,14 @@ Atualizado em 07/11/2026. Este é o roteiro do Croma: o que já foi feito, onde 
 |---|---|
 | Repositórios | Feito: 9 repositórios na organização `Croma-plataform`, documentação em `croma-doc`, perfil em `.github` |
 | Identidade visual | Feito: v0.1 "Barras" oficial (manual, logotipo, ícones, pranchas). Vai precisar de uma revisão por causa das seções (fase 2) |
-| Servidor | `croma-servidor` é fork do Jellyfin (branch `croma` na tag `v12.4`), ainda sem mudanças. Na máquina CintraMan roda o binário oficial v12.4, **assistente inicial não concluído**. No Linux, nada instalado |
-| Interface (`croma-web`) | Tema Croma aplicado: paleta, fontes, cantos vivos, foco, logos, nome e textos (commit `e5f1c1a4c`). Nenhuma tela própria ainda |
+| Servidor | `croma-servidor` é fork do Jellyfin (branch `croma` na tag `v12.4`), compilado e rodando no Linux com o acervo de Filmes do usuário. Já tem o subtipo da biblioteca e a leitura do padrão Baú (filmes). Na máquina CintraMan ainda roda o binário oficial |
+| Interface (`croma-web`) | Tema Croma aplicado (paleta, fontes, cantos vivos, foco, logos, nome e textos), campo "Conteúdo" no diálogo de biblioteca e TV ao vivo fora da interface. A navegação e as telas ainda são as do Jellyfin |
 | TV (`croma-tizen`) | Fork sem mudanças. Tizen Studio, certificado e modo desenvolvedor da TV ainda não configurados |
 | Desktop (`croma-desktop`) | Fork sem mudanças |
 | Android (`croma-android`) | Fork sem mudanças, implementação adiada |
-| Especificações | Seções Audiovisual, Áudios e Leitura (estrutura decidida, cores e detalhes em aberto), coleções (pronta), tags (decisões em aberto), bibliotecas caseiras (formato em desenvolvimento) |
+| Especificações | Seções Audiovisual, Áudios e Leitura (decididas), varredura do padrão Baú (filmes implementado), coleções (pronta), tags (decisões em aberto), bibliotecas caseiras (formato em desenvolvimento) |
 
-**Em resumo:** a base está montada (repositórios, marca e tema). Ainda não rodamos o Croma de ponta a ponta com mídia de verdade, nem na TV.
+**Em resumo:** a base está montada (repositórios, marca, tema e servidor próprio) e o Croma já roda no Linux com os 160 filmes do acervo, lidos do padrão Baú. Falta a identidade das seções, as telas próprias e a TV.
 
 ## Fases
 
@@ -23,11 +23,12 @@ Atualizado em 07/11/2026. Este é o roteiro do Croma: o que já foi feito, onde 
 
 Objetivo: ter o Croma funcionando com um pouco de cada tipo de mídia, para testar todas as telas.
 
-- [ ] Concluir o assistente em http://localhost:8096 (conta de administrador; a senha é do usuário)
+- [x] Concluir o assistente em http://localhost:8096 no Linux (08/11/2026)
+- [x] Biblioteca de Filmes com o acervo real (`Black_hole/Filmes/movies`, 160 filmes), lida do padrão Baú (08/11/2026)
 - [ ] Montar uma pasta de mídia de teste com um pouco de cada subtipo: filmes, uma série, um documentário, álbuns, um podcast, um audiolivro (M4B com capítulos), livros EPUB e PDF, uma HQ e um mangá (CBZ), fotos
 - [ ] Criar uma biblioteca por subtipo (veja `specs/secoes.md`)
 - [ ] Build do `croma-web` servido pelo servidor (`--webdir`, passo a passo em `croma-servidor/croma/README.md`). O `croma-web` v12.4 exige **Node 24 e npm 11**. No Linux o Node 24 está instalado (`node-24`), mas o comando `node` ainda aponta para o 22: `sudo dnf swap nodejs22-bin nodejs24-bin` resolve. Build e servidor juntos já funcionam no Linux (07/11/2026)
-- [ ] Servidor no Linux: script de inicialização equivalente ao `.ps1`, para desenvolver nas duas máquinas
+- [x] Servidor no Linux: script de inicialização equivalente ao `.ps1` (07/11/2026)
 
 ### Fase 2 — Seções e revisão da identidade
 
@@ -63,6 +64,8 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 - [x] Catálogo de seções e subtipos, campo do subtipo nas opções da biblioteca, validação e padrão por tipo (07/11/2026)
 - [x] Subtipo e seção nas visões do usuário, regra de agrupamento e endpoint do catálogo (07/11/2026)
 - [x] Testes do servidor para o catálogo, a gravação, a validação e a API (07/11/2026)
+- [x] Leitura do padrão Baú para Filmes: `metadata.json`, pôster e fundos, legendas em `metadata/subs/`, coleções de `collections/`; listas do JSON completas, sem somar as do TMDB (`specs/varredura-bau.md`, 08/11/2026)
+- [ ] Padrão Baú para Séries, Músicas, Vídeos e Galeria, quando os documentos do DL_HERMES estiverem aprovados
 
 ### Fase 5 — Seções no `croma-web`
 
@@ -73,7 +76,8 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 - [ ] **Audiovisual:** abas Filmes, Séries e Documentários (filmes e séries documentais juntos), detalhe do filme, detalhe da série com a fita de episódios
 - [ ] **Áudios:** músicas (tocando agora com analisador), página de programa de podcast, audiolivros, player falado (pulos de 15/30 s, velocidade, capítulos, temporizador para dormir)
 - [ ] **Leitura:** leitores com o visual do manual; mangá da direita para a esquerda por padrão
-- [x] Campo "Conteúdo" (o subtipo) no diálogo de biblioteca do painel; tipos do SDK estendidos em `src/types/librarySubtype.ts` e `src/utils/librarySubtypes.ts` (07/11/2026). Falta conferir na tela, depois do assistente
+- [x] Campo "Conteúdo" (o subtipo) no diálogo de biblioteca do painel; tipos do SDK estendidos em `src/types/librarySubtype.ts` e `src/utils/librarySubtypes.ts` (07/11/2026)
+- [ ] Edição do filme (tag do Baú, por exemplo `Estendida`) como etiqueta ao lado do título, nos cartões e no detalhe (`specs/varredura-bau.md`)
 - [ ] Busca agrupada por seção
 
 ### Fase 6 — Coleções e tags
@@ -98,7 +102,7 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 
 ### Fase 9 — Depois
 
-- [ ] Bibliotecas caseiras com varredura estruturada: plugin C# no `croma-servidor` (`specs/bibliotecas-caseiras.md`, quando o formato estiver definido). Usa o .NET SDK da fase 4
+- [ ] Bibliotecas caseiras (Vídeos e Galeria) com varredura estruturada: o padrão Baú, quando os documentos do DL_HERMES estiverem prontos (`specs/varredura-bau.md`, `specs/bibliotecas-caseiras.md`)
 - [ ] Podcasts por assinatura de feed (plugin próprio; `specs/secoes.md`, decisão D2)
 - [ ] App Android (`croma-android`)
 
