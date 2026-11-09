@@ -65,14 +65,15 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 - [x] Subtipo e seção nas visões do usuário, regra de agrupamento e endpoint do catálogo (07/11/2026)
 - [x] Testes do servidor para o catálogo, a gravação, a validação e a API (07/11/2026)
 - [x] Leitura do padrão Baú para Filmes: `metadata.json`, pôster e fundos, legendas em `metadata/subs/`, coleções de `collections/`; listas do JSON completas, sem somar as do TMDB (`specs/varredura-bau.md`, 08/11/2026)
-- [ ] Padrão Baú para Séries, Músicas, Vídeos e Galeria, quando os documentos do DL_HERMES estiverem aprovados
+- [x] Leitura do padrão Baú para Séries: série, episódios (pela lista `episodes`), pôster das temporadas, legendas `SNNENN_subtitle_*`, coleções (`specs/varredura-bau.md`, 08/11/2026)
+- [ ] Padrão Baú para Músicas (documento aprovado em 08/11/2026), Vídeos e Galeria, quando os documentos do DL_HERMES estiverem aprovados
 
 ### Fase 5 — Seções no `croma-web`
 
 - [x] Tirar a TV ao vivo da interface, com o interruptor `cromaFeatures.liveTv` (`specs/secoes.md`, seção "TV ao vivo", 07/11/2026)
 - [ ] Mapa "biblioteca → seção e subtipo", gravado no servidor, e a tela de ajuste
 - [ ] Menu da TV, barra lateral do desktop e abas do celular com as seções. **Barra lateral do desktop feita** (08/11/2026, `SectionLinks.tsx`); faltam TV e celular
-- [ ] Página de seção: resumo ("Continuar" e novidades) e abas por subtipo. **Feita só para Filmes** (08/11/2026, `SectionTabs.tsx`): cabeçalho com a barra da seção e as abas Resumo, Filmes, Coleções e Gêneros. Falta juntar as bibliotecas da seção (Séries, Documentários) no Resumo, nas Coleções e nos Gêneros
+- [ ] Página de seção: resumo ("Continuar" e novidades) e abas por subtipo. **Audiovisual em andamento** (08/11/2026, `SectionTabs.tsx`): cabeçalho com a barra da seção e as abas Resumo, uma por biblioteca da seção (Filmes, Séries; cada uma abre a grade da sua biblioteca), Coleções e Gêneros. Resumo, Coleções e Gêneros ainda são os da biblioteca aberta: falta juntar as bibliotecas da seção neles
 - [ ] **Audiovisual:** abas Filmes, Séries e Documentários (filmes e séries documentais juntos), detalhe do filme, detalhe da série com a fita de episódios
   - [x] Filmes: aba com grade e filtros (a do Jellyfin, sob o cabeçalho da seção)
   - [ ] Detalhe do filme no visual do manual (prancha 28). **Feito:** moldura Fósforo no pôster e edição ao lado do título. **Falta:** botões Assistir, Do início e Trailer + ações em quadrados Grafite de 64 px; *kicker* em mono ("■ FILME · GÊNEROS") e título em Archivo Expandida; progresso "parou em X · faltam Y"; faixa de baixo (Ficha técnica, Arquivo, Parecidos na biblioteca); destacar a seção na barra lateral quando se está no detalhe

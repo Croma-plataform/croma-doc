@@ -3,7 +3,7 @@
 O acervo do usuário já é organizado num padrão próprio, o **Baú**, documentado no repositório **DL_HERMES** (`~/Documentos/Projetos/Codes/DL_HERMES`). Cada item guarda os seus dados ao lado do arquivo de mídia: `metadata/metadata.json`, `metadata/images/` e `metadata/subs/`. O Croma lê esse padrão direto, sem depender da identificação pela internet.
 
 - **Fonte da verdade:** o padrão é definido no DL_HERMES. Este documento só diz como o servidor lê o padrão. Se os dois divergirem, vale o DL_HERMES, e o leitor precisa ser corrigido.
-- **Situação:** só **Filmes** está aprovado e testado (`docs/bibliotecas/filmes.md`, `schema_version` 2). Séries, Músicas, Vídeos e Galeria entram quando os documentos deles estiverem prontos.
+- **Situação:** **Filmes** (`docs/bibliotecas/filmes.md`) e **Séries** (`docs/bibliotecas/series.md`), ambos no `schema_version` 2, estão implementados. Músicas é o próximo (documento aprovado em 08/11/2026). Vídeos e Galeria entram quando os documentos deles estiverem prontos.
 - **O servidor só lê:** nada é gravado nas pastas do acervo. Quem escreve nelas são os scripts e pipelines do Baú.
 
 ## Filmes
@@ -28,6 +28,31 @@ Biblioteca do tipo `movies` apontando para `Filmes/movies/` (como no Plex). Cada
 - **Listas completas:** gêneros, tags, produtoras e países do JSON são a lista inteira. Por padrão o servidor **soma** as listas de todos os provedores (o TMDB acrescentaria as palavras-chave dele, em inglês, às tags). Para isso foi criada a interface `IAuthoritativeMetadataProvider` no núcleo: um leitor local declara quais listas estão completas, e nem a internet nem os dados antigos do item acrescentam nada a elas.
 - **Conferência:** se o JSON tiver `files`, ele precisa listar o vídeo; senão é ignorado (proteção contra uma pasta com o JSON de outro filme). JSON inválido ou de outra `schema_version` é ignorado e registrado no log.
 - **Atualização:** quando o `metadata.json` muda, a próxima varredura relê o filme sozinha.
+
+## Séries
+
+Biblioteca do tipo `tvshows` apontando para `Series/shows/`. Cada `shows/Título (Ano)/` tem as pastas `Season NN` e `Specials` (temporada 0) e `metadata/`. O JSON da série descreve também os episódios.
+
+| O que | De onde | Para onde (servidor) |
+|---|---|---|
+| Título, título original, ano, sinopse | `title`, `original_title`, `year`, `description` | nome, título original, ano, sinopse |
+| Estreia | `first_air_date` | data de estreia |
+| Situação | `status` | `returning` e `in_production` → em exibição; `ended` e `canceled` → encerrada; `planned` e `pilot` → não lançada |
+| Classificação, idioma original | `content_rating`, `original_language` | `BR-14` etc., idioma original |
+| Gêneros e tags | `tags` | os gêneros de série do TMDB em pt-BR (`Drama`, `Ficção científica e fantasia`, `Ação e aventura`…) viram **gêneros**; o resto (`Ficção científica`, `StarWars`…) vira **tags** |
+| Emissora, produtoras | `network`, `studios` | estúdios, com a emissora primeiro (como faz o provedor do TMDB) |
+| Criadores, elenco | `creators`, `cast` | pessoas do tipo criador; elenco na ordem do arquivo, com o personagem |
+| Países | `countries` | locais de produção |
+| IDs | `uuid`, `imdb_id`, `tmdb_id` | `Bau`, `Imdb`, `Tmdb` |
+| Pôster, fundos | `metadata/images/poster.*`, `background.*`, `extra.*` | como nos filmes |
+| Pôster da temporada | `metadata/images/season_NN.*` | imagem principal da temporada (os especiais usariam `season_00`) |
+| Episódio | `episodes[]`, achado pelo `file` (caminho do vídeo relativo à pasta da série) | título, temporada, número e o `uuid` do episódio como ID `Bau` |
+| Legendas | `metadata/subs/SNNENN_subtitle_<idioma>.srt` (na pasta da série) | legenda externa do episódio; `_forced` marca forçada |
+
+- Mesma prioridade e listas completas dos filmes: o JSON manda, e o TMDB completa os campos vazios. Nos episódios, a sinopse, a data e a imagem vêm do TMDB.
+- Um vídeo que o `episodes` não lista fica sem os dados do Baú (registrado no log), e o servidor usa o nome do arquivo e o TMDB.
+- Os campos `seasons`, `numbering_source`, `episode_titles_source` e os dados técnicos de `files` não são lidos.
+- Coleções de séries: `Series/collections/` (vazia por enquanto), com o mesmo funcionamento das de filmes, só que os `items` são `uuid` de séries.
 
 ## Coleções
 
@@ -57,10 +82,11 @@ No `croma-servidor`, em `MediaBrowser.Providers/Bau/` (arquivos novos), mais uma
 | `BauLayout.cs` | Nomes de pastas e arquivos do padrão; nome das legendas |
 | `BauJson.cs`, `BauMovieMetadata.cs`, `BauCollectionMetadata.cs`… | Leitura do JSON (`snake_case`, só `schema_version` 2) |
 | `BauMovieProvider.cs` | Leitor de metadados local "Baú" para filmes (aparece nas opções da biblioteca) |
-| `BauImageProvider.cs` | Pôster e fundos de `metadata/images/` |
+| `BauSeriesProvider.cs`, `BauEpisodeProvider.cs`, `BauSeriesMetadata.cs`, `BauEpisode.cs` | Leitores "Baú" para séries e episódios |
+| `BauImageProvider.cs` | Pôster e fundos de `metadata/images/`; pôster das temporadas |
 | `BauExternalId.cs` | O `uuid` como ID externo `Bau` |
 | `BauCollectionsPostScanTask.cs` | Sincroniza as coleções depois de cada varredura |
-| `MediaBrowser.Providers/MediaInfo/MediaInfoResolver.cs` | **Núcleo:** procura legendas também em `metadata/subs/` com o nome do Baú |
+| `MediaBrowser.Providers/MediaInfo/MediaInfoResolver.cs` | **Núcleo:** procura legendas também em `metadata/subs/` com o nome do Baú (episódios: na pasta da série, pelo código `S01E03`) |
 | `MediaBrowser.Controller/Providers/IAuthoritativeMetadataProvider.cs`, `MediaBrowser.Providers/Manager/MetadataService.cs` | **Núcleo:** listas completas de um leitor local (acima) |
 
 Testes em `tests/Jellyfin.Providers.Tests/Bau/` e `tests/Jellyfin.Providers.Tests/Manager/AuthoritativeMetadataProviderTests.cs`.

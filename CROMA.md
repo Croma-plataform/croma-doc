@@ -97,7 +97,7 @@ croma-web (fork do jellyfin-web)  ← a identidade aplicada na interface mora aq
 - **Seções (08/11/2026):**
   - `src/apps/modern/features/sections/sections.ts`: seções, cores, ícones e agrupamento das bibliotecas;
   - `src/apps/modern/components/drawers/SectionLinks.tsx`: seções na barra lateral;
-  - `src/apps/modern/features/sections/components/SectionTabs.tsx`: cabeçalho e abas, usado pelo `LibraryViewMenu.tsx` quando a biblioteca tem seção;
+  - `src/apps/modern/features/sections/components/SectionTabs.tsx`: cabeçalho e abas (Resumo, uma aba por biblioteca da seção, Coleções, Gêneros), usado pelo `LibraryViewMenu.tsx` quando a biblioteca tem seção; a grade aberta por cada tipo de biblioteca está em `getSubtypeTabs` (`sections.ts`);
   - `src/apps/modern/features/libraries/constants/libraryRoutes.ts`: o Resumo (Sugestões) é a aba padrão dos filmes.
 - **Edição do filme:** `src/utils/editions.ts` (lista e `getEdition`); etiqueta nos cartões em `components/cardbuilder/Card/` (`badge` na linha do ano) e em `cardBuilder.js`; no detalhe, `renderName` em `apps/legacy/controllers/itemDetails/index.js`; estilos `.cardEdition` (`card.scss`) e `.detailEdition` (`themes/croma/theme.scss`). A tag precisa vir na lista: o campo `Tags` foi pedido em `utils/items.ts`, `SuggestionsSectionView.tsx` e nas seções `resume`/`recentlyAdded`
 - **Detalhe do item:** ainda é o controller legado `apps/legacy/controllers/itemDetails/` (index.html e index.js, 2.200 linhas); mudanças pequenas e isoladas
