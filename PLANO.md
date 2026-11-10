@@ -92,7 +92,7 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 ### Fase 7 — Telas e componentes especiais da v0.1
 
 - [ ] Capa gerada para itens sem arte
-- [ ] Linha do tempo em espectro no player e no mini player
+- [ ] Linha do tempo em espectro no player e no mini player. **Player de vídeo feito** (09/11/2026, pranchas 11 e 12): kicker e título em cima, hora e "termina às", linha do tempo em espectro com os capítulos como linhas escuras e a cabeça de leitura Fósforo, "Capítulo 5 de 9" e "−1:28:00 · 2:43:52", botões ⏮ −10 ⏸ +30 ⏭ em quadrados Grafite, chips (resolução, HDR, áudio, "Reprodução direta" ou "Convertendo no servidor") e o balão da busca com tempo e capítulo. **Falta:** painel lateral de legendas e áudio (prancha 36), próximo episódio e pular abertura, estado carregando (prancha 38, com o trecho já carregado na linha do tempo), miniatura na busca (depende de trickplay, que não pode ser gerado no acervo) e o mini player de música
 - [ ] Analisador de espectro (música)
 - [ ] Abertura, tela de calibração, descanso de tela e "Sem sinal"
 - [ ] Avisos, carregamento e estados com o texto do manual
