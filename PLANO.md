@@ -13,7 +13,7 @@ Atualizado em 08/11/2026. Este é o roteiro do Croma: o que já foi feito, onde 
 | TV (`croma-tizen`) | Fork sem mudanças. Tizen Studio, certificado e modo desenvolvedor da TV ainda não configurados |
 | Desktop (`croma-desktop`) | Fork sem mudanças |
 | Android (`croma-android`) | Fork sem mudanças, implementação adiada |
-| Especificações | Seções Audiovisual, Áudios e Leitura (decididas), varredura do padrão Baú (filmes implementado), coleções (pronta), tags (decisões em aberto), bibliotecas caseiras (formato em desenvolvimento) |
+| Especificações | Seções Audiovisual, Áudios e Leitura (decididas), varredura do padrão Baú (filmes implementado), coleções (pronta), tags (decisões em aberto) |
 
 **Em resumo:** a base está montada (repositórios, marca, tema e servidor próprio) e o Croma já roda no Linux com os 160 filmes do acervo, lidos do padrão Baú. Falta a identidade das seções, as telas próprias e a TV.
 
@@ -66,7 +66,7 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 - [x] Testes do servidor para o catálogo, a gravação, a validação e a API (07/11/2026)
 - [x] Leitura do padrão Baú para Filmes: `metadata.json`, pôster e fundos, legendas em `metadata/subs/`, coleções de `collections/`; listas do JSON completas, sem somar as do TMDB (`specs/varredura-bau.md`, 08/11/2026)
 - [x] Leitura do padrão Baú para Séries: série, episódios (pela lista `episodes`), pôster das temporadas, legendas `SNNENN_subtitle_*`, coleções (`specs/varredura-bau.md`, 08/11/2026)
-- [ ] Padrão Baú para Músicas (documento aprovado em 08/11/2026), Vídeos e Galeria, quando os documentos do DL_HERMES estiverem aprovados
+- [ ] Padrão Baú para Músicas (documento aprovado em 08/11/2026)
 
 ### Fase 5 — Seções no `croma-web`
 
@@ -105,7 +105,6 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 
 ### Fase 9 — Depois
 
-- [ ] Bibliotecas caseiras (Vídeos e Galeria) com varredura estruturada: o padrão Baú, quando os documentos do DL_HERMES estiverem prontos (`specs/varredura-bau.md`, `specs/bibliotecas-caseiras.md`)
 - [ ] Podcasts por assinatura de feed (plugin próprio; `specs/secoes.md`, decisão D2)
 - [ ] App Android (`croma-android`)
 - [ ] **Verificação da qualidade dos arquivos** (pedido do usuário, 09/11/2026; só depois de terminar o core da plataforma): funcionalidades que conferem a qualidade dos arquivos do acervo. O escopo ainda vai ser definido com o usuário, e a spec vai para `specs/` quando a frente começar. O bloco Arquivo do detalhe do filme (codec, resolução, HDR, faixas, tamanho e modo de reprodução) já mostra parte desses dados
@@ -115,6 +114,7 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 - **TV ao vivo** (decisão do usuário, 07/11/2026): continua documentada no manual e em `specs/secoes.md`, mas não será feita por enquanto e sai da interface. A barra vermelha fica reservada para ela.
 - **Android TV e iOS:** sem data.
 - **Rolagem vertical (webtoon)** no leitor de quadrinhos.
+- **Bibliotecas Vídeos e Galeria do acervo do usuário** (decisão do usuário, 09/11/2026): por privacidade, terão uma aplicação dedicada, fora do Croma. O Croma continua servindo fotos e vídeos com a varredura padrão do Jellyfin; só essas bibliotecas não entram nele.
 
 ## Decisões pendentes do usuário
 
@@ -122,4 +122,3 @@ Objetivo: compilar o servidor a partir do código, para poder mudar o núcleo. D
 |---|---|
 | `specs/secoes.md` | D5 vídeos caseiros e clipes (adiada) |
 | `specs/tags.md` | decisões listadas na spec |
-| `specs/bibliotecas-caseiras.md` | formato da estrutura de pastas |

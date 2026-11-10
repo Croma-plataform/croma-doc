@@ -166,7 +166,7 @@ Três caminhos. Decidido (D2): **caminho 1 agora, caminho 3 depois.**
 
 1. **Pasta local:** os episódios são baixados por outro programa e ficam numa biblioteca marcada como Podcasts. O Croma só exibe. É o mais simples.
 2. **Plugin de canal de terceiros:** expõe feeds como "canais" do Jellyfin. Depende de plugin externo e o progresso funciona mal.
-3. **Plugin próprio no `croma-servidor`:** assina os feeds, baixa os episódios para uma pasta e o Jellyfin os indexa. É o mais completo e exige C# (junto com o plugin das bibliotecas caseiras).
+3. **Plugin próprio no `croma-servidor`:** assina os feeds, baixa os episódios para uma pasta e o Jellyfin os indexa. É o mais completo e exige C#.
 
 
 ## TV ao vivo (fora do escopo)
@@ -256,7 +256,7 @@ Decididas pelo usuário em 07/11/2026:
 
 Adiada:
 
-- **D5 (adiado). Vídeos caseiros e clipes** (`homevideos`, `musicvideos`): vídeos caseiros em Fotos (como "memórias") ou numa seção própria com o ciano; clipes em Audiovisual ou em Áudios/Músicas. Volta quando a spec das bibliotecas caseiras avançar.
+- **D5 (adiado). Vídeos caseiros e clipes** (`homevideos`, `musicvideos`): vídeos caseiros em Fotos (como "memórias") ou numa seção própria com o ciano; clipes em Audiovisual ou em Áudios/Músicas. As bibliotecas Vídeos e Galeria do acervo do usuário não entram no Croma (09/11/2026, aplicação dedicada por privacidade); a D5 trata só de como o Croma exibe esses tipos de mídia em geral.
 
 ## Implementação (resumo)
 

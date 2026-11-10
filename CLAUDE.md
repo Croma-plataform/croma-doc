@@ -90,8 +90,8 @@ Resumo das regras:
 | Coleções por biblioteca e modo de exibição | Especificado, não implementado | `specs/colecoes.md` |
 | Tags e editor de tags (vindos do v1) | Avaliado, com decisões em aberto | `specs/tags.md` |
 | Seções Audiovisual, Áudios e Leitura; TV ao vivo fora do escopo | Estrutura decidida pelo usuário (07/11/2026); D1–D4 decididas (D4: subtipo como campo da biblioteca no servidor, com fork do Jellyfin), D5 adiada; manual revisado (08/11/2026) | `specs/secoes.md` |
-| Varredura do padrão Baú (acervo do usuário, documentado no repositório DL_HERMES em `~/Documentos/Projetos/Codes/DL_HERMES`) | **Filmes implementado** (08/11/2026): metadados, imagens, legendas e coleções, testado com os 160 filmes. Séries, Músicas, Vídeos e Galeria quando os documentos do DL_HERMES forem aprovados | `specs/varredura-bau.md` |
-| Varredura estruturada (com níveis) das bibliotecas caseiras | Vai seguir o padrão Baú (formato em desenvolvimento pelo usuário) | `specs/bibliotecas-caseiras.md` |
+| Varredura do padrão Baú (acervo do usuário, documentado no repositório DL_HERMES em `~/Documentos/Projetos/Codes/DL_HERMES`) | **Filmes implementado** (08/11/2026): metadados, imagens, legendas e coleções, testado com os 160 filmes. Séries também (08/11/2026); Músicas quando o documento do DL_HERMES for aprovado | `specs/varredura-bau.md` |
+| Bibliotecas Vídeos e Galeria do acervo | **Fora do Croma** (09/11/2026): conteúdo privado, terão uma aplicação dedicada. O Croma continua servindo fotos e vídeos com a varredura padrão do Jellyfin | `PLANO.md`, "Fora do escopo" |
 | `croma-tizen` e `croma-desktop` | Não iniciados (ícones, nomes, empacotamento) | `croma-tizen/`, `croma-desktop/` |
 | `croma-android` | Criado (fork sem mudanças), implementação adiada | `croma-android/` |
 | Repositórios na organização `Croma-plataform`, perfil `.github` e hub renomeado para `croma-doc` | Feito (07/11/2026) | veja "Repositórios" |

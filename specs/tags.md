@@ -36,4 +36,4 @@ Levar para TypeScript, no `croma-web`, a lógica pura do v1, trocando só a cama
 2. **Níveis:** achatar as pastas no cliente ou convertê-los em tags.
 3. **Escopo:** tags só em Fotos ou em todas as bibliotecas.
 
-O plugin de varredura estruturada ([`bibliotecas-caseiras.md`](bibliotecas-caseiras.md)) pode resolver os níveis e a importação das tags de uma vez, mas exige o .NET SDK.
+A varredura estruturada que resolveria os níveis e as tags de uma vez era a das bibliotecas Vídeos e Galeria do acervo, que saíram do Croma (09/11/2026, aplicação dedicada por privacidade). Os níveis precisam de outra solução, se ainda fizerem sentido.

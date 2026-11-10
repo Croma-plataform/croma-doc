@@ -137,7 +137,6 @@ O roteiro (onde estamos, fases e decisões pendentes) fica em [`PLANO.md`](PLANO
 | [`specs/tags.md`](specs/tags.md) | Tags e editor de tags vindos do v1 | Avaliado, com decisões em aberto |
 | [`specs/secoes.md`](specs/secoes.md) | Seções Audiovisual, Áudios e Leitura; TV ao vivo fora do escopo | Estrutura decidida (07/11/2026); cores e detalhes em aberto |
 | [`specs/varredura-bau.md`](specs/varredura-bau.md) | Leitura do padrão Baú (acervo do usuário, DL_HERMES): metadados, imagens, legendas e coleções | Filmes implementado (08/11/2026) |
-| [`specs/bibliotecas-caseiras.md`](specs/bibliotecas-caseiras.md) | Varredura estruturada (níveis) de Vídeos e Fotos | Formato em desenvolvimento pelo usuário |
 
 ## Identidade visual
 

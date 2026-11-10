@@ -3,7 +3,7 @@
 O acervo do usuário já é organizado num padrão próprio, o **Baú**, documentado no repositório **DL_HERMES** (`~/Documentos/Projetos/Codes/DL_HERMES`). Cada item guarda os seus dados ao lado do arquivo de mídia: `metadata/metadata.json`, `metadata/images/` e `metadata/subs/`. O Croma lê esse padrão direto, sem depender da identificação pela internet.
 
 - **Fonte da verdade:** o padrão é definido no DL_HERMES. Este documento só diz como o servidor lê o padrão. Se os dois divergirem, vale o DL_HERMES, e o leitor precisa ser corrigido.
-- **Situação:** **Filmes** (`docs/bibliotecas/filmes.md`) e **Séries** (`docs/bibliotecas/series.md`), ambos no `schema_version` 2, estão implementados. Músicas é o próximo (documento aprovado em 08/11/2026). Vídeos e Galeria entram quando os documentos deles estiverem prontos.
+- **Situação:** **Filmes** (`docs/bibliotecas/filmes.md`) e **Séries** (`docs/bibliotecas/series.md`), ambos no `schema_version` 2, estão implementados. Músicas é o próximo (documento aprovado em 08/11/2026). Vídeos e Galeria ficam fora do Croma (decisão do usuário, 09/11/2026): por privacidade, terão uma aplicação dedicada.
 - **O servidor só lê:** nada é gravado nas pastas do acervo. Quem escreve nelas são os scripts e pipelines do Baú.
 
 ## Filmes
