@@ -157,16 +157,16 @@ Testes:
 
 Feito: grade com filtros, detalhe completo (prancha 28), etiqueta da edição.
 
-- [?] Galeria (prancha 09): 7 colunas de 160 px, indicadores do D02.
-- [ ] Filtro por **resolução**, além de gênero, ano e visto.
-- [?] Detalhe: etiqueta de classificação (número em mono sobre Fósforo).
-- [ ] Lista de edições (`editions.ts` só conhece `Estendida`): vir do servidor ou ganhar as demais.
+- [x] Galeria (prancha 09): colunas de 160 px no desktop (`themes/croma/theme.scss`), indicadores do D02 (11/11/2026). A TV (216 px) fica no T04.
+- [x] Filtro por **resolução** (SD, HD, 4K, 3D; o painel ganhou o nome "Resolução"), além de gênero, ano e visto (11/11/2026).
+- [x] Detalhe: etiqueta de classificação (número em mono sobre Fósforo) (11/11/2026).
+- [~] Lista de edições: `editions.ts` ganhou Diretor, Versão do diretor, Sem cortes, Remasterizada e Final; ainda é lista fechada no web (vir do servidor fica para depois).
 
 Testes:
 
-- [ ] **E** detalhe com e sem progresso, com edição, com mais de uma versão, sem elenco, sem fundo; favoritar e marcar como visto; filtros da grade.
+- [~] **E** feitos: edição e classificação, sem elenco, favoritar e marcar como visto, filtros de resolução, largura da galeria. Faltam: com progresso, com mais de uma versão, sem fundo.
 - [ ] **U** falha do `PlaybackInfo` na ficha do arquivo.
-- [ ] **V** grade e detalhe contra as pranchas 09 e 28.
+- [~] **V** grade e detalhe têm referências próprias; falta compará-las com as pranchas 09 e 28.
 
 ### D04 · Séries e episódios
 

@@ -150,3 +150,29 @@ def osd(pagina):
         pagina.mouse.move(740, 440)
         pagina.wait_for_selector('.cromaOsdTitle', state='visible', timeout=5000)
     return _osd
+
+
+@pytest.fixture(scope='session')
+def api_admin(base):
+    """`api_admin('Items/ID', corpo, 'POST')` chama a API do servidor de teste como administrador."""
+    import json
+    import urllib.request
+    raiz = base.removesuffix('web/')
+    auth = 'MediaBrowser Client="croma-teste", Device="teste", DeviceId="croma-api", Version="1"'
+
+    def chamar(caminho, corpo=None, metodo=None, token=None):
+        pedido = urllib.request.Request(
+            raiz + caminho, data=json.dumps(corpo).encode() if corpo is not None else None, method=metodo,
+            headers={'Content-Type': 'application/json',
+                     'Authorization': auth + (f', Token="{token}"' if token else '')})
+        with urllib.request.urlopen(pedido) as r:
+            texto = r.read()
+            return json.loads(texto) if texto else None
+
+    sessao = chamar('Users/AuthenticateByName', {'Username': 'admin', 'Pw': 'teste'})
+    token, uid = sessao['AccessToken'], sessao['User']['Id']
+
+    def api(caminho, corpo=None, metodo=None):
+        return chamar(caminho, corpo, metodo, token)
+    api.uid = uid
+    return api

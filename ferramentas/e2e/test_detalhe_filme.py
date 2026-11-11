@@ -1,6 +1,8 @@
 """Detalhe do filme (prancha 28): kicker, botões, faixa de baixo e o que ficou de fora."""
 import re
 
+import pytest
+
 PAGINA = '#itemDetailPage:not(.hide) '
 
 
@@ -47,3 +49,43 @@ def test_secao_fica_destacada_no_detalhe(pagina, ir, item, layout):
 def test_visual_do_detalhe(pagina, ir, item, conferir):
     ir(f'details?id={item("Movie", "Barras Faixas (2003)")}')
     conferir('detalhe-filme-faixas')
+
+
+def _editar(api_admin, id_item, **campos):
+    """Muda campos do item e devolve os valores antigos (para restaurar)."""
+    dto = api_admin(f'Items/{id_item}')
+    antigos = {k: dto.get(k) for k in campos}
+    dto.update(campos)
+    api_admin(f'Items/{id_item}', dto, 'POST')
+    return antigos
+
+
+def test_edicao_e_classificacao_aparecem_no_detalhe(pagina, ir, item, api_admin):
+    id_item = item('Movie', 'Barras Capitulos (2004)')
+    antigos = _editar(api_admin, id_item, Tags=['Diretor'], OfficialRating='14')
+    try:
+        ir(f'details?id={id_item}')
+        assert pagina.locator(PAGINA + '.detailEdition').inner_text().strip().lower() == 'diretor'
+        classificacao = pagina.locator(PAGINA + '.mediaInfoOfficialRating').first
+        assert classificacao.inner_text().strip() == '14'
+        cor = classificacao.evaluate('e => getComputedStyle(e).backgroundColor')
+        assert cor == 'rgb(242, 242, 240)'     # Fósforo
+    finally:
+        _editar(api_admin, id_item, **antigos)
+
+
+@pytest.mark.usuario('admin')
+def test_favoritar_e_marcar_como_visto(pagina, ir, item, api_admin):
+    id_item = item('Movie', 'Barras Direto (2001)')
+    uid = api_admin.uid
+    try:
+        ir(f'details?id={id_item}')
+        pagina.locator(PAGINA + '.btnPlaystate').first.click()
+        pagina.locator(PAGINA + '.btnUserRating').first.click()
+        pagina.wait_for_timeout(1500)
+        dados = api_admin(f'Users/{uid}/Items/{id_item}')['UserData']
+        assert dados['Played'] is True
+        assert dados['IsFavorite'] is True
+    finally:
+        api_admin(f'Users/{uid}/PlayedItems/{id_item}', None, 'DELETE')
+        api_admin(f'Users/{uid}/FavoriteItems/{id_item}', None, 'DELETE')
