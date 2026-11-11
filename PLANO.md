@@ -148,10 +148,10 @@ O que todas as seções usam. Fazer antes delas evita refazer.
 
 Testes:
 
-- [ ] **U** capa gerada (proporção por tipo, título longo, cor da seção, sem autor); fila de avisos (limite de 3, durações, erro fica até a pessoa agir).
-- [ ] **C** cada componente nos seus estados.
-- [ ] **E** item sem arte mostra a capa gerada; aviso aparece e some; biblioteca vazia; movimento reduzido para as animações.
-- [ ] **V** uma página de mostruário com todos os componentes e estados, comparada à prancha 35.
+- [x] **U** capa gerada (proporção por tipo, título longo, cor da seção, sem autor); fila de avisos (limite de 3, durações, erro fica até a pessoa agir).
+- [~] **C** cada componente nos estados (capa, avisos, esqueletos, vazio, alternador: feitos; falta o restante do tema).
+- [~] **E** feitos: capa gerada, alternador, aviso aparece e some (máx. 3, erro fica), movimento reduzido zera as durações. Falta biblioteca vazia.
+- [~] **V** página de mostruário em `#/mostruario` (`apps/modern/routes/mostruario/`; botões, campo, avisos, capas, esqueletos e vazio) com referência `mostruario.png`. Falta comparar com a prancha 35 e acrescentar seletor de passo e alternância.
 
 ### D03 · Filmes: fecho
 
