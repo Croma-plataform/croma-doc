@@ -186,14 +186,14 @@ Testes:
 
 ### D05 · Documentários
 
-- [ ] Aba **Documentários** que junta as bibliotecas de filmes e de séries documentais numa grade só, com a etiqueta FILME ou SÉRIE.
-- [ ] Novidades de documentários no Resumo.
+- [x] Aba **Documentários** que junta as bibliotecas de filmes e de séries documentais numa grade só, com a etiqueta FILME ou SÉRIE (11/11/2026: `sections/components/GroupedItemsView.tsx`, parâmetro `group=documentaries` na URL; a barra lateral ainda lista as duas bibliotecas; a etiqueta é o `showKindLabel` dos cartões, reaproveitável na busca e no Início).
+- [x] Novidades de documentários no Resumo (uma fileira "Novidades" por biblioteca documental, já vinda do D01).
 
 Testes:
 
-- [ ] **U** junção e ordenação das duas bibliotecas; etiqueta de tipo.
+- [x] **U** junção e ordenação das duas bibliotecas (`grouped.test.ts`); aba única (`sections.test.ts`).
 - [ ] **S** já existe: documentários não entram nas visões agrupadas de filmes.
-- [ ] **E** um filme documental aparece em Documentários e não em Filmes.
+- [x] **E** `test_documentarios.py`: uma aba só, filme e série com etiqueta, filme documental fora de Filmes, visual.
 
 ### D06 · Player de vídeo: complementos
 
