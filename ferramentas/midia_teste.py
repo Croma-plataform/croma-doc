@@ -53,7 +53,7 @@ def capitulos(caminho: Path, titulos: list[str], duracao_s: int) -> Path:
 
 
 def video(destino: Path, *, codec='libx264', segundos=12, audios=(('por', 440),), legendas=(), cap=(), titulo='',
-          extra=()) -> None:
+          genero='', extra=()) -> None:
     """Vídeo de barras com um tom por faixa de áudio; legendas e capítulos opcionais (contêiner MKV ou MP4)."""
     destino.parent.mkdir(parents=True, exist_ok=True)
     entradas: list[str] = ['-f', 'lavfi', '-i', f'testsrc2=size=640x360:rate=15:duration={segundos}']
@@ -83,6 +83,8 @@ def video(destino: Path, *, codec='libx264', segundos=12, audios=(('por', 440),)
         meta += [f'-metadata:s:s:{i}', f'language={idioma}']
     if titulo:
         meta += ['-metadata', f'title={titulo}']
+    if genero:
+        meta += ['-metadata', f'genre={genero}']
     if cap:
         meta += ['-map_metadata', str(base + len(legendas))]
     rodar(*entradas, *mapa, *saida, *meta, *extra, str(destino))
@@ -184,10 +186,12 @@ def gerar(raiz: Path) -> dict:
 
     # Filmes
     f = raiz / 'filmes'
-    video(f / 'Barras Direto (2001)' / 'Barras Direto (2001).mp4', titulo='Barras Direto')
-    video(f / 'Barras HEVC (2002)' / 'Barras HEVC (2002).mkv', codec='libx265', titulo='Barras HEVC')
+    video(f / 'Barras Direto (2001)' / 'Barras Direto (2001).mp4', titulo='Barras Direto',
+          genero='Ação')
+    video(f / 'Barras HEVC (2002)' / 'Barras HEVC (2002).mkv', codec='libx265', titulo='Barras HEVC',
+          genero='Ação;Drama')
     video(f / 'Barras Faixas (2003)' / 'Barras Faixas (2003).mkv', audios=(('por', 440), ('eng', 660)),
-          legendas=legendas, titulo='Barras Faixas')
+          legendas=legendas, titulo='Barras Faixas', genero='Drama')
     video(f / 'Barras Capitulos (2004)' / 'Barras Capitulos (2004).mkv', segundos=40,
           cap=capitulos(tmp / 'cap.ffmeta', ['Abertura', 'Meio', 'Virada', 'Final'], 40), titulo='Barras Capítulos')
     video(f / 'Barras Com Arte (2005)' / 'Barras Com Arte (2005).mp4', titulo='Barras Com Arte')
@@ -205,7 +209,8 @@ def gerar(raiz: Path) -> dict:
 
     # Documentários: um filme e uma série
     d = raiz / 'documentarios-filmes'
-    video(d / 'Documental Um (2015)' / 'Documental Um (2015).mp4', titulo='Documental Um')
+    video(d / 'Documental Um (2015)' / 'Documental Um (2015).mp4', titulo='Documental Um',
+          genero='Documentário;Drama')
     cat['documentarios-filmes'] = {'tipo': 'movies', 'subtipo': 'Documentaries', 'pasta': 'documentarios-filmes'}
     ds = raiz / 'documentarios-series' / 'Serie Documental (2016)'
     for e in (1, 2):

@@ -57,3 +57,64 @@ def test_clicar_na_secao_abre_a_primeira_biblioteca(pagina, ir):
 def test_visual_da_grade_de_filmes(pagina, ir, biblioteca, conferir):
     ir(f'movies?topParentId={biblioteca("Filmes")["id"]}&collectionType=movies&tab=0')
     conferir('grade-filmes')
+
+
+def test_cabecalho_mostra_o_comprimento_de_onda_e_as_contagens(pagina, ir, biblioteca):
+    ir(f'movies?topParentId={biblioteca("Filmes")["id"]}&collectionType=movies&tab=1')
+    rotulo = pagina.locator('[data-testid="section-label"]')
+    rotulo.wait_for()
+    # as contagens chegam depois do primeiro desenho
+    pagina.wait_for_function(
+        "document.querySelector('[data-testid=section-label]').textContent.includes('·')")
+    texto = rotulo.inner_text()
+    assert texto.startswith('λ 580 nm'), texto
+    assert 'FILMES' in texto.upper() and 'SÉRIES' in texto.upper()
+
+
+@pytest.mark.parametrize('secao,biblio,rota,cor', [
+    ('Audiovisual', 'Filmes', 'movies', 'rgb(192, 192, 0)'),
+    ('Áudios', 'Músicas', 'music', 'rgb(0, 192, 0)'),
+    ('Leitura', 'Livros', 'books', 'rgb(59, 59, 255)'),
+    ('Fotos', 'Fotos', 'homevideos', 'rgb(192, 0, 192)'),
+])
+def test_cada_secao_tem_cabecalho_com_a_sua_cor(pagina, ir, biblioteca, secao, biblio, rota, cor):
+    b = biblioteca(biblio)
+    ir(f'{rota}?topParentId={b["id"]}&collectionType={rota}&tab=0')
+    pagina.locator('[data-testid="section-label"]').wait_for()
+    cabecalho = pagina.locator('[data-testid="section-label"]').locator('xpath=..')
+    assert secao in cabecalho.inner_text()
+    quadrado = cabecalho.locator('xpath=./div[2]/div[1]')
+    assert quadrado.evaluate('e => getComputedStyle(e).backgroundColor') == cor
+
+
+@pytest.mark.parametrize('secao,biblio,rota', [
+    ('audiovisual', 'Filmes', 'movies'),
+    ('audios', 'Músicas', 'music'),
+    ('leitura', 'Livros', 'books'),
+    ('fotos', 'Fotos', 'homevideos'),
+])
+def test_visual_do_cabecalho_de_cada_secao(pagina, ir, biblioteca, conferir, secao, biblio, rota):
+    ir(f'{rota}?topParentId={biblioteca(biblio)["id"]}&collectionType={rota}&tab=0')
+    pagina.wait_for_function(
+        "(document.querySelector('[data-testid=section-label]')||{textContent:''}).textContent.includes('·')"
+        " || document.querySelector('[data-testid=section-label]')")
+    pagina.wait_for_timeout(600)
+    # só o cabeçalho e a barra lateral: a grade abaixo carrega em ritmo variável
+    conferir(f'cabecalho-{secao}', esconder=['.itemsContainer', '.listItem', '.alphaPicker', '.paging'])
+
+
+def test_generos_sao_os_da_secao_inteira_com_contagem_por_subtipo(pagina, ir, biblioteca):
+    ir(f'movies?topParentId={biblioteca("Filmes")["id"]}&collectionType=movies&tab=1')
+    pagina.locator(TABS, has_text='Gêneros').click()
+    pagina.locator('[data-testid="section-genre"]').first.wait_for()
+    pagina.wait_for_function("document.querySelectorAll('[data-testid=section-genre]').length >= 3")
+
+    linhas = {}
+    for linha in pagina.locator('[data-testid="section-genre"]').all():
+        nome = linha.locator('h2').inner_text().strip()
+        linhas[nome] = linha.locator('.MuiTypography-caption').inner_text().strip().upper()
+
+    assert set(linhas) == {'Ação', 'Documentário', 'Drama'}
+    # Drama existe em Filmes (2) e em Documentários (filmes) (1): a contagem separa os subtipos
+    assert linhas['Drama'] == '2 FILMES · 1 DOCUMENTÁRIOS'
+    assert linhas['Ação'] == '2 FILMES'

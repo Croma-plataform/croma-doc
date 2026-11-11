@@ -117,32 +117,34 @@ Pronto quando: um comando só diz se o projeto está inteiro.
 
 Feito: barra lateral com as seções, cabeçalho com abas, Resumo do Audiovisual, seção destacada no detalhe.
 
-- [ ] Cabeçalho da seção como no manual: rótulo mono com o comprimento de onda e as contagens (`λ 580 nm · 160 FILMES · 64 SÉRIES`), nome em Archivo Expandida e o quadrado na cor.
-- [ ] **Coleções e Gêneros da seção inteira** (hoje são os da biblioteca aberta), com a contagem por subtipo nos gêneros.
-- [?] Barra lateral: 240 px, barra vertical de 4 px e fundo Grafite na ativa, subtipos com ícone sem cor.
-- [ ] A lista de seções do `sections.ts` confere com o catálogo do servidor (`GET /Library/Subtypes`).
-- [ ] Editar o subtipo de uma biblioteca que já existe, pela tela.
+- [x] Cabeçalho da seção como no manual: rótulo mono `λ 580 nm · 5 FILMES · 1 SÉRIES`, nome em Archivo Expandida e o quadrado na cor (11/11/2026). Fotos fica sem λ (o magenta não é espectral). Código em `features/sections/counts.ts` e `useSectionCounts.ts`.
+- [x] **Gêneros da seção inteira**, com a contagem por subtipo em cada gênero (`SectionGenresView`, `genres.ts`). Gêneros iguais de bibliotecas diferentes se juntam, sem contar acento ou caixa.
+- [ ] **Coleções da seção inteira.** Depende da decisão do usuário sobre o dono das coleções (`specs/colecoes.md`); hoje a aba mostra as da biblioteca aberta.
+- [?] Barra lateral: 240 px, barra de 4 px e fundo Grafite na ativa, subtipos com ícone sem cor. Conferido na captura (240 px, barra amarela, subtipos com ícone); falta medir a barra e a cor.
+- [x] A lista de seções e subtipos do web confere com o catálogo do servidor (`test_catalogo.py`).
+- [x] Editar o subtipo de uma biblioteca que já existe, pela tela: o campo já existia no editor; agora há teste (`test_subtipo_biblioteca.py`).
+- [ ] O cartão da biblioteca no painel mostra o tipo do Jellyfin ("Livros") e não o subtipo ("Mangás").
 
 Testes:
 
-- [ ] **U** contagens do cabeçalho; gêneros somados por subtipo; `getHeaderTabs`.
-- [ ] **U** um teste compara as seções do web com o catálogo do servidor de teste.
-- [ ] **C** `SectionTabs` (uma e várias bibliotecas, aba ativa, biblioteca sem seção), `SectionLinks` (ativa por `topParentId` e pelos ancestrais do item), `SectionSummaryView` (fileira vazia some).
-- [ ] **E** percorrer as abas das quatro seções; conta sem acesso a uma biblioteca; seção sem biblioteca some do menu.
-- [ ] **V** barra lateral e cabeçalho de cada seção.
+- [x] **U** contagens do cabeçalho, gêneros somados e filtrados por letra (`counts.test.ts`, `genres.test.ts`). `getHeaderTabs` está exportada, falta o caso dedicado.
+- [x] **U/E** seções do web contra o catálogo do servidor de teste.
+- [x] **C** `SectionTabs` (agora com o rótulo), `SectionLinks`. `SectionSummaryView` (fileira vazia some, recomendações dos filmes).
+- [x] **E** abas e cabeçalho das quatro seções, gêneros da seção, conta com uma só biblioteca (`test_acesso.py`), troca de subtipo.
+- [x] **V** cabeçalho e barra lateral de cada seção (`cabecalho-*`).
 
 ### D02 · Componentes comuns
 
 O que todas as seções usam. Fazer antes delas evita refazer.
 
-- [ ] **Capa gerada** para itens sem arte: 2:3 e 1:1, quadrado na cor da seção, título, autor em mono, faixa de 7 barras, com visto e progresso por cima.
-- [ ] **Cartões:** visto (quadrado na cor da seção com ✓, título em Névoa), progresso na cor da seção, etiqueta `+2` de episódios novos, etiqueta de tipo, e ao passar o mouse a borda de 4 px com o botão de assistir.
-- [ ] **Avisos rápidos:** sucesso, informação e erro, com as durações do manual, até 3 empilhados.
-- [ ] **Carregando** geral (espectro varrendo em 1,8 s depois de 300 ms) e **cartões-esqueleto**.
-- [ ] **Vazio:** moldura apagada, ícone do subtipo, "0 ITENS" e a ação principal.
+- [x] **Capa gerada** (11/11/2026, `components/croma/generatedCover/`, ligada em `Media.tsx`; SVG que escala com o cartão; filmes, séries, temporadas, coleções, álbuns e livros; episódios mantêm o ícone). Era: 2:3 e 1:1, quadrado na cor da seção, título, autor em mono, faixa de 7 barras, com visto e progresso por cima.
+- [~] **Cartões** (11/11/2026, `themes/croma/theme.scss`, `CardImageContainer.tsx` define `--croma-card-cor` pela seção do item): feitos o visto (quadrado na cor da seção com ✓ em Sinal), o progresso na cor da seção (era azul do Jellyfin), a etiqueta `+2` em mono e a borda Fósforo de 4 px ao passar o mouse. Faltam o título em Névoa nos vistos, a etiqueta de tipo (FILME/SÉRIE, módulo D05) e o botão de assistir ao passar o mouse.
+- [x] **Avisos rápidos** (11/11/2026, `components/toast/toast.ts` reescrito sobre `components/croma/toast/toastQueue.ts`; callers antigos seguem como informação de 6 s): sucesso, informação e erro, com as durações do manual, até 3 empilhados.
+- [x] **Carregando** geral (`components/loading/`: faixa do espectro com trecho aceso a 1,8 s, só depois de 300 ms, parada a 60% com movimento reduzido) e **cartões-esqueleto** (`components/croma/states/CardSkeletons.tsx`, usados no Resumo e nos Gêneros da seção; as outras telas ainda usam só o carregando geral) (11/11/2026).
+- [x] **Vazio** (`components/croma/states/EmptyState.tsx`, aplicado pelo `NoItemsMessage`): moldura apagada, ícone do subtipo, "0 ITENS" e a ação principal. Falta passar o ícone e a ação em cada tela (11/11/2026).
 - [ ] **Alternar grade e lista.**
 - [?] Tema contra o manual: botões (principal, secundário, terciário), foco em cartão e em botão, abas, campos de formulário, alternância, seleção segmentada, seletor de passo.
-- [ ] **Movimento:** durações e curva do manual como variáveis; tudo respeita `prefers-reduced-motion`.
+- [x] **Movimento** (variáveis `--croma-dur-*` e `--croma-ease-enter` no tema, zeradas com movimento reduzido; falta aplicar nas telas antigas): durações e curva do manual como variáveis; tudo respeita `prefers-reduced-motion`.
 
 Testes:
 
