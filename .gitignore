@@ -12,3 +12,8 @@ jellyfin-server/
 
 # Material de marca da CAPRA (repositório próprio)
 Capra/
+
+# Saídas dos testes de ponta a ponta (ferramentas/e2e)
+ferramentas/e2e/falhas/
+__pycache__/
+.pytest_cache/

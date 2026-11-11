@@ -113,8 +113,21 @@ croma-web (fork do jellyfin-web)  ← a identidade aplicada na interface mora aq
 
 ## Ferramentas
 
-- [`ferramentas/web_capturas.py`](ferramentas/web_capturas.py): entra no Croma web com a conta de teste e salva capturas de tela (Playwright). Uso: `python3 ferramentas/web_capturas.py <pasta> "<rota>|<nome>" ...`. Para capturar é preciso o servidor no ar e o build do `croma-web`.
-- **Build do `croma-web` no Linux:** o `node` do sistema ainda é o 22. Sem trocar o pacote, crie links temporários (`ln -sf /usr/bin/node-24 <pasta>/node` e o mesmo para `npm-24`), ponha a pasta no começo do `PATH` e rode `npm run build:production` (leva de 1 a 2 minutos). Lint e tipos: `npx eslint <caminhos>` e `npx tsc --noEmit`.
+Tudo em [`ferramentas/`](ferramentas/). O módulo D00 do plano explica a ideia; aqui está como usar.
+
+| Arquivo | Para quê |
+|---|---|
+| [`verificar.sh`](ferramentas/verificar.sh) | **Um comando verifica tudo:** lint, estilo, tipos, testes e build do `croma-web`; testes e formatação do `croma-servidor`; testes de ponta a ponta. `--rapido` roda só o que mudou e sem o build; `--so web\|servidor\|e2e` escolhe a parte; `--ate-o-fim` não para no primeiro erro. Acha o Node 24 sozinho. |
+| [`midia_teste.py`](ferramentas/midia_teste.py) | Gera a **mídia de teste**: um pouco de cada subtipo, toda sintética (barras e tons feitos com o ffmpeg, páginas desenhadas). Vai para `~/.cache/croma-teste/midia` (28 MB, 4 s). Os arquivos não entram em nenhum repositório. |
+| [`servidor_teste.py`](ferramentas/servidor_teste.py) | **Servidor de teste**: dados em `~/.cache/croma-teste/servidor`, porta **8097**, só a mídia sintética, **sem provedores da internet**, com uma biblioteca por subtipo e as contas `admin`, `leitor` e `tocador` (senha `teste`, só deste servidor descartável). Comandos: `subir`, `parar`, `estado`, `limpar`. Nunca toca o acervo nem o servidor de trabalho (8096). |
+| [`e2e/`](ferramentas/e2e/) | **Ponta a ponta** com Playwright e pytest, contra o servidor de teste. Cada teste roda no `desktop` (1600×900) e na `tv` (1920×1080, modo TV). `python3 -m pytest` dentro da pasta; `-k nome` filtra; `--headed` mostra o navegador; `--atualizar-referencias` regrava as capturas. `conftest.py` tem os auxiliares (`pagina`, `ir`, `item`, `tocar`, `osd`, `conferir`). Marca `@pytest.mark.usuario('tocador')` nos testes que assistem (eles mudam o estado dos itens; o `leitor` fica intacto para as capturas). Falha também se a página lançar erro de JavaScript. |
+| [`e2e/referencias/`](ferramentas/e2e/referencias/) | Capturas de referência (regressão visual), comparadas por `visual.py` (tolerância de 0,3% dos pixels). O que falhar vai para `e2e/falhas/` com o mapa de diferenças. |
+| [`web_capturas.py`](ferramentas/web_capturas.py) | Captura avulsa de telas do servidor de trabalho (conta `teste`), para olhar uma tela sem escrever teste. Uso: `python3 ferramentas/web_capturas.py <pasta> "<rota>\|<nome>" ...`. |
+
+- **Dependências:** `pip install --user pytest playwright pillow`, o Chromium do Playwright (`playwright install chromium`) e o ffmpeg do sistema. O Chromium do Playwright não tem H.264: o servidor converte, e os chips mostram "Convertendo no servidor". Reprodução direta só num navegador com H.264 (pendência do D00).
+- **Testes de componente** (`croma-web`): Vitest com Testing Library, ao lado do componente (`SectionTabs.test.tsx`, `SectionLinks.test.tsx`). O `vite.config.ts` define as globais do build do webpack (`__WEBPACK_SERVE__` etc.); como as globais do Vitest estão desligadas, o teste chama `afterEach(cleanup)`. Módulos que puxam metade do app (como `useCurrentTab`, que lê as configurações do usuário) são trocados por `vi.mock`.
+- **Chromium 85 (TV):** o `.stylelintrc.json` do `croma-web` recusa `inset`, `aspect-ratio` e `:not(a, b)` em `src/components/croma/` e `src/themes/croma/`.
+- **Build do `croma-web` no Linux:** o `node` do sistema ainda é o 22; o `verificar.sh` já resolve. À mão: links temporários (`ln -sf /usr/bin/node-24 <pasta>/node`, o mesmo para `npm-24`), a pasta no começo do `PATH`, e `npm run build:production` (1 a 2 minutos). O servidor lê o `dist/` do disco.
 
 ## Mapa das cascas
 
@@ -127,7 +140,7 @@ Nenhuma casca foi alterada ainda: as três seguem com nome, ids e ícones do Jel
 
 ## Plano de desenvolvimento
 
-O roteiro (onde estamos, fases e decisões pendentes) fica em [`PLANO.md`](PLANO.md).
+O roteiro fica em [`PLANO.md`](PLANO.md): etapas por plataforma (desktop agora, depois TV e celular) e módulos, cada um com as entregas e os testes que o fecham.
 
 ## Especificações
 
@@ -135,8 +148,8 @@ O roteiro (onde estamos, fases e decisões pendentes) fica em [`PLANO.md`](PLANO
 |---|---|---|
 | [`specs/colecoes.md`](specs/colecoes.md) | Coleções por biblioteca e modo de exibição | Especificado, não implementado |
 | [`specs/tags.md`](specs/tags.md) | Tags e editor de tags vindos do v1 | Avaliado, com decisões em aberto |
-| [`specs/secoes.md`](specs/secoes.md) | Seções Audiovisual, Áudios e Leitura; TV ao vivo fora do escopo | Estrutura decidida (07/11/2026); cores e detalhes em aberto |
-| [`specs/varredura-bau.md`](specs/varredura-bau.md) | Leitura do padrão Baú (acervo do usuário, DL_HERMES): metadados, imagens, legendas e coleções | Filmes implementado (08/11/2026) |
+| [`specs/secoes.md`](specs/secoes.md) | Seções Audiovisual, Áudios e Leitura; TV ao vivo fora do escopo | Estrutura e cores decididas (07/11/2026); só a D5 adiada |
+| [`specs/varredura-bau.md`](specs/varredura-bau.md) | Leitura do padrão Baú (acervo do usuário, DL_HERMES): metadados, imagens, legendas e coleções | Filmes e séries implementados (08/11/2026); músicas a fazer |
 
 ## Identidade visual
 

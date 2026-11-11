@@ -15,6 +15,6 @@ Este repositório (`croma-doc`) é a **documentação** do projeto, o hub: visã
 | [`croma-v1`](https://github.com/Croma-plataform/croma-v1) | Croma v1, arquivado |
 | [`.github`](https://github.com/Croma-plataform/.github) | Página de perfil da organização (pasta local `croma-org/`) |
 
-- [`PLANO.md`](PLANO.md): plano de desenvolvimento (onde estamos e próximas fases).
+- [`PLANO.md`](PLANO.md): plano de desenvolvimento por plataforma e por módulo, com os testes de cada um.
 - [`CROMA.md`](CROMA.md): repositórios, versões, arquitetura, mapa do código e como clonar tudo.
 - [`specs/`](specs/): especificações (seções, varredura do padrão Baú, coleções, tags).
