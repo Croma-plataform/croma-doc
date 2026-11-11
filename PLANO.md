@@ -173,16 +173,16 @@ Testes:
 Feito: fita de episódios e kicker no detalhe da série. O leitor do Baú para séries já existe no servidor.
 
 - [ ] Biblioteca de Séries do acervo criada e varrida.
-- [ ] Galeria de séries (prancha 10) com a etiqueta `+2`.
+- [~] Galeria de séries (prancha 10): a etiqueta `+N` já aparece (11/11/2026). Falta o formato 16:9 do manual: hoje o cartão sem arte sai quadrado e a capa gerada só tem 2:3 e 1:1.
 - [ ] Resto do detalhe da série e a página da temporada no visual do manual.
-- [ ] **Detalhe do episódio** (prancha 29): imagem na moldura, fita da temporada e a lista com o episódio atual em Grafite.
-- [ ] Faixa de baixo (ficha técnica e arquivo) para o episódio.
+- [~] **Detalhe do episódio** (prancha 29, 11/11/2026): kicker `EPISÓDIO · T1 E02`, imagem 16:9 na moldura e "Mais da temporada". Falta a lista com o episódio atual em Grafite.
+- [x] Faixa de baixo (ficha técnica e arquivo) para o episódio (11/11/2026; sem "Parecidos na biblioteca").
 
 Testes:
 
 - [ ] **U** fita com especiais e com temporada sem episódios (o modelo já tem 7 testes).
-- [ ] **E** série sem nada visto, pela metade e toda vista; episódio novo depois da última vez que a pessoa assistiu; "Próximo: T1 E02" abre o episódio certo.
-- [ ] **V** pranchas 10 e 29.
+- [~] **E** feitos (`test_series.py`): série sem nada visto, pela metade e toda vista; "Próximo: T1 E02"; kicker e arquivo do episódio. Falta o episódio novo depois da última vez que a pessoa assistiu.
+- [~] **V** referências `grade-series`, `detalhe-serie` e `detalhe-episodio`; falta compará-las com as pranchas 10 e 29.
 
 ### D05 · Documentários
 
