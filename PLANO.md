@@ -142,8 +142,8 @@ O que todas as seções usam. Fazer antes delas evita refazer.
 - [x] **Avisos rápidos** (11/11/2026, `components/toast/toast.ts` reescrito sobre `components/croma/toast/toastQueue.ts`; callers antigos seguem como informação de 6 s): sucesso, informação e erro, com as durações do manual, até 3 empilhados.
 - [x] **Carregando** geral (`components/loading/`: faixa do espectro com trecho aceso a 1,8 s, só depois de 300 ms, parada a 60% com movimento reduzido) e **cartões-esqueleto** (`components/croma/states/CardSkeletons.tsx`, usados no Resumo e nos Gêneros da seção; as outras telas ainda usam só o carregando geral) (11/11/2026).
 - [x] **Vazio** (`components/croma/states/EmptyState.tsx`, aplicado pelo `NoItemsMessage`): moldura apagada, ícone do subtipo, "0 ITENS" e a ação principal. Falta passar o ícone e a ação em cada tela (11/11/2026).
-- [ ] **Alternar grade e lista.**
-- [?] Tema contra o manual: botões (principal, secundário, terciário), foco em cartão e em botão, abas, campos de formulário, alternância, seleção segmentada, seletor de passo.
+- [x] **Alternar grade e lista** (11/11/2026, `apps/modern/features/libraries/components/ViewModeToggle.tsx`): seleção segmentada visível na barra da biblioteca (o escolhido em Fósforo com texto Sinal); o menu de configurações do Jellyfin continua com as opções de imagem e cartão.
+- [~] Tema contra o manual (11/11/2026, `themes/croma/theme.scss`): feitos botões (principal, secundário, terciário com contorno de 2 px), foco em botão (fundo Fósforo e contorno de 4 px afastado 4 px), campos (contorno `#4A4B4F` sobre Sinal, rótulo mono), alternância (trilho Fósforo/Linha), abas (barra de 4 px) e título em Névoa nos vistos (`data-played` no `CardBox`). Falta conferir tudo na página de mostruário (V) e o seletor de passo; alternância sem o texto "Ligado/Desligado" ao lado.
 - [x] **Movimento** (variáveis `--croma-dur-*` e `--croma-ease-enter` no tema, zeradas com movimento reduzido; falta aplicar nas telas antigas): durações e curva do manual como variáveis; tudo respeita `prefers-reduced-motion`.
 
 Testes:

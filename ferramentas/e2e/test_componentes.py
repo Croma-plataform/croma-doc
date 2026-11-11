@@ -22,3 +22,18 @@ def test_item_sem_arte_mostra_a_capa_gerada_e_item_com_arte_nao(pagina, ir, bibl
 
     com_arte = [c for n, c in cartoes.items() if n.startswith('Barras Com Arte')][0]
     assert com_arte.locator('[data-testid="generated-cover"]').count() == 0
+
+
+def test_alternar_grade_e_lista(pagina, ir, biblioteca):
+    ir(f'movies?topParentId={biblioteca("Filmes")["id"]}&collectionType=movies&tab=0')
+    alternador = pagina.locator('[data-testid="view-mode-toggle"]')
+    alternador.wait_for()
+    grade, lista = alternador.locator('button').nth(0), alternador.locator('button').nth(1)
+    assert grade.get_attribute('aria-pressed') == 'true'
+    lista.click()
+    pagina.wait_for_selector('.listItem')
+    assert lista.get_attribute('aria-pressed') == 'true'
+    assert pagina.locator('.card').count() == 0
+    grade.click()
+    pagina.locator('.card').first.wait_for()
+    assert grade.get_attribute('aria-pressed') == 'true'
