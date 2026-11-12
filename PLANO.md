@@ -232,14 +232,14 @@ Testes:
 
 ### D08 · Início
 
-- [ ] Tela inicial (pranchas 04 e 15) no visual do manual: "Continuar" primeiro, com o rótulo de tipo na cor da seção (`SÉRIE · DARK · T2 E06`), depois as novidades por seção.
-- [ ] Opções da tela inicial sem as fileiras que saíram.
+- [~] Tela inicial (pranchas 04 e 15) no visual do manual (11/11/2026): sem a fileira "Minha mídia" no desktop (`cromaFeatures.homeLibraryTiles`), "Continuar" e "A seguir" primeiro com o rótulo de tipo na cor da seção (`SÉRIE · DARK · T2 E06`, opção `showTypeLabel` dos cartões, nos dois construtores), novidades na ordem das seções e capa gerada nos itens sem arte. Falta o cabeçalho de cada fileira com o quadrado da seção e a conferência contra a prancha 15.
+- [ ] Opções da tela inicial (Ajustes) sem as fileiras que saíram.
 
 Testes:
 
-- [ ] **U** rótulo de tipo de cada item; ordem das fileiras; nunca pôster e capa quadrada na mesma fileira.
-- [ ] **E** conta nova (Início vazio), conta com itens pela metade de três seções.
-- [ ] **V** prancha 15.
+- [~] **U** rótulo de tipo (`typeLabel.test.ts`), ordem das bibliotecas (`sortViewsBySection`), fileira de bibliotecas escondida. Falta: nunca pôster e capa quadrada na mesma fileira.
+- [~] **E** `test_inicio.py`: sem Minha mídia, rótulo na cor da seção, ordem das novidades, capa gerada. Falta conta nova (Início vazio) e itens pela metade de três seções.
+- [~] **V** referência `inicio.png`; falta comparar com a prancha 15.
 
 ### D09 · Busca
 
