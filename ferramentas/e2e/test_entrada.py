@@ -69,3 +69,27 @@ def test_entrar_e_sair(visitante):
     visitante.locator('button[aria-controls="app-user-menu"]').first.click()
     visitante.locator('li:visible, [role="menuitem"]:visible', has_text='Sair').first.click()
     visitante.wait_for_url('**/login**', timeout=30000)
+
+
+@pytest.fixture
+def quick_connect_ligado(api_admin):
+    config = api_admin('System/Configuration')
+    api_admin('System/Configuration', {**config, 'QuickConnectAvailable': True}, 'POST')
+    yield
+    api_admin('System/Configuration', {**config, 'QuickConnectAvailable': config.get('QuickConnectAvailable', False)}, 'POST')
+
+
+def test_codigo_do_quick_connect_com_barra_de_validade(quick_connect_ligado, visitante):
+    visitante.reload()
+    visitante.wait_for_selector('.btnQuick', timeout=30000)
+    visitante.locator('.btnQuick').click()
+    codigo = visitante.locator('[data-testid="quick-connect-code"]')
+    codigo.wait_for(timeout=10000)
+    texto = codigo.inner_text().strip()
+    assert texto.isdigit() and len(texto) == 6
+    barra = visitante.locator('.cromaQuickCode-bar')
+    assert barra.get_attribute('role') == 'progressbar'
+    assert barra.evaluate('e => getComputedStyle(e).height') == '6px'
+    assert int(barra.get_attribute('aria-valuenow')) >= 99
+    assert visitante.locator('.cromaQuickCode-time').inner_text().upper().startswith('VÁLIDO POR 10:00') or \
+        visitante.locator('.cromaQuickCode-time').inner_text().upper().startswith('VÁLIDO POR 9:')

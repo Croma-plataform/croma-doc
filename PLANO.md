@@ -339,12 +339,12 @@ Testes:
 
 - [x] **Abertura** (prancha 30, 11/11/2026, `index.html` + `styles/site.scss`): moldura desenhada em 450 ms, barras a cada 100 ms, "CROMA" e status em mono, 1,9 s no total; movimento reduzido mostra o estado final.
 - [ ] **Servidor** (prancha 32): escolher e adicionar, com a varredura de servidores.
-- [~] Entrar e **perfis** (prancha 31, 11/11/2026): avatar de barras com a inicial (`components/croma/avatar/`), convidado em Grafite. Falta o código de autorização (Quick Connect) com a barra de validade de 6 px.
+- [~] Entrar e **perfis** (prancha 31, 11/11/2026): avatar de barras com a inicial (`components/croma/avatar/`), convidado em Grafite. Código de autorização (Quick Connect) em mono grande com barra de validade de 6 px que fica vermelha aos 20% (`components/croma/quickConnect/`, 12/11/2026).
 
 Testes:
 
-- [~] **U** barras do avatar pelo perfil (`avatar.test.ts`); falta a validade do código.
-- [~] **E** `test_entrada.py` (avatares, senha errada, entrar e sair) e `test_abertura.py` (sequência de 1,9 s, movimento reduzido). Falta trocar de perfil e o primeiro acesso.
+- [~] **U** barras do avatar pelo perfil (`avatar.test.ts`) e a validade do código (`validity.test.ts`).
+- [~] **E** `test_entrada.py` (avatares, senha errada, entrar e sair) e `test_abertura.py` (sequência de 1,9 s, movimento reduzido). Quick Connect testado (código de 6 dígitos, barra de 6 px). Falta trocar de perfil e o primeiro acesso.
 - [ ] **V** pranchas 30, 31 e 32.
 
 ### D17 · Ajustes e calibração
