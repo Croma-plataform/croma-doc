@@ -349,14 +349,14 @@ Testes:
 
 ### D17 · Ajustes e calibração
 
-- [ ] **Ajustes** (prancha 34) no visual do manual, com os controles do D02.
-- [ ] **Tela de calibração** (prancha 03), em Ajustes › Imagem: Brilho (PLUGE), Contraste e Cor.
+- [~] **Ajustes** (prancha 34): alternância com o trilho Fósforo/Linha e botão de calibrar (11/11/2026). A página segue o formulário do Jellyfin; falta reagrupar como na prancha, com seleção segmentada e seletor de passo.
+- [x] **Tela de calibração** (prancha 03, 11/11/2026, `apps/modern/features/calibration/` e rota `/calibration`, aberta por "Calibrar a tela" nos ajustes de exibição): Brilho (PLUGE), Contraste e Cor (só azul), com as cores reais do padrão.
 
 Testes:
 
-- [ ] **U** os valores das barras e do PLUGE de cada etapa.
-- [ ] **E** mudar uma preferência e conferir que valeu depois de recarregar; percorrer as três etapas da calibração.
-- [ ] **V** pranchas 03 e 34.
+- [x] **U** os valores das barras e do PLUGE de cada etapa (`calibration.test.ts`).
+- [x] **E** `test_calibracao.py`: as três etapas e uma preferência que vale depois de recarregar.
+- [~] **V** referências `calibracao-brilho/contraste/cor`; falta compará-las com a prancha 03 e fazer a 34.
 
 ### D18 · Espera e erro
 
