@@ -314,14 +314,14 @@ Testes:
 
 O Croma serve fotos e vídeos com a varredura padrão do Jellyfin. As bibliotecas Vídeos e Galeria do acervo ficam fora (veja "Fora do escopo").
 
-- [ ] Grade justificada com agrupamento por mês (prancha 24), favorita com o quadrado magenta, etiqueta de vídeo "▶ 0:42".
+- [x] Grade justificada com agrupamento por mês (prancha 24), favorita com o quadrado magenta, etiqueta de vídeo "▶ 0:42" (11/11/2026, `apps/modern/features/photos/`; é a aba Fotos da biblioteca e junta os álbuns; a aba de pastas continua). Falta o teste da etiqueta de vídeo (a mídia de teste não tem vídeo na biblioteca de fotos) e a data vem do `DateCreated` do servidor.
 - [ ] Visualizador com a fita de miniaturas (prancha 25).
 
 Testes:
 
-- [ ] **U** a conta da grade justificada (cada fileira fecha a largura, proporções mantidas) e o agrupamento por mês.
-- [ ] **E** abrir a grade, o visualizador, avançar, favoritar.
-- [ ] **V** pranchas 24 e 25.
+- [x] **U** a conta da grade justificada e o agrupamento por mês (`justified.test.ts`, `months.test.ts`).
+- [~] **E** `test_fotos.py`: grade por mês, fileiras fecham a largura, favorita, abrir uma foto. Falta o visualizador e avançar.
+- [~] **V** referência `galeria-fotos`; falta comparar com a prancha 24 e fazer a 25.
 
 ### D15 · Tags
 
