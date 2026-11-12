@@ -349,14 +349,14 @@ Testes:
 
 ### D17 · Ajustes e calibração
 
-- [~] **Ajustes** (prancha 34): alternância com o trilho Fósforo/Linha e botão de calibrar (11/11/2026). A página segue o formulário do Jellyfin; falta reagrupar como na prancha, com seleção segmentada e seletor de passo.
+- [~] **Ajustes** (prancha 34): alternância com o trilho Fósforo/Linha e botão de calibrar (11/11/2026). Componentes da prancha: linha "Calibrar a tela" com as barras e "Abrir ›" (`CalibrationRow`), seleção segmentada (`SegmentedField`, usada no modo de exibição) e seletor de passo (`StepperField`, usado no tempo do descanso), em `apps/modern/features/preferences/` (12/11/2026). A página inteira ainda segue o formulário do Jellyfin: faltam o menu lateral Conta/Reprodução/Legendas/Imagem… e os demais campos nesse formato.
 - [x] **Tela de calibração** (prancha 03, 11/11/2026, `apps/modern/features/calibration/` e rota `/calibration`, aberta por "Calibrar a tela" nos ajustes de exibição): Brilho (PLUGE), Contraste e Cor (só azul), com as cores reais do padrão.
 
 Testes:
 
 - [x] **U** os valores das barras e do PLUGE de cada etapa (`calibration.test.ts`).
 - [x] **E** `test_calibracao.py`: as três etapas e uma preferência que vale depois de recarregar.
-- [~] **V** referências `calibracao-brilho/contraste/cor`; falta compará-las com a prancha 03 e fazer a 34.
+- [~] **E** `test_calibracao.py`: seletor de passo muda o descanso e vale depois de recarregar; linha de calibrar. **V** referências `calibracao-*` e `ajustes-exibicao`; falta compará-las com as pranchas 03 e 34.
 
 ### D18 · Espera e erro
 
@@ -419,7 +419,7 @@ Testes:
 | S07 | Atualização para uma versão nova do Jellyfin | todas | ensaio a fazer |
 
 - **S01** — [x] testes: editar o subtipo (`400` quando não combina) e biblioteca antiga sem o campo, em `ferramentas/e2e_servidor/test_bau.py` (servidor descartável na porta 8098, passa no `verificar.sh`).
-- **S02** — testes que faltam: [x] `BauCollectionsPostScanTask` (cria, acha pelo `uuid`, não duplica ao renomear, tira o item posto à mão, não apaga quando o arquivo some; `e2e_servidor/test_bau.py`); [ ] `BauEpisodeProvider` (achado pelo `file`, vídeo fora da lista, especiais); [x] varredura de uma pasta Baú de mentira de ponta a ponta (filmes; séries ainda não); [~] **somente leitura:** (conferido para filmes em `test_bau.py`: a árvore fica idêntica depois de varrer) varrer e atualizar uma cópia e conferir que nenhum arquivo dela mudou.
+- **S02** — testes que faltam: [x] `BauCollectionsPostScanTask` (cria, acha pelo `uuid`, não duplica ao renomear, tira o item posto à mão, não apaga quando o arquivo some; `e2e_servidor/test_bau.py`); [x] `BauEpisodeProvider` (achado pelo `file`, vídeo fora da lista, especiais; `e2e_servidor/test_bau.py`); [x] varredura de uma pasta Baú de mentira de ponta a ponta (filmes e séries); [x] **somente leitura:** (conferido para filmes e séries em `test_bau.py`: a árvore fica idêntica depois de varrer) varrer e atualizar uma cópia e conferir que nenhum arquivo dela mudou.
 - **S03** — [ ] leitores de artista, álbum e faixa, imagens e coleções (documento do DL_HERMES aprovado em 08/11/2026); atualizar `specs/varredura-bau.md`. Testes: um arquivo por leitor, como nos filmes. As telas do D11 não dependem dele: usam a mídia de teste e a varredura padrão.
 - **S04** — [ ] decidir onde mora o dono da coleção. A convenção de 07/11/2026 pede o modelo do servidor, não tags reservadas. Testes **S** no D10.
 - **S05** — [ ] abertura: de onde vêm as marcações (capítulos do arquivo, plugin ou marcação à mão); [ ] trickplay: só se as miniaturas ficarem fora da pasta da mídia, confirmado no código e testado numa cópia.

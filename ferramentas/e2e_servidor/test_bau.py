@@ -170,3 +170,65 @@ def test_biblioteca_sem_o_campo_usa_o_subtipo_padrao_e_editar_recusa_incompative
         st.api('POST', '/Library/VirtualFolders/LibraryOptions', corpo, servidor)
     corpo['LibraryOptions']['Subtype'] = 'Documentaries'
     st.api('POST', '/Library/VirtualFolders/LibraryOptions', corpo, servidor)
+
+
+UUID_SERIE = '019a5f3c-0000-7000-8000-0000000000d0'
+
+
+def video(caminho: Path) -> None:
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', 'testsrc=size=320x180:rate=10', '-t', '2',
+                    '-pix_fmt', 'yuv420p', '-c:v', 'libx264', str(caminho)], check=True)
+
+
+@pytest.fixture(scope='module')
+def serie(servidor, acervo):
+    """Uma série no padrão Baú: o título do episódio vem do arquivo de metadados, achado pelo caminho do vídeo."""
+    raiz = acervo.parent / 'Series'
+    pasta = raiz / 'shows' / 'Serie Bau (2010)'
+    video(pasta / 'Season 01' / 'Serie Bau (2010) - S01E01 - nome do arquivo.mp4')
+    video(pasta / 'Season 01' / 'Serie Bau (2010) - S01E02 - nome do arquivo.mp4')
+    video(pasta / 'Season 01' / 'Serie Bau (2010) - S01E03 - fora da lista.mp4')
+    video(pasta / 'Specials' / 'Serie Bau (2010) - S00E01 - especial.mp4')
+    (pasta / 'metadata' / 'images').mkdir(parents=True)
+    (pasta / 'metadata' / 'metadata.json').write_text(json.dumps({
+        'schema_version': 2, 'uuid': UUID_SERIE, 'title': 'Serie do Bau', 'year': 2010, 'status': 'ended',
+        'description': 'Uma série de teste.', 'tags': ['Drama'], 'first_air_date': '2010-01-01',
+        'seasons': [{'number': 0, 'episodes_in_files': 1}, {'number': 1, 'episodes_in_files': 3}],
+        'episodes': [
+            {'uuid': UUID_SERIE[:-1] + '1', 'season': 1, 'episode': 1, 'title': 'Piloto do Bau',
+             'file': 'Season 01/Serie Bau (2010) - S01E01 - nome do arquivo.mp4'},
+            {'uuid': UUID_SERIE[:-1] + '2', 'season': 1, 'episode': 2, 'title': 'Segundo do Bau',
+             'file': 'Season 01/Serie Bau (2010) - S01E02 - nome do arquivo.mp4'},
+            {'uuid': UUID_SERIE[:-1] + '3', 'season': 0, 'episode': 1, 'title': 'Especial do Bau',
+             'file': 'Specials/Serie Bau (2010) - S00E01 - especial.mp4'}],
+        'files': []}), encoding='utf-8')
+    st.api('POST', '/Library/VirtualFolders?name=Series%20Bau&collectionType=tvshows&refreshLibrary=false',
+           {'LibraryOptions': st.opcoes_biblioteca(raiz / 'shows', 'Series')}, servidor)
+    antes = fotografar(raiz)
+    escanear(servidor)
+    return raiz, antes
+
+
+def test_serie_le_titulo_e_episodios_pelo_arquivo(servidor, serie):
+    raiz, antes = serie
+    series = [s for s in itens(servidor, 'Series') if s['ProviderIds'].get('Bau') == UUID_SERIE]
+    assert len(series) == 1 and series[0]['Name'] == 'Serie do Bau'
+    assert series[0]['ProductionYear'] == 2010 and series[0]['Overview'] == 'Uma série de teste.'
+    episodios = {(e['ParentIndexNumber'], e['IndexNumber']): e['Name']
+                 for e in itens(servidor, 'Episode') if e.get('SeriesName') == 'Serie do Bau'}
+    assert episodios[(1, 1)] == 'Piloto do Bau'
+    assert episodios[(1, 2)] == 'Segundo do Bau'
+    assert episodios[(0, 1)] == 'Especial do Bau', 'o especial (temporada 0) não foi lido'
+
+
+def test_video_fora_da_lista_fica_com_o_nome_do_arquivo(servidor, serie):
+    episodio = next(e for e in itens(servidor, 'Episode') if e.get('IndexNumber') == 3 and e.get('ParentIndexNumber') == 1)
+    # sem entrada no metadata.json o episódio segue a leitura padrão do nome do arquivo, sem título do Baú
+    assert episodio['Name'] not in ('Piloto do Bau', 'Segundo do Bau', 'Especial do Bau')
+
+
+def test_varrer_serie_nao_grava_na_pasta(servidor, serie):
+    raiz, antes = serie
+    escanear(servidor)
+    assert fotografar(raiz) == antes, 'a varredura mexeu na pasta da série'

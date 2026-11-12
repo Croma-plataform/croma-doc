@@ -35,8 +35,6 @@ def test_calibracao_abre_pelos_ajustes_e_percorre_as_tres_etapas(pagina, ir, con
     pagina.wait_for_url('**/mypreferencesdisplay**')
 
 
-
-
 def test_uma_preferencia_vale_depois_de_recarregar(pagina, ir, api_admin):
     uid = next(u['Id'] for u in api_admin('Users') if u['Name'] == 'leitor')
     url = f'mypreferencesdisplay?userId={uid}'
@@ -59,3 +57,37 @@ def test_uma_preferencia_vale_depois_de_recarregar(pagina, ir, api_admin):
             c.evaluate('e => e.click()')
             pagina.get_by_role('button', name='Salvar').click()
             pagina.wait_for_timeout(1500)
+
+
+def test_seletor_de_passo_muda_o_tempo_do_descanso_e_vale_depois_de_recarregar(pagina, ir, api_admin, conferir):
+    """Prancha 34: o tempo do descanso de tela é um seletor de passo (◂ valor ▸), de 1 em 1 minuto."""
+    uid = next(u['Id'] for u in api_admin('Users') if u['Name'] == 'leitor')
+    url = f'mypreferencesdisplay?userId={uid}'
+    ir(url, espera=2500)
+    passo = pagina.locator('[data-testid="stepper-screensaverTime"]')
+    passo.wait_for()
+    assert passo.locator('output').inner_text() == '5 min'
+    passo.scroll_into_view_if_needed()
+    conferir('ajustes-exibicao')
+    try:
+        passo.get_by_role('button', name='+').click()
+        assert passo.locator('output').inner_text() == '6 min'
+        pagina.get_by_role('button', name='Salvar').click()
+        pagina.wait_for_timeout(1500)
+        ir(url, espera=2500)
+        assert pagina.locator('[data-testid="stepper-screensaverTime"] output').inner_text() == '6 min'
+    finally:
+        ir(url, espera=2500)
+        passo = pagina.locator('[data-testid="stepper-screensaverTime"]')
+        if passo.locator('output').inner_text() != '5 min':
+            passo.get_by_role('button', name='−').click()
+            pagina.get_by_role('button', name='Salvar').click()
+            pagina.wait_for_timeout(1000)
+
+
+def test_linha_de_calibrar_tem_as_barras_e_abre_a_calibracao(pagina, ir, api_admin):
+    uid = next(u['Id'] for u in api_admin('Users') if u['Name'] == 'leitor')
+    ir(f'mypreferencesdisplay?userId={uid}', espera=2500)
+    linha = pagina.locator('[data-testid="open-calibration"]')
+    assert linha.locator('.cromaCalibrationRow-bars > span').count() == 7
+    assert 'Abrir' in linha.inner_text()
