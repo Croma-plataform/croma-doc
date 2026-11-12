@@ -66,24 +66,24 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 |---|---|---|---|---|
 | D00 | Base de testes e ambiente | — | M | **pronto**, faltam só 3 ações de ambiente |
 | D01 | Seções e navegação | D00 | M | em parte |
-| D02 | Componentes comuns | D00 | G | a fazer |
-| D03 | Filmes: fecho | D01, D02 | P | quase pronto |
+| D02 | Componentes comuns | D00 | G | em parte |
+| D03 | Filmes: fecho | D01, D02 | P | em parte |
 | D04 | Séries e episódios | D02, D03 | M | em parte |
-| D05 | Documentários | D01, D04 | P | a fazer |
+| D05 | Documentários | D01, D04 | P | em parte |
 | D06 | Player de vídeo: complementos | D04 | M | em parte |
-| D07 | App desktop: primeira versão | D00 | M | a fazer |
-| D08 | Início | D01, D02 | M | a fazer |
-| D09 | Busca | D01, D02 | M | a fazer |
+| D07 | App desktop: primeira versão | D00 | M | em parte (falta compilar) |
+| D08 | Início | D01, D02 | M | em parte |
+| D09 | Busca | D01, D02 | M | em parte |
 | D10 | Coleções | D01, S04 | M | a fazer |
-| D11 | Músicas | D02, D07 | G | a fazer |
+| D11 | Músicas | D02, D07 | G | em parte |
 | D12 | Falado: podcasts e audiolivros | D11, I01 | G | a fazer |
 | D13 | Leitura | D02, I01 | G | a fazer |
-| D14 | Fotos | D02 | M | a fazer |
+| D14 | Fotos | D02 | M | em parte |
 | D15 | Tags | decisões do usuário | M | bloqueado |
-| D16 | Entrada e conta | D02 | M | a fazer |
-| D17 | Ajustes e calibração | D02 | M | a fazer |
-| D18 | Espera e erro | D02 | M | a fazer |
-| D19 | Painel de administração | D02 | P | a conferir |
+| D16 | Entrada e conta | D02 | M | em parte |
+| D17 | Ajustes e calibração | D02 | M | em parte |
+| D18 | Espera e erro | D02 | M | em parte |
+| D19 | Painel de administração | D02 | P | feito |
 | D20 | App desktop: versão final | D07 e os demais | M | a fazer |
 | D21 | Fechamento do desktop | todos | M | a fazer |
 
@@ -373,13 +373,13 @@ Testes:
 
 Só existe no desktop.
 
-- [?] Telas do painel com o tema Croma, sem nome nem logo do Jellyfin.
-- [ ] Campo "Conteúdo" do diálogo de biblioteca e a TV ao vivo escondida, cobertos por teste.
+- [x] Telas do painel com o tema Croma, sem nome nem logo do Jellyfin (teste confere título, cabeçalho, gaveta e imagens; referência visual `painel-bibliotecas`; conferência com pranchas fica para o D21).
+- [x] Campo "Conteúdo" do diálogo de biblioteca e a TV ao vivo escondida, cobertos por teste.
 
 Testes:
 
-- [ ] **C** o campo "Conteúdo" lista só os subtipos do tipo escolhido.
-- [ ] **E** criar uma biblioteca de cada subtipo, editar, varrer; nenhuma entrada de TV ao vivo.
+- [x] **C** o campo (`librarySubtypes.test.ts`, `getCompatibleSubtypes`) "Conteúdo" lista só os subtipos do tipo escolhido.
+- [x] **E** (`test_painel.py`, `test_subtipo_biblioteca.py`) criar uma biblioteca de cada subtipo, editar, varrer; nenhuma entrada de TV ao vivo.
 
 ### D20 · App desktop: versão final
 
