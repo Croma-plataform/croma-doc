@@ -360,14 +360,14 @@ Testes:
 
 ### D18 · Espera e erro
 
-- [ ] **Descanso de tela** (pranchas 05 e 06): o movimento do manual, depois de 5 min parado no menu, nunca durante a reprodução. Hoje só o logo foi trocado.
-- [ ] **Sem sinal** (prancha 07): estática, painel, nova tentativa a cada 15 s e "Trocar servidor".
+- [x] **Descanso de tela** (pranchas 05 e 06, 11/11/2026, `plugins/logoScreensaver/` + `components/croma/screensaver/bounce.ts`): o símbolo cruza a tela, troca para a cor da barra seguinte a cada borda, desvia até 12° com o ângulo entre 25° e 65°, e no canto em cheio a moldura se enche de barras por 2,4 s. É o padrão (antes era desligado) e entra em 5 min; o Jellyfin já não o mostra com vídeo tocando.
+- [x] **Sem sinal** (prancha 07, 11/11/2026, `components/croma/states/NoSignal.tsx`, ligado em `ConnectionErrorPage`): estática, linhas de varredura, faixa rolante, painel com a nova tentativa a cada 15 s e "Trocar servidor".
 - [ ] Textos de erro com a voz do manual.
 
 Testes:
 
-- [ ] **U** movimento do descanso (ângulo sempre entre 25° e 65°, troca de cor na borda, canto em cheio); contagem da nova tentativa.
-- [ ] **E** derrubar o servidor de teste: aparece "Sem sinal" e a tela volta sozinha quando ele sobe; o descanso não entra com um vídeo tocando.
+- [x] **U** movimento do descanso (`bounce.test.ts`) e contagem da nova tentativa (`retry.test.ts`).
+- [~] **E** `test_sem_sinal.py` (chamadas do servidor abortadas na página, volta com "Tentar agora") e `test_descanso.py` (entra em 5 min com o relógio falso, anda, cobre a tela, tecla tira). Falta: o descanso não entra com vídeo tocando.
 
 ### D19 · Painel de administração
 
