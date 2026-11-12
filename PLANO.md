@@ -85,7 +85,7 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 | D18 | Espera e erro | D02 | M | em parte |
 | D19 | Painel de administração | D02 | P | feito |
 | D20 | App desktop: versão final | D07 e os demais | M | a fazer |
-| D21 | Fechamento do desktop | todos | M | a fazer |
+| D21 | Fechamento do desktop | todos | M | em parte |
 
 A ordem da tabela é a ordem sugerida. O **D07 entra cedo** de propósito: o app toca com o mpv, não com o player do navegador, e isso muda o comportamento do player, das legendas e do áudio. É melhor descobrir agora do que no fim.
 
@@ -379,7 +379,7 @@ Só existe no desktop.
 Testes:
 
 - [x] **C** o campo (`librarySubtypes.test.ts`, `getCompatibleSubtypes`) "Conteúdo" lista só os subtipos do tipo escolhido.
-- [x] **E** (`test_painel.py`, `test_subtipo_biblioteca.py`) criar uma biblioteca de cada subtipo, editar, varrer; nenhuma entrada de TV ao vivo.
+- [x] **E** (`test_painel.py`, `test_subtipo_biblioteca.py`) subtipos de cada biblioteca, edição pelo diálogo, criação recusada com subtipo incompatível (criar de verdade deixa o item no servidor de teste), varredura; nenhuma entrada de TV ao vivo.
 
 ### D20 · App desktop: versão final
 
@@ -399,10 +399,10 @@ Testes:
 
 - [ ] Roteiro de aceitação completo (todos os **E** e **M**) numa instalação limpa.
 - [ ] Desempenho com o acervo real: grade, busca e abertura do detalhe.
-- [ ] Acessibilidade: tudo pelo teclado, foco sempre visível, movimento reduzido.
-- [ ] Textos: nenhum "Jellyfin" na interface; voz do manual.
-- [ ] Licença: código GPL publicado, sem nome nem logo do Jellyfin no produto.
-- [ ] Guia de instalação e uso em `croma-doc`.
+- [~] Acessibilidade: foco visível em 20 paradas de Tab na tela inicial testado (`test_textos_acessibilidade.py`); movimento reduzido já testado nos módulos; falta percorrer todas as telas só pelo teclado.
+- [~] Textos: nenhum "Jellyfin" nas telas do usuário e do painel (teste); o app se identifica como "Croma Web"; falta a revisão da voz do manual.
+- [x] Licença: código GPL publicado, sem nome nem logo do Jellyfin no produto (seção 6 do `GUIA.md`).
+- [x] Guia de instalação e uso em `croma-doc` (`GUIA.md`; revisar quando o D20 trouxer o instalador do Windows).
 
 ---
 

@@ -32,28 +32,15 @@ def test_cada_biblioteca_mostra_o_seu_subtipo(pagina, ir, api_admin):
     assert len(vistos) >= 6
 
 
-def test_criar_editar_e_varrer_uma_biblioteca(pagina, ir, api_admin, tmp_path):
-    nome = 'BibliotecaTemporaria'
-    pasta = tmp_path / 'vazia'
-    pasta.mkdir()
-    api_admin(f'Library/VirtualFolders?name={nome}&collectionType=books&refreshLibrary=false',
-              {'LibraryOptions': {'Subtype': 'Podcasts', 'PathInfos': [{'Path': str(pasta)}]}}, 'POST')
-    try:
-        ir('dashboard/libraries')
-        cartao = pagina.locator('.MuiCard-root', has_text=nome)
-        expect(cartao).to_be_visible()
-        cartao.locator('[data-testid="MoreVertIcon"]').click()
-        pagina.get_by_role('menuitem', name='Gerenciar biblioteca').click()
-        expect(pagina.locator('#selectLibrarySubtype')).to_have_value('Podcasts')
-        pagina.locator('#selectLibrarySubtype').select_option(value='Audiobooks')
-        pagina.get_by_role('button', name='OK').click()
-        pagina.locator('#selectLibrarySubtype').wait_for(state='detached')
-        atual = [p for p in api_admin('Library/VirtualFolders') if p['Name'] == nome][0]
-        assert atual['LibraryOptions']['Subtype'] == 'Audiobooks'
-        # varrer a biblioteca vazia termina sem erro
-        api_admin('Library/Refresh', None, 'POST')
-    finally:
-        api_admin(f'Library/VirtualFolders?name={nome}&refreshLibrary=false', None, 'DELETE')
+def test_criar_biblioteca_com_subtipo_incompativel_e_recusado(api_admin, tmp_path):
+    """Criar de verdade deixaria a biblioteca nas telas dos outros usuários até limpar o servidor de teste (o
+    servidor mantém o item da raiz depois de apagar a pasta virtual), então aqui só se confere a validação."""
+    import urllib.error
+    with pytest.raises(urllib.error.HTTPError) as erro:
+        api_admin('Library/VirtualFolders?name=Recusada&collectionType=movies&refreshLibrary=false',
+                  {'LibraryOptions': {'Subtype': 'Music', 'PathInfos': [{'Path': str(tmp_path)}]}}, 'POST')
+    assert erro.value.code == 400
+    assert 'Recusada' not in [p['Name'] for p in api_admin('Library/VirtualFolders')]
 
 
 def test_nenhuma_entrada_de_tv_ao_vivo(pagina, ir):
