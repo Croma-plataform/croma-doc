@@ -199,16 +199,16 @@ Testes:
 
 Feito: OSD (pranchas 11 e 12), painel de legendas e áudio (36), tela de carregando (38).
 
-- [ ] **Próximo episódio** (prancha 37): o vídeo encolhe para a moldura, cartão do episódio, contagem de 8 s, "Assistir agora" em foco. O Jellyfin já tem o `upnextdialog`.
-- [ ] **Pular abertura:** botão já em foco, só durante a abertura. O Jellyfin já tem os segmentos de mídia; falta decidir **de onde vêm as marcações** (S05).
+- [~] **Próximo episódio** (prancha 37, 11/11/2026, `components/upnextdialog/` + `components/croma/upNext/`): cartão em Sinal com a moldura Fósforo, kicker `PRÓXIMO · T2 E01`, barra de contagem na cor da série que esvazia, "Assistir agora" em foco. Falta o vídeo encolher para a moldura e a contagem usa o tempo que o Jellyfin dá (30 a 40 s), não 8 s.
+- [~] **Pular abertura** (11/11/2026, `components/playback/skipsegment.ts` + `components/croma/skip/`): botão claro em Fósforo, já em foco também no desktop, some 1 s depois do fim da abertura. Falta decidir **de onde vêm as marcações** (S05); o teste simula a resposta do servidor.
 - [ ] **Aba Imagem** do painel: o manual não define o conteúdo (I02).
 - [ ] Miniatura na busca: depende do trickplay fora do acervo (S05).
 
 Testes:
 
-- [ ] **U** contagem do próximo episódio; janela em que o botão de pular aparece e some (1 s depois do fim).
+- [x] **U** código do episódio e barra da contagem (`upNext.test.ts`); janela do botão de pular (`skipWindow.test.ts`).
 - [ ] **E** do que já existe: tocar, pausar, −10 e +30, capítulos, buscar, sair e voltar no ponto; painel (trocar legenda e áudio, tamanho, fundo, atraso, fechar com Esc); carregando com a rede lenta.
-- [ ] **E** fim de um episódio leva ao próximo; cancelar a contagem; pular a abertura.
+- [x] **E** `test_proximo_episodio.py`: cartão do próximo com código e foco, "Assistir agora" abre o próximo, ocultar cancela, pular a abertura (o terceiro episódio da mídia de teste tem 620 s porque o Jellyfin só mostra o cartão em vídeos de 10 min ou mais). Falta o fim natural do episódio.
 - [ ] **E** reprodução direta (navegador com H.264), conversão só de áudio e conversão de vídeo: os selos e os chips certos em cada caso.
 
 ### D07 · App desktop: primeira versão

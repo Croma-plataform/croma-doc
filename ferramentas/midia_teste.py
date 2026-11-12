@@ -203,8 +203,11 @@ def gerar(raiz: Path) -> dict:
     for temporada, eps in ((1, 3), (2, 2)):
         for e in range(1, eps + 1):
             nome = f'Serie de Teste - S{temporada:02d}E{e:02d} - Episodio {e}'
-            video(s / f'Season {temporada:02d}' / f'{nome}.mp4', segundos=10, audios=(('por', 300 + 40 * e),),
-                  legendas=legendas[:1])
+            # O terceiro episódio da temporada 1 dura mais de 10 min: só assim o player mostra o cartão do próximo
+            # episódio (o Jellyfin exige 10 min de duração)
+            longo = (temporada, e) == (1, 3)
+            video(s / f'Season {temporada:02d}' / f'{nome}.mp4', segundos=620 if longo else 10,
+                  audios=(('por', 300 + 40 * e),), legendas=legendas[:1])
     cat['series'] = {'tipo': 'tvshows', 'subtipo': 'Series', 'pasta': 'series'}
 
     # Documentários: um filme e uma série
