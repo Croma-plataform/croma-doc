@@ -3,7 +3,7 @@
 O acervo do usuário já é organizado num padrão próprio, o **Baú**, documentado no repositório **DL_HERMES** (`~/Documentos/Projetos/Codes/DL_HERMES`). Cada item guarda os seus dados ao lado do arquivo de mídia: `metadata/metadata.json`, `metadata/images/` e `metadata/subs/`. O Croma lê esse padrão direto, sem depender da identificação pela internet.
 
 - **Fonte da verdade:** o padrão é definido no DL_HERMES. Este documento só diz como o servidor lê o padrão. Se os dois divergirem, vale o DL_HERMES, e o leitor precisa ser corrigido.
-- **Situação:** **Filmes** (`docs/bibliotecas/filmes.md`) e **Séries** (`docs/bibliotecas/series.md`), ambos no `schema_version` 2, estão implementados. Músicas é o próximo (documento aprovado em 08/11/2026). Vídeos e Galeria ficam fora do Croma (decisão do usuário, 09/11/2026): por privacidade, terão uma aplicação dedicada.
+- **Situação:** **Filmes** (`docs/bibliotecas/filmes.md`) e **Séries** (`docs/bibliotecas/series.md`), ambos no `schema_version` 2, estão implementados. **Músicas** (`docs/bibliotecas/musicas.md`, `schema_version` 2) também está implementado (12/11/2026). Vídeos e Galeria ficam fora do Croma (decisão do usuário, 09/11/2026): por privacidade, terão uma aplicação dedicada.
 - **O servidor só lê:** nada é gravado nas pastas do acervo. Quem escreve nelas são os scripts e pipelines do Baú.
 
 ## Filmes
@@ -53,6 +53,16 @@ Biblioteca do tipo `tvshows` apontando para `Series/shows/`. Cada `shows/Título
 - Um vídeo que o `episodes` não lista fica sem os dados do Baú (registrado no log), e o servidor usa o nome do arquivo e o TMDB.
 - Os campos `seasons`, `numbering_source`, `episode_titles_source` e os dados técnicos de `files` não são lidos.
 - Coleções de séries: `Series/collections/` (vazia por enquanto), com o mesmo funcionamento das de filmes, só que os `items` são `uuid` de séries.
+
+## Músicas (12/11/2026)
+
+Formato em `docs/bibliotecas/musicas.md` do DL_HERMES. A biblioteca aponta para a pasta `Musicas/`; cada pasta de coleção (uma playlist, uma trilha sonora ou um artista) tem `tracks/<id>.mp3` e `metadata/playlist.json`. As pastas que começam com `_` e as `metadata/` têm `.ignore`, então a varredura padrão não entra nelas; os leitores abaixo leem os arquivos pelo caminho.
+
+- **Faixa** (`BauAudioProvider`, `ILocalMetadataProvider<Audio>`): acha a entrada de `tracks[]` cujo `file` é o nome do MP3. Preenche título, artista, álbum, ano (texto ou número) e o UUID da faixa (`ProviderIds.Bau`). MP3 que não está na lista segue as tags do próprio arquivo. O Jellyfin **une** os artistas da tag com os do arquivo; no acervo os dois coincidem (o `tags.py` grava a tag a partir do JSON).
+- **Capa da faixa** (`BauImageProvider`): `metadata/covers/<id>.jpg` (ou `.png`, `.webp`) vira a imagem principal.
+- **Coleção** (`BauCollectionsPostScanTask`): cada `playlist.json` vira uma coleção (BoxSet) travada, achada pelo `uuid`, com título, descrição, o `type` como tag (`playlist`, `soundtrack`, `artist`), a capa `metadata/cover.<ext>` e as faixas na ordem do arquivo; as regras são as de filmes e séries (item posto à mão sai na varredura, arquivo que some não apaga a coleção). Música usa BoxSet e não Playlist do Jellyfin porque a playlist tem dono (usuário), e o dono das coleções é a decisão em aberto do S04.
+- **Artista e álbum:** o Jellyfin os cria das tags das faixas, como sempre; não há leitor próprio, porque o Baú não tem arquivo de artista nem de álbum.
+- **Testes:** `BauMusicTests` (unidade) e `ferramentas/e2e_servidor/test_bau.py` (varredura de uma pasta de mentira, coleção, capa, `_management` ignorada e pasta da mídia intacta). Conferido também com uma cópia da coleção `avicii` do acervo real (8 faixas, capas e coleção lidas).
 
 ## Coleções
 

@@ -412,7 +412,7 @@ Testes:
 |---|---|---|---|
 | S01 | Subtipo da biblioteca | todos | feito |
 | S02 | Padrão Baú: filmes e séries | D03, D04 | feito, testes de ponta a ponta feitos |
-| S03 | Padrão Baú: músicas | acervo de música no D11 | a fazer |
+| S03 | Padrão Baú: músicas | acervo de música no D11 | feito |
 | S04 | Coleções com dono | D10 | a fazer |
 | S05 | Marcações de abertura e trickplay | D06 | decisão |
 | S06 | Servidor no Windows (CintraMan) | D20 | a fazer |
@@ -420,7 +420,7 @@ Testes:
 
 - **S01** — [x] testes: editar o subtipo (`400` quando não combina) e biblioteca antiga sem o campo, em `ferramentas/e2e_servidor/test_bau.py` (servidor descartável na porta 8098, passa no `verificar.sh`).
 - **S02** — testes que faltam: [x] `BauCollectionsPostScanTask` (cria, acha pelo `uuid`, não duplica ao renomear, tira o item posto à mão, não apaga quando o arquivo some; `e2e_servidor/test_bau.py`); [x] `BauEpisodeProvider` (achado pelo `file`, vídeo fora da lista, especiais; `e2e_servidor/test_bau.py`); [x] varredura de uma pasta Baú de mentira de ponta a ponta (filmes e séries); [x] **somente leitura:** (conferido para filmes e séries em `test_bau.py`: a árvore fica idêntica depois de varrer) varrer e atualizar uma cópia e conferir que nenhum arquivo dela mudou.
-- **S03** — [ ] leitores de artista, álbum e faixa, imagens e coleções (documento do DL_HERMES aprovado em 08/11/2026); atualizar `specs/varredura-bau.md`. Testes: um arquivo por leitor, como nos filmes. As telas do D11 não dependem dele: usam a mídia de teste e a varredura padrão.
+- **S03** — [x] faixa (`BauAudioProvider`), capas da faixa e da coleção (`BauImageProvider`) e coleções a partir do `playlist.json` (`BauCollectionsPostScanTask`), 12/11/2026. Artista e álbum seguem as tags das faixas (o Baú não tem arquivo próprio deles). Testes: `BauMusicTests` e `e2e_servidor/test_bau.py`; conferido com uma cópia da coleção `avicii`. Detalhes em `specs/varredura-bau.md`.
 - **S04** — [ ] decidir onde mora o dono da coleção. A convenção de 07/11/2026 pede o modelo do servidor, não tags reservadas. Testes **S** no D10.
 - **S05** — [ ] abertura: de onde vêm as marcações (capítulos do arquivo, plugin ou marcação à mão); [ ] trickplay: só se as miniaturas ficarem fora da pasta da mídia, confirmado no código e testado numa cópia.
 - **S06** — [ ] .NET SDK 10 no Windows, migrar a pasta para o layout novo, compilar, `jellyfin-ffmpeg`, trocar o binário oficial pelo fork. Teste **M**: subir, varrer uma biblioteca de teste, tocar.

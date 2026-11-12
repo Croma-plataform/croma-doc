@@ -232,3 +232,74 @@ def test_varrer_serie_nao_grava_na_pasta(servidor, serie):
     raiz, antes = serie
     escanear(servidor)
     assert fotografar(raiz) == antes, 'a varredura mexeu na pasta da série'
+
+
+UUID_MUSICA = '019a5f3c-0000-7000-8000-0000000000e0'
+
+
+def mp3(caminho: Path, titulo: str, artista: str, album: str) -> None:
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', 'sine=frequency=440:duration=2', '-c:a', 'libmp3lame',
+                    '-metadata', f'title={titulo}', '-metadata', f'artist={artista}', '-metadata', f'album={album}',
+                    str(caminho)], check=True)
+
+
+@pytest.fixture(scope='module')
+def musica(servidor, acervo):
+    """Uma biblioteca de Músicas no padrão Baú: coleção/tracks/id.mp3 e coleção/metadata/playlist.json."""
+    raiz = acervo.parent / 'Musicas'
+    colecao = raiz / 'artista-teste'
+    # o artista da tag é o do JSON (como no acervo real): o Jellyfin une os artistas da tag e do provedor
+    mp3(colecao / 'tracks' / 'faixa-um.mp3', 'titulo da tag um', 'Artista de Teste', 'Tag Album')
+    mp3(colecao / 'tracks' / 'faixa-dois.mp3', 'titulo da tag dois', 'Artista de Teste', 'Tag Album')
+    mp3(colecao / 'tracks' / 'fora.mp3', 'Fora da Lista', 'Tag Artista', 'Tag Album')
+    (colecao / 'metadata' / 'covers').mkdir(parents=True)
+    for nome in ('cover', 'covers/faixa-um'):
+        subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', 'color=c=green:s=300x300', '-frames:v', '1',
+                        str(colecao / 'metadata' / f'{nome}.jpg')], check=True)
+    # os marcadores do padrão: a Jellyfin não deve entrar em metadata/
+    (colecao / 'metadata' / '.ignore').write_text('*\n*/*\n')
+    (colecao / 'metadata' / 'playlist.json').write_text(json.dumps({
+        'schema_version': 2, 'uuid': UUID_MUSICA, 'id': 'artista-teste', 'type': 'artist', 'title': 'Artista de Teste',
+        'description': 'Uma coleção de música.', 'cover': 'metadata/cover.jpg', 'tracks_base': '../tracks',
+        'tracks': [
+            {'uuid': UUID_MUSICA[:-1] + '1', 'id': 'faixa-um', 'file': 'faixa-um.mp3', 'title': 'Faixa Um do Bau',
+             'artist': 'Artista de Teste', 'album': 'Album do Bau', 'year': '2015'},
+            {'uuid': UUID_MUSICA[:-1] + '2', 'id': 'faixa-dois', 'file': 'faixa-dois.mp3', 'title': 'Faixa Dois do Bau',
+             'artist': 'Artista de Teste', 'album': 'Album do Bau', 'year': 2016}],
+        'files': []}), encoding='utf-8')
+    (raiz / '_management').mkdir()
+    (raiz / '_management' / 'lixo.mp3').write_bytes(b'x')
+    (raiz / '_management' / '.ignore').write_text('*\n*/*\n')
+    st.api('POST', '/Library/VirtualFolders?name=Musicas%20Bau&collectionType=music&refreshLibrary=false',
+           {'LibraryOptions': st.opcoes_biblioteca(raiz, 'Music')}, servidor)
+    antes = fotografar(raiz)
+    escanear(servidor)
+    return raiz, antes
+
+
+def test_musica_le_a_faixa_pelo_playlist_json(servidor, musica):
+    faixas = {f['Name']: f for f in itens(servidor, 'Audio')}
+    um = faixas['Faixa Um do Bau']
+    assert um['Artists'] == ['Artista de Teste'] and um['Album'] == 'Album do Bau'
+    assert um['ProductionYear'] == 2015 and faixas['Faixa Dois do Bau']['ProductionYear'] == 2016
+    assert um['ProviderIds']['Bau'] == UUID_MUSICA[:-1] + '1'
+    assert um['ImageTags'].get('Primary'), 'a capa da faixa (metadata/covers) não foi lida'
+    # fora da lista: segue as tags do próprio MP3
+    assert faixas['Fora da Lista']['Artists'] == ['Tag Artista']
+    assert 'lixo' not in ' '.join(faixas), 'a pasta _management deveria ser ignorada'
+
+
+def test_musica_cria_a_colecao_com_as_faixas_na_ordem_e_a_capa(servidor, musica):
+    colecoes = [c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_MUSICA]
+    assert len(colecoes) == 1
+    c = colecoes[0]
+    assert c['Name'] == 'Artista de Teste' and 'artist' in c['Tags'] and c['Overview'] == 'Uma coleção de música.'
+    assert c['ImageTags'].get('Primary')
+    assert filhos(servidor, c['Id']) == {'Faixa Um do Bau', 'Faixa Dois do Bau'}
+
+
+def test_varrer_musica_nao_grava_na_pasta(servidor, musica):
+    raiz, antes = musica
+    escanear(servidor)
+    assert fotografar(raiz) == antes, 'a varredura mexeu na pasta da música'
