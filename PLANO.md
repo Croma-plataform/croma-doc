@@ -268,18 +268,18 @@ Testes:
 
 Nada feito no visual do Croma. O Jellyfin já tem as bibliotecas, a fila e as letras.
 
-- [ ] Abas e Resumo da seção **Áudios**.
+- [x] Abas e Resumo da seção **Áudios** (já vinham do D01; referência `galeria-albuns`).
 - [ ] Galeria, álbum e artista (pranchas 17, 20 e 21): capa na moldura, faixa tocando com o mini equalizador, capa de artista (foto, mosaico ou capa) com a etiqueta de origem.
 - [ ] **Tocando agora** (prancha 18) com a fila.
-- [ ] **Analisador de espectro.** O web não tem nenhum hoje. No navegador sai do Web Audio; **no app o som passa pelo mpv**, que não entrega as amostras à interface: precisa de uma ponte nativa ou de outra saída (decidir depois do D07).
-- [ ] **Mini player** fixo embaixo, com o progresso em espectro.
+- [~] **Analisador de espectro** (11/11/2026: `components/croma/analyzer/`, canvas de 32 colunas com cor pela frequência e marca de pico na tela Tocando agora; o `htmlAudioPlayer` agora sempre monta o grafo Web Audio com um `AnalyserNode`). Funciona no navegador; **no app falta a ponte** do mpv. O web não tinha nenhum. No navegador sai do Web Audio; **no app o som passa pelo mpv**, que não entrega as amostras à interface: precisa de uma ponte nativa ou de outra saída (decidir depois do D07).
+- [~] **Mini player** fixo embaixo, com o progresso em espectro (11/11/2026: linha do tempo em espectro e volume em Fósforo, sem o azul do Jellyfin, na barra e na tela Tocando agora). Falta o layout da prancha.
 - [ ] Capas de playlist geradas.
 
 Testes:
 
-- [ ] **U** cor de cada coluna do analisador pela frequência e o pico; escolha da capa do artista; faixa de espectro de cada playlist.
+- [~] **U** cor de cada coluna do analisador pela frequência e o pico (`analyzer.test.ts`); escolha da capa do artista; faixa de espectro de cada playlist.
 - [ ] **C** mini player e linha de faixa nos estados (tocando, pausado, sem capa).
-- [ ] **E** tocar um álbum, trocar de faixa, fila, o mini player continua ao navegar, sair e voltar.
+- [~] **E** `test_musicas.py`: espectro e Fósforo no player, o analisador desenha. Falta trocar de faixa, fila e o mini player ao navegar.
 - [ ] **M** no app: som pelo mpv, teclas de mídia, analisador.
 - [ ] **V** pranchas 17, 18, 20 e 21.
 
