@@ -337,14 +337,14 @@ Testes:
 
 ### D16 · Entrada e conta
 
-- [ ] **Abertura** (prancha 30): moldura, barras e nome em 1,9 s.
+- [x] **Abertura** (prancha 30, 11/11/2026, `index.html` + `styles/site.scss`): moldura desenhada em 450 ms, barras a cada 100 ms, "CROMA" e status em mono, 1,9 s no total; movimento reduzido mostra o estado final.
 - [ ] **Servidor** (prancha 32): escolher e adicionar, com a varredura de servidores.
-- [ ] Entrar e **perfis** (prancha 31), com o avatar de barras; código de autorização.
+- [~] Entrar e **perfis** (prancha 31, 11/11/2026): avatar de barras com a inicial (`components/croma/avatar/`), convidado em Grafite. Falta o código de autorização (Quick Connect) com a barra de validade de 6 px.
 
 Testes:
 
-- [ ] **U** barras do avatar pelo perfil; validade do código.
-- [ ] **E** primeiro acesso, senha errada, trocar de perfil, sair; abertura com movimento reduzido.
+- [~] **U** barras do avatar pelo perfil (`avatar.test.ts`); falta a validade do código.
+- [~] **E** `test_entrada.py` (avatares, senha errada, entrar e sair) e `test_abertura.py` (sequência de 1,9 s, movimento reduzido). Falta trocar de perfil e o primeiro acesso.
 - [ ] **V** pranchas 30, 31 e 32.
 
 ### D17 · Ajustes e calibração
