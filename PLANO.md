@@ -243,15 +243,15 @@ Testes:
 
 ### D09 · Busca
 
-- [ ] Resultados agrupados por seção e, dentro dela, por subtipo (prancha 33).
-- [ ] Atalho `Ctrl K`; campo no visual do manual.
-- [ ] Sem resultados: "0" grande, "Nada com “termo”" e sugestões em chips.
+- [~] Resultados agrupados por seção (11/11/2026, `apps/modern/features/search/searchGroups.ts` + `SearchGroupHeader`): Audiovisual, Áudios, Leitura, Fotos e o resto; dentro do grupo seguem as fileiras por tipo do Jellyfin (Filmes, Séries, Episódios). Falta separar por subtipo da biblioteca (documentários, podcasts), que a busca ainda não sabe.
+- [x] Atalho `Ctrl K` (`useSearchShortcut`, no `AppLayout`) e campo de 72 px com a linha de base Fósforo (11/11/2026).
+- [x] Sem resultados: "0" grande, "Nada com “termo”" e chips das seções (`SearchEmpty`, 11/11/2026). As sugestões são só as seções; sugestões de termos ficam para depois.
 
 Testes:
 
-- [ ] **U** agrupamento e ordem dos resultados; pessoas e estúdios no lugar certo.
-- [ ] **E** buscar com e sem resultado; `Ctrl K` de qualquer tela; abrir um resultado e voltar.
-- [ ] **V** prancha 33.
+- [x] **U** agrupamento, ordem e "outros" (`searchGroups.test.ts`); atalho (`useSearchShortcut.test.ts`).
+- [x] **E** `test_busca.py`: resultados por seção, sem resultado, `Ctrl K`, abrir e voltar.
+- [~] **V** referências `busca-resultados` e `busca-vazia`; falta comparar com a prancha 33.
 
 ### D10 · Coleções
 
