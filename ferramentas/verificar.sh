@@ -124,6 +124,10 @@ e2e() {
     if [[ $rapido -eq 1 ]]; then python3 -m pytest -q -m "not lento"; else python3 -m pytest -q; fi
 }
 
+servidor_bau() {
+    cd "$hub/ferramentas" && python3 -m pytest -q e2e_servidor
+}
+
 if quer web; then
     passo "croma-web: eslint" web_lint
     passo "croma-web: stylelint (inclui o Chromium 85 da TV)" web_estilo
@@ -134,6 +138,7 @@ fi
 if quer servidor; then
     passo "croma-servidor: testes (dotnet test)" servidor_testes
     [[ $rapido -eq 1 ]] || passo "croma-servidor: formatação (dotnet format)" servidor_formato
+    passo "croma-servidor: Baú e subtipo de ponta a ponta (servidor descartável)" servidor_bau
 fi
 if quer e2e; then
     passo "ponta a ponta (Playwright)" e2e
