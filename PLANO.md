@@ -74,7 +74,7 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 | D07 | App desktop: primeira versão | D00 | M | em parte (falta compilar) |
 | D08 | Início | D01, D02 | M | em parte |
 | D09 | Busca | D01, D02 | M | em parte |
-| D10 | Coleções | D01, S04 | M | feito (falta a capa gerada nos cartões horizontais) |
+| D10 | Coleções | D01, S04 | M | feito (13/11/2026) |
 | D11 | Músicas | D02, D07 | G | em parte |
 | D12 | Falado: podcasts e audiolivros | D11, I01 | G | a fazer |
 | D13 | Leitura | D02, I01 | G | a fazer |
@@ -256,7 +256,7 @@ Testes:
 ### D10 · Coleções
 
 - [x] **Rever a `specs/colecoes.md` antes** (S04, 12/11/2026): o dono é campo do modelo, não tag reservada.
-- [x] Coleção com dono (13/11/2026): aba Coleções lista só as da biblioteca (`GET /Collections?ownerLibraryId=`); "Nova coleção" cria com a biblioteca; "Adicionar à coleção" só lista as do dono do item; coleções do Baú com dono; seletor "Exibir como: Pôster | Miniatura" na página da coleção (só quem gerencia coleções; gravado no servidor); modo por biblioteca na aba Coleções (caixa no editor de bibliotecas, `LibraryOptions.CollectionsUseThumbnails`); a biblioteca "Coleções" global sai das visões do usuário. Falta só ligar a capa gerada como último recurso nos cartões horizontais (a ordem já está em `pickThumbnailArt`).
+- [x] Coleção com dono (13/11/2026): aba Coleções lista só as da biblioteca (`GET /Collections?ownerLibraryId=`); "Nova coleção" cria com a biblioteca; "Adicionar à coleção" só lista as do dono do item; coleções do Baú com dono; seletor "Exibir como: Pôster | Miniatura" na página da coleção (só quem gerencia coleções; gravado no servidor); modo por biblioteca na aba Coleções (caixa no editor de bibliotecas, `LibraryOptions.CollectionsUseThumbnails`); a biblioteca "Coleções" global sai das visões do usuário. Capa gerada em 16:9 como último recurso nos cartões horizontais (`getCoverSpec(item, landscape)`; `test_colecao_sem_arte_usa_a_capa_gerada_em_16_9`).
 
 Testes:
 
@@ -315,7 +315,7 @@ Testes:
 O Croma serve fotos e vídeos com a varredura padrão do Jellyfin. As bibliotecas Vídeos e Galeria do acervo ficam fora (veja "Fora do escopo").
 
 - [x] Grade justificada com agrupamento por mês (prancha 24), favorita com o quadrado magenta, etiqueta de vídeo "▶ 0:42" (11/11/2026, `apps/modern/features/photos/`; é a aba Fotos da biblioteca e junta os álbuns; a aba de pastas continua). Falta o teste da etiqueta de vídeo (a mídia de teste não tem vídeo na biblioteca de fotos) e a data vem do `DateCreated` do servidor.
-- [~] Visualizador (prancha 25, 13/11/2026): linha "FOTOS · 3 DE 48 · ÁLBUM" com o quadrado magenta e a fita de até 9 miniaturas com a foto atual em Fósforo, que acompanha as setas e leva à foto ao clicar (`components/croma/photoViewer/`, ligado em `components/slideshow/slideshow.js`; só desktop). Falta: a barra de baixo com data, EXIF e os botões (Apresentação, Girar, Informações, Favorita).
+- [~] Visualizador (prancha 25, 13/11/2026; linha de dados com data, câmera e EXIF sobre a fita, `getPhotoInfoLine`; faltam os botões Apresentação/Girar/Informações/Favorita da barra de baixo): linha "FOTOS · 3 DE 48 · ÁLBUM" com o quadrado magenta e a fita de até 9 miniaturas com a foto atual em Fósforo, que acompanha as setas e leva à foto ao clicar (`components/croma/photoViewer/`, ligado em `components/slideshow/slideshow.js`; só desktop). Falta: a barra de baixo com data, EXIF e os botões (Apresentação, Girar, Informações, Favorita).
 
 Testes:
 

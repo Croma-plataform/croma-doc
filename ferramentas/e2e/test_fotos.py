@@ -77,6 +77,7 @@ def test_visualizador_diz_onde_esta_e_mostra_a_fita(pagina, ir, item):
     miniaturas = pagina.locator('[data-testid="viewer-strip"] .cromaViewerThumb')
     assert 1 <= miniaturas.count() <= 9
     assert pagina.locator('[data-testid="viewer-strip"] [aria-current="true"]').count() == 1
+    assert pagina.locator('[data-testid="viewer-info"]').count() == 1
 
 
 def test_visualizador_avanca_e_a_fita_acompanha(pagina, ir, item):

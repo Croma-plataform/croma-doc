@@ -110,6 +110,20 @@ def test_aba_colecoes_segue_o_modo_da_biblioteca(pagina, ir, api_admin, bibliote
         _opcao_da_biblioteca(api_admin, 'Filmes', False)
 
 
+def test_colecao_sem_arte_usa_a_capa_gerada_em_16_9(pagina, ir, api_admin, biblioteca, colecoes):
+    # uma coleção vazia não herda arte de nenhum item: o último recurso é a capa gerada
+    vazia = api_admin(f'Collections?name=Vazia%20E2E&ownerLibraryId={biblioteca("Filmes")["id"]}', metodo='POST')['Id']
+    _opcao_da_biblioteca(api_admin, 'Filmes', True)
+    try:
+        _abrir_aba_colecoes(pagina, ir, biblioteca)
+        cartao = pagina.locator('.card.backdropCard', has_text='Vazia E2E')
+        cartao.wait_for()
+        assert cartao.locator('[data-testid="generated-cover"]').get_attribute('viewBox') == '0 0 384 216'
+    finally:
+        _opcao_da_biblioteca(api_admin, 'Filmes', False)
+        api_admin(f'Items/{vazia}', metodo='DELETE')
+
+
 def test_nao_ha_tela_global_de_colecoes(pagina, ir, colecoes):
     ir('home')
     assert pagina.locator('a[href*="boxsets"]').count() == 0
