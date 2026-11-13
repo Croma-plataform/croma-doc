@@ -94,6 +94,51 @@ def test_visualizador_avanca_e_a_fita_acompanha(pagina, ir, item):
     assert pagina.locator('[data-testid="viewer-strip"] [aria-current="true"]').get_attribute('data-index') == str(indice)
 
 
+def _mostrar_barra(pagina):
+    # o primeiro movimento só anota a posição do ponteiro; o seguinte, longe dele, mostra a barra
+    pagina.mouse.move(300, 300)
+    pagina.mouse.move(600, 400)
+    pagina.locator('.slideshowBottomBar').wait_for(state='visible')
+
+
+def test_barra_do_visualizador_tem_os_botoes_da_prancha(pagina, ir, item):
+    _abrir_visualizador(pagina, ir, item)
+    _mostrar_barra(pagina)
+    for classe, nome in (('btnSlideshowPause', 'Apresentação'), ('btnRotate', 'Girar'),
+                         ('btnPhotoInfo', 'Informações'), ('btnFavorite', 'Favorito')):
+        assert pagina.locator(f'.slideshowBottomBar .{classe}').get_attribute('aria-label') == nome
+
+
+def test_girar_a_foto_e_voltar_ao_fim_de_quatro_giros(pagina, ir, item):
+    _abrir_visualizador(pagina, ir, item)
+    _mostrar_barra(pagina)
+    imagem = pagina.locator('.swiper-slide-active .swiper-slide-img')
+    for graus in (90, 180, 270, 0):
+        pagina.locator('.slideshowBottomBar .btnRotate').click()
+        assert imagem.evaluate('e => e.style.transform') == f'rotate({graus}deg)'
+
+
+def test_botao_de_informacoes_esconde_e_mostra_a_linha_de_dados(pagina, ir, item):
+    _abrir_visualizador(pagina, ir, item)
+    _mostrar_barra(pagina)
+    info = pagina.locator('[data-testid="viewer-info"]')
+    pagina.locator('.slideshowBottomBar .btnPhotoInfo').click()
+    assert not info.is_visible()
+    pagina.locator('.slideshowBottomBar .btnPhotoInfo').click()
+    assert info.evaluate('e => getComputedStyle(e).display') != 'none'
+
+
+def test_favoritar_a_foto_no_visualizador_grava_no_servidor(pagina, ir, item, api_admin):
+    _abrir_visualizador(pagina, ir, item)
+    _mostrar_barra(pagina)
+    botao = pagina.locator('.slideshowBottomBar .btnFavorite')
+    botao.click()
+    pagina.wait_for_function("document.querySelector('.btnFavorite .material-icons').classList.contains('favorite')")
+    assert botao.get_attribute('aria-pressed') == 'true'
+    botao.click()  # deixa o servidor como estava
+    pagina.wait_for_function("document.querySelector('.btnFavorite .material-icons').classList.contains('favorite_border')")
+
+
 def test_visual_do_visualizador_de_fotos(pagina, ir, item, conferir):
     _abrir_visualizador(pagina, ir, item)
     pagina.wait_for_timeout(1200)

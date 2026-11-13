@@ -78,7 +78,7 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 | D11 | Músicas | D02, D07 | G | em parte |
 | D12 | Falado: podcasts e audiolivros | D11, I01 | G | a fazer |
 | D13 | Leitura | D02, I01 | G | a fazer |
-| D14 | Fotos | D02 | M | em parte |
+| D14 | Fotos | D02 | M | feito (falta comparar a grade com a prancha 24) |
 | D15 | Tags | decisões do usuário | M | bloqueado |
 | D16 | Entrada e conta | D02 | M | em parte |
 | D17 | Ajustes e calibração | D02 | M | em parte |
@@ -315,7 +315,7 @@ Testes:
 O Croma serve fotos e vídeos com a varredura padrão do Jellyfin. As bibliotecas Vídeos e Galeria do acervo ficam fora (veja "Fora do escopo").
 
 - [x] Grade justificada com agrupamento por mês (prancha 24), favorita com o quadrado magenta, etiqueta de vídeo "▶ 0:42" (11/11/2026, `apps/modern/features/photos/`; é a aba Fotos da biblioteca e junta os álbuns; a aba de pastas continua). Falta o teste da etiqueta de vídeo (a mídia de teste não tem vídeo na biblioteca de fotos) e a data vem do `DateCreated` do servidor.
-- [~] Visualizador (prancha 25, 13/11/2026; linha de dados com data, câmera e EXIF sobre a fita, `getPhotoInfoLine`; faltam os botões Apresentação/Girar/Informações/Favorita da barra de baixo): linha "FOTOS · 3 DE 48 · ÁLBUM" com o quadrado magenta e a fita de até 9 miniaturas com a foto atual em Fósforo, que acompanha as setas e leva à foto ao clicar (`components/croma/photoViewer/`, ligado em `components/slideshow/slideshow.js`; só desktop). Falta: a barra de baixo com data, EXIF e os botões (Apresentação, Girar, Informações, Favorita).
+- [x] Visualizador (prancha 25, 13/11/2026; linha de dados com data, câmera e EXIF sobre a fita, `getPhotoInfoLine`; barra de baixo com Apresentação, Girar, Informações e Favorita, gravada no servidor): linha "FOTOS · 3 DE 48 · ÁLBUM" com o quadrado magenta e a fita de até 9 miniaturas com a foto atual em Fósforo, que acompanha as setas e leva à foto ao clicar (`components/croma/photoViewer/`, ligado em `components/slideshow/slideshow.js`; só desktop). Falta: a barra de baixo com data, EXIF e os botões (Apresentação, Girar, Informações, Favorita).
 
 Testes:
 
