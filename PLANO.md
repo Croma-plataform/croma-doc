@@ -123,7 +123,7 @@ Feito: barra lateral com as seções, cabeçalho com abas, Resumo do Audiovisual
 - [?] Barra lateral: 240 px, barra de 4 px e fundo Grafite na ativa, subtipos com ícone sem cor. Conferido na captura (240 px, barra amarela, subtipos com ícone); falta medir a barra e a cor.
 - [x] A lista de seções e subtipos do web confere com o catálogo do servidor (`test_catalogo.py`).
 - [x] Editar o subtipo de uma biblioteca que já existe, pela tela: o campo já existia no editor; agora há teste (`test_subtipo_biblioteca.py`).
-- [ ] O cartão da biblioteca no painel mostra o tipo do Jellyfin ("Livros") e não o subtipo ("Mangás").
+- [x] O cartão da biblioteca no painel mostra o subtipo ("Mangás") e não só o tipo do Jellyfin ("Livros") (13/11/2026; `LibraryCard.tsx`, teste em `test_painel.py`).
 
 Testes:
 
@@ -233,7 +233,7 @@ Testes:
 ### D08 · Início
 
 - [~] Tela inicial (pranchas 04 e 15) no visual do manual (11/11/2026): sem a fileira "Minha mídia" no desktop (`cromaFeatures.homeLibraryTiles`), "Continuar" e "A seguir" primeiro com o rótulo de tipo na cor da seção (`SÉRIE · DARK · T2 E06`, opção `showTypeLabel` dos cartões, nos dois construtores), novidades na ordem das seções e capa gerada nos itens sem arte. Falta o cabeçalho de cada fileira com o quadrado da seção e a conferência contra a prancha 15.
-- [ ] Opções da tela inicial (Ajustes) sem as fileiras que saíram.
+- [x] Opções da tela inicial (Ajustes) sem as fileiras que saíram: sem TV ao vivo e, no desktop, sem "Minha mídia" (13/11/2026; `homeScreenSettings.js`, teste em `test_inicio.py`).
 
 Testes:
 

@@ -53,12 +53,21 @@ def test_foco_visivel_em_todo_o_tab(pagina, ir, layout):
         if not caixa or caixa['width'] < 36 or caixa['height'] < 36:
             continue
         nome = caixa.pop('nome')
-        com_foco = pagina.screenshot(clip=caixa)
-        pagina.evaluate("document.activeElement.blur()")
-        pagina.wait_for_timeout(150)
-        sem = pagina.screenshot(clip=caixa)
-        if com_foco == sem:
+        pagina.evaluate("document.activeElement.setAttribute('data-foco-teste', '1')")
+        for tentativa in range(2):
+            # a transição do foco leva um instante: a segunda tentativa evita acusar a captura que veio cedo demais
+            pagina.evaluate("document.querySelector('[data-foco-teste]').focus()")
+            pagina.wait_for_timeout(300 if tentativa else 0)
+            com_foco = pagina.screenshot(clip=caixa)
+            pagina.evaluate("document.activeElement.blur()")
+            pagina.wait_for_timeout(150)
+            sem = pagina.screenshot(clip=caixa)
+            if com_foco != sem:
+                break
+        else:
             sem_foco.append(nome)
+        pagina.evaluate("document.querySelector('[data-foco-teste]').focus()")
+        pagina.evaluate("document.querySelector('[data-foco-teste]').removeAttribute('data-foco-teste')")
         pagina.keyboard.press('Shift+Tab')
         pagina.wait_for_timeout(100)
     assert not sem_foco, f'sem foco visível: {sem_foco}'

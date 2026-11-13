@@ -70,3 +70,13 @@ def test_painel_sem_a_marca_jellyfin(pagina, ir):
 def test_painel_visual(pagina, ir, conferir):
     ir('dashboard/libraries')
     conferir('painel-bibliotecas')
+
+
+def test_cartao_da_biblioteca_mostra_o_subtipo_e_nao_so_o_tipo(pagina, ir, api_admin):
+    """O cartão de "Mangás" diz Mangás (o tipo do Jellyfin seria "Livros")."""
+    ir('dashboard/libraries')
+    pagina.locator('.MuiCard-root', has_text='Mangás').first.wait_for()
+    linhas = pagina.locator('.MuiCard-root', has_text='Mangás').first.inner_text().split('\n')
+    assert 'Livros' not in [l.strip() for l in linhas], linhas
+    subtitulo = pagina.locator('.MuiCard-root', has_text='Mangás').first.locator('p, span').all_inner_texts()
+    assert any('Mangás' in t for t in subtitulo), subtitulo

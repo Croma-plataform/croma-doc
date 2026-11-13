@@ -50,3 +50,16 @@ def test_novidades_seguem_a_ordem_das_secoes(pagina, ir):
 def test_item_sem_arte_na_tela_inicial_tem_capa_gerada(pagina, ir):
     ir('home', espera=3000)
     assert pagina.locator('.card [data-testid="generated-cover"]').count() >= 1
+
+
+def test_opcoes_da_tela_inicial_sem_as_fileiras_que_sairam(pagina, ir, layout, api_admin):
+    """Ajustes › Tela inicial: sem TV ao vivo, e sem "Minha mídia" no desktop (a TV mantém a fileira)."""
+    uid = next(u['Id'] for u in api_admin('Users') if u['Name'] == 'leitor')
+    ir(f'mypreferenceshome?userId={uid}', espera=2500)
+    valores = set(pagina.locator('select[id^="selectHomeSection"] option').evaluate_all('os => os.map(o => o.value)'))
+    assert valores, 'a página de ajustes da tela inicial não carregou'
+    assert not valores & {'livetv', 'activerecordings'}
+    if layout == 'tv':
+        assert {'smalllibrarytiles', 'librarybuttons'} <= valores
+    else:
+        assert not valores & {'smalllibrarytiles', 'librarybuttons'}
