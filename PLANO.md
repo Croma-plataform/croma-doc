@@ -362,7 +362,7 @@ Testes:
 
 - [x] **Descanso de tela** (pranchas 05 e 06, 11/11/2026, `plugins/logoScreensaver/` + `components/croma/screensaver/bounce.ts`): o símbolo cruza a tela, troca para a cor da barra seguinte a cada borda, desvia até 12° com o ângulo entre 25° e 65°, e no canto em cheio a moldura se enche de barras por 2,4 s. É o padrão (antes era desligado) e entra em 5 min; o Jellyfin já não o mostra com vídeo tocando.
 - [x] **Sem sinal** (prancha 07, 11/11/2026, `components/croma/states/NoSignal.tsx`, ligado em `ConnectionErrorPage`): estática, linhas de varredura, faixa rolante, painel com a nova tentativa a cada 15 s e "Trocar servidor".
-- [ ] Textos de erro com a voz do manual.
+- [x] Textos de erro com a voz do manual (13/11/2026, seção 11): 19 mensagens de reprodução, lista e genéricas reescritas em `strings/pt-br.json` (dizem o que houve e o que fazer; "O servidor Croma não responde" no lugar de "erro de rede"). Teste `components/croma/voice/voz.test.ts` barra jargão, "por favor" e mensagens longas. As demais strings de erro (TV ao vivo, plugins, SyncPlay) ficam para a passada do D21.
 
 Testes:
 
