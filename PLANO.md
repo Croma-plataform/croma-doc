@@ -256,13 +256,13 @@ Testes:
 ### D10 · Coleções
 
 - [x] **Rever a `specs/colecoes.md` antes** (S04, 12/11/2026): o dono é campo do modelo, não tag reservada.
-- [ ] Coleção com dono; "Adicionar à coleção" só lista as do dono do item; sem tela global; modo de exibição por biblioteca e por coleção; coleções do Baú com dono.
+- [~] Coleção com dono (13/11/2026): [x] aba Coleções lista só as da biblioteca (`GET /Collections?ownerLibraryId=`), [x] "Nova coleção" cria com a biblioteca, [x] "Adicionar à coleção" só lista as do dono do item, [x] coleções do Baú com dono. Falta: [ ] tirar a tela global `/boxsets` do menu e do Início, [ ] seletor do modo de exibição (pôster ou miniatura) por biblioteca e por coleção, com a arte de reserva (o servidor já guarda o modo da coleção).
 
 Testes:
 
 - [ ] **S** gravação, validação e consulta por dono; migração numa cópia do banco.
 - [ ] **U** escolha do formato (pôster ou miniatura) e a ordem de arte de reserva (Thumb, Backdrop, capa gerada).
-- [ ] **E** criar, adicionar, mudar o modo de exibição; formatos nunca misturados.
+- [~] **E** `test_colecoes.py` (lista da biblioteca, itens do dono, recusa de outra biblioteca) passa; falta mudar o modo de exibição e os formatos nunca misturados.
 
 ### D11 · Músicas
 

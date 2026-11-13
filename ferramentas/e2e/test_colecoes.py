@@ -1,5 +1,6 @@
 """Coleções (módulo D10): cada coleção pertence a uma biblioteca (`specs/colecoes.md`, servidor S04)."""
 import urllib.error
+from urllib.parse import quote
 
 import pytest
 
@@ -25,6 +26,10 @@ def colecoes(api_admin, biblioteca, estado):
     yield criadas
     for id_ in criadas.values():
         api_admin(f'Items/{id_}', metodo='DELETE')
+    # criar a primeira coleção cria a biblioteca "Coleções" do servidor; sem ela o painel das outras telas muda
+    for pasta in api_admin('Library/VirtualFolders'):
+        if pasta.get('CollectionType') == 'boxsets':
+            api_admin(f'Library/VirtualFolders?name={quote(pasta["Name"])}&refreshLibrary=false', metodo='DELETE')
 
 
 def test_aba_colecoes_lista_so_as_da_biblioteca(pagina, ir, biblioteca, colecoes):
