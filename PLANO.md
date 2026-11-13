@@ -150,7 +150,7 @@ Testes:
 
 - [x] **U** capa gerada (proporção por tipo, título longo, cor da seção, sem autor); fila de avisos (limite de 3, durações, erro fica até a pessoa agir).
 - [~] **C** cada componente nos estados (capa, avisos, esqueletos, vazio, alternador: feitos; falta o restante do tema).
-- [~] **E** feitos: capa gerada, alternador, aviso aparece e some (máx. 3, erro fica), movimento reduzido zera as durações. Falta biblioteca vazia.
+- [~] **E** feitos (13/11/2026: `test_cartoes_foco.py`, moldura de foco inteira nos quatro lados e etiqueta de quantidade em Fósforo; a moldura é uma camada `::after` por dentro do cartão): capa gerada, alternador, aviso aparece e some (máx. 3, erro fica), movimento reduzido zera as durações. Falta biblioteca vazia.
 - [~] **V** página de mostruário em `#/mostruario` (`apps/modern/routes/mostruario/`; botões, campo, avisos, capas, esqueletos e vazio) com referência `mostruario.png`. Falta comparar com a prancha 35 e acrescentar seletor de passo e alternância.
 
 ### D03 · Filmes: fecho
