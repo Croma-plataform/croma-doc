@@ -128,6 +128,10 @@ servidor_bau() {
     cd "$hub/ferramentas" && python3 -m pytest -q e2e_servidor
 }
 
+identidade_geradores() {
+    cd "$hub/ferramentas" && python3 -m pytest -q test_geradores.py
+}
+
 if quer web; then
     passo "croma-web: eslint" web_lint
     passo "croma-web: stylelint (inclui o Chromium 85 da TV)" web_estilo
@@ -142,6 +146,9 @@ if quer servidor; then
 fi
 if quer e2e; then
     passo "ponta a ponta (Playwright)" e2e
+fi
+if [[ -z "$so" ]]; then
+    passo "croma-identidade: geradores dão o que está versionado (I03)" identidade_geradores
 fi
 
 echo; echo "━━ Resumo"

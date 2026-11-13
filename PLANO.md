@@ -432,7 +432,7 @@ Testes:
 |---|---|---|
 | I01 | Pranchas novas: páginas das seções com o Resumo, Documentários, página de programa de podcast, player falado, leitor de HQ e mangá | D05, D12, D13 |
 | I02 | Decisões de prancha: conteúdo da aba Imagem do painel; prancha 38 sem tempo estimado nem velocidade da rede (o servidor não informa) | D06 |
-| I03 | Teste dos geradores: rodar os scripts do zero e conferir que as pranchas saem iguais às versionadas | — |
+| I03 | Teste dos geradores: rodar os scripts do zero e conferir que as pranchas saem iguais às versionadas. **Feito em parte** (13/11/2026): `ferramentas/test_geradores.py`, numa cópia temporária, confere os ícones SVG, os PNG dos SVG e os ícones do app (entra no `verificar.sh` completo). **Achado:** os tiles da TV versionados (`logos/app/tv/tile-*.png`: símbolo com a faixa embaixo e a palavra CROMA) não são o que o `gerar_icones_app.py` desenha (7 barras cheias); decidir qual vale. O `gerar_logotipo.py` fica de fora (precisa da fonte Archivo em TTF e do `fontTools`) | — |
 
 ---
 
