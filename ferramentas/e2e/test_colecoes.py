@@ -80,3 +80,37 @@ def test_quem_nao_gerencia_colecoes_ve_o_modo_mas_nao_muda(pagina, ir, api_admin
     _abrir_colecao(pagina, ir, id_)
     pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .backdropCard').first.wait_for()
     assert pagina.get_by_test_id('collection-display-switch').count() == 0
+
+
+def _opcao_da_biblioteca(api_admin, nome, miniaturas):
+    pasta = next(b for b in api_admin('Library/VirtualFolders') if b['Name'] == nome)
+    opcoes = {**pasta['LibraryOptions'], 'CollectionsUseThumbnails': miniaturas}
+    api_admin('Library/VirtualFolders/LibraryOptions', {'Id': pasta['ItemId'], 'LibraryOptions': opcoes}, 'POST')
+
+
+def _abrir_aba_colecoes(pagina, ir, biblioteca):
+    ir(f'movies?topParentId={biblioteca("Filmes")["id"]}&collectionType=movies&tab=0')
+    pagina.locator('.MuiTabs-root [role="tab"]', has_text='Coleções').click()
+
+
+def test_aba_colecoes_usa_posteres_por_padrao(pagina, ir, biblioteca, colecoes):
+    _abrir_aba_colecoes(pagina, ir, biblioteca)
+    pagina.locator('.card.portraitCard', has_text='Saga E2E').wait_for()
+    assert pagina.locator('.card.backdropCard').count() == 0
+
+
+def test_aba_colecoes_segue_o_modo_da_biblioteca(pagina, ir, api_admin, biblioteca, colecoes):
+    # a visão da biblioteca fica em cache na sessão da página: o modo é gravado antes de abrir a tela
+    _opcao_da_biblioteca(api_admin, 'Filmes', True)
+    try:
+        _abrir_aba_colecoes(pagina, ir, biblioteca)
+        pagina.locator('.card.backdropCard', has_text='Saga E2E').wait_for()
+        assert pagina.locator('.card.portraitCard').count() == 0
+    finally:
+        _opcao_da_biblioteca(api_admin, 'Filmes', False)
+
+
+def test_nao_ha_tela_global_de_colecoes(pagina, ir, colecoes):
+    ir('home')
+    assert pagina.locator('a[href*="boxsets"]').count() == 0
+    assert 'collectionType=boxsets' not in pagina.content()

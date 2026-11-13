@@ -261,6 +261,25 @@ def test_varredura_da_dono_a_colecao_feita_a_mao(servidor, musica):
     assert depois['OwnerLibraryId'].replace('-', '') == filmes.replace('-', '')
 
 
+def test_modo_de_exibicao_das_colecoes_da_biblioteca(servidor, acervo):
+    """O modo (pôster ou miniatura) da aba Coleções é uma opção da biblioteca e chega na visão do usuário."""
+    uid = st.api('GET', '/Users/Me', token=servidor)['Id']
+
+    def modo():
+        visoes = st.api('GET', f'/UserViews?userId={uid}', token=servidor)['Items']
+        return next(v for v in visoes if v['Name'] == 'Filmes Bau')['CollectionsUseThumbnails']
+
+    assert modo() is False
+    pasta = next(b for b in st.api('GET', '/Library/VirtualFolders', token=servidor) if b['Name'] == 'Filmes Bau')
+    opcoes = pasta['LibraryOptions']
+    opcoes['CollectionsUseThumbnails'] = True
+    st.api('POST', '/Library/VirtualFolders/LibraryOptions', {'Id': pasta['ItemId'], 'LibraryOptions': opcoes}, servidor)
+    assert modo() is True
+    opcoes['CollectionsUseThumbnails'] = False
+    st.api('POST', '/Library/VirtualFolders/LibraryOptions', {'Id': pasta['ItemId'], 'LibraryOptions': opcoes}, servidor)
+    assert modo() is False
+
+
 def test_biblioteca_sem_o_campo_usa_o_subtipo_padrao_e_editar_recusa_incompativel(servidor, acervo):
     """S01: biblioteca de antes do subtipo (sem o campo) e edição com subtipo que não combina com o tipo."""
     opcoes = st.opcoes_biblioteca(acervo / 'movies', 'Movies')

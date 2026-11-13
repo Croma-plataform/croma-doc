@@ -53,7 +53,7 @@ A interface é a mesma nas três plataformas. Para a TV e o celular não virarem
 1. as entregas estão feitas e conferidas contra o manual da identidade;
 2. os testes listados existem e passam no `ferramentas/verificar.sh`, junto com todos os anteriores;
 3. o teste de fumaça no modo TV passa;
-4. o mapa do código (`CROMA.md`) e este plano estão atualizados;
+4. o mapa do código (`CROMA.md`, atualizado em 13/11/2026 até o D10 e o S04) e este plano estão atualizados;
 5. o usuário viu a tela e aprovou, e o trabalho está em commits por funcionalidade.
 
 Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar os módulos entre si.
@@ -74,7 +74,7 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 | D07 | App desktop: primeira versão | D00 | M | em parte (falta compilar) |
 | D08 | Início | D01, D02 | M | em parte |
 | D09 | Busca | D01, D02 | M | em parte |
-| D10 | Coleções | D01, S04 | M | a fazer |
+| D10 | Coleções | D01, S04 | M | feito (falta a capa gerada nos cartões horizontais) |
 | D11 | Músicas | D02, D07 | G | em parte |
 | D12 | Falado: podcasts e audiolivros | D11, I01 | G | a fazer |
 | D13 | Leitura | D02, I01 | G | a fazer |
@@ -256,13 +256,13 @@ Testes:
 ### D10 · Coleções
 
 - [x] **Rever a `specs/colecoes.md` antes** (S04, 12/11/2026): o dono é campo do modelo, não tag reservada.
-- [~] Coleção com dono (13/11/2026): [x] aba Coleções lista só as da biblioteca (`GET /Collections?ownerLibraryId=`), [x] "Nova coleção" cria com a biblioteca, [x] "Adicionar à coleção" só lista as do dono do item, [x] coleções do Baú com dono. [x] seletor "Exibir como: Pôster | Miniatura" na página da coleção (só para quem gerencia coleções; o modo fica gravado no servidor; álbuns e faixas continuam quadrados; `components/croma/collectionDisplay/`). Falta: [ ] tirar a tela global `/boxsets` do menu e do Início, [ ] modo de exibição por biblioteca na aba Coleções (campo da biblioteca no servidor), [ ] capa gerada como último recurso nos cartões horizontais (a ordem Thumb, Backdrop, capa já está em `pickThumbnailArt`, ainda não ligada aos cartões).
+- [x] Coleção com dono (13/11/2026): aba Coleções lista só as da biblioteca (`GET /Collections?ownerLibraryId=`); "Nova coleção" cria com a biblioteca; "Adicionar à coleção" só lista as do dono do item; coleções do Baú com dono; seletor "Exibir como: Pôster | Miniatura" na página da coleção (só quem gerencia coleções; gravado no servidor); modo por biblioteca na aba Coleções (caixa no editor de bibliotecas, `LibraryOptions.CollectionsUseThumbnails`); a biblioteca "Coleções" global sai das visões do usuário. Falta só ligar a capa gerada como último recurso nos cartões horizontais (a ordem já está em `pickThumbnailArt`).
 
 Testes:
 
 - [ ] **S** gravação, validação e consulta por dono; migração numa cópia do banco.
 - [x] **U** escolha do formato (pôster ou miniatura) e a ordem de arte de reserva (`collectionDisplay.test.ts`).
-- [~] **E** `test_colecoes.py` (lista da biblioteca, itens do dono, recusa de outra biblioteca) passa, inclusive mudar o modo da coleção, gravá-lo e esconder o seletor de quem não gerencia; falta o modo por biblioteca.
+- [x] **E** `test_colecoes.py` (lista da biblioteca, itens do dono, recusa de outra biblioteca) passa, inclusive mudar o modo da coleção, gravá-lo e esconder o seletor de quem não gerencia, o modo por biblioteca e a ausência da tela global.
 
 ### D11 · Músicas
 
