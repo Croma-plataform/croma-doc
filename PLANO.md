@@ -79,7 +79,7 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 | D12 | Falado: podcasts e audiolivros | D11, I01 | G | a fazer |
 | D13 | Leitura | D02, I01 | G | a fazer |
 | D14 | Fotos | D02 | M | feito (falta comparar a grade com a prancha 24) |
-| D15 | Tags | decisões do usuário | M | bloqueado |
+| D15 | Tags | 2 decisões do usuário (níveis já decidido) | M | bloqueado |
 | D16 | Entrada e conta | D02 | M | em parte |
 | D17 | Ajustes e calibração | D02 | M | em parte |
 | D18 | Espera e erro | D02 | M | em parte |
@@ -325,7 +325,7 @@ Testes:
 
 ### D15 · Tags
 
-Bloqueado nas três decisões de `specs/tags.md` (onde ficam salvas, níveis, escopo). A spec precisa de revisão: ela se apoiava nas bibliotecas que saíram do Croma.
+Bloqueado em duas decisões de `specs/tags.md` (onde ficam salvas e escopo). **Níveis: decidido em 13/11/2026, não existem no Croma** (eram do conteúdo do disco Worm Hole, fora do escopo). A spec precisa de revisão: ela se apoiava nas bibliotecas que saíram do Croma.
 
 - [ ] Depois das decisões: levar a lógica do v1 para TypeScript, modo "todas", edição em massa, trava do campo Tags.
 
@@ -422,7 +422,7 @@ Testes:
 - **S02** — testes que faltam: [x] `BauCollectionsPostScanTask` (cria, acha pelo `uuid`, não duplica ao renomear, tira o item posto à mão, não apaga quando o arquivo some; `e2e_servidor/test_bau.py`); [x] `BauEpisodeProvider` (achado pelo `file`, vídeo fora da lista, especiais; `e2e_servidor/test_bau.py`); [x] varredura de uma pasta Baú de mentira de ponta a ponta (filmes e séries); [x] **somente leitura:** (conferido para filmes e séries em `test_bau.py`: a árvore fica idêntica depois de varrer) varrer e atualizar uma cópia e conferir que nenhum arquivo dela mudou.
 - **S03** — [x] faixa (`BauAudioProvider`), capas da faixa e da coleção (`BauImageProvider`) e coleções a partir do `playlist.json` (`BauCollectionsPostScanTask`), 12/11/2026. Artista e álbum seguem as tags das faixas (o Baú não tem arquivo próprio deles). Testes: `BauMusicTests` e `e2e_servidor/test_bau.py`; conferido com uma cópia da coleção `avicii`. Detalhes em `specs/varredura-bau.md`.
 - **S04** — [x] dono da coleção como campo do modelo (12–13/11/2026): `BoxSet.OwnerLibraryId`, DTO, `POST /Collections?ownerLibraryId=`, recusa (400) de item de outra biblioteca, `GET /Collections?ownerLibraryId=` (lista por dono), modo de exibição por coleção (`POST /Collections/{id}/DisplayMode?useThumbnails=`, `CollectionUseThumbnails` no DTO), Baú preenche o dono e `BoxSetOwnerPostScanTask` dá dono às coleções feitas à mão (biblioteca com a maioria dos itens). Testes em `e2e_servidor/test_bau.py`. Falta só a migração do banco real do usuário, que roda sozinha na próxima varredura.
-- **S05** — [ ] abertura: de onde vêm as marcações (capítulos do arquivo, plugin ou marcação à mão); [ ] trickplay: só se as miniaturas ficarem fora da pasta da mídia, confirmado no código e testado numa cópia.
+- **S05** — [ ] abertura: de onde vêm as marcações (capítulos do arquivo, plugin ou marcação à mão); [ ] trickplay: **tem que ter** (decisão de 13/11/2026); no código `SaveTrickplayWithMedia` é falso por padrão, então as miniaturas ficam na pasta de dados do servidor e não na da mídia; falta travar essa opção, testar numa cópia e ligar a miniatura na busca e na linha do tempo.
 - **S06** — [ ] .NET SDK 10 no Windows, migrar a pasta para o layout novo, compilar, `jellyfin-ffmpeg`, trocar o binário oficial pelo fork. Teste **M**: subir, varrer uma biblioteca de teste, tocar.
 - **S07** — [ ] ensaiar o rebase da branch `croma` numa versão nova, com o `croma-web` junto, e rodar o `verificar.sh`.
 

@@ -22,7 +22,6 @@ Levar para TypeScript, no `croma-web`, a lógica pura do v1, trocando só a cama
 - modo "todas" da pesquisa;
 - tags herdadas do álbum;
 - edição em massa: uma chamada `POST /Items/{id}` por item;
-- níveis: lidos do nome da pasta pai `Nivel_N`;
 - álbum oculto: tag reservada mais `excludeTags`.
 
 ## Riscos
@@ -33,7 +32,7 @@ Levar para TypeScript, no `croma-web`, a lógica pura do v1, trocando só a cama
 ## Decisões em aberto (ainda sem resposta do usuário)
 
 1. **Onde as tags ficam salvas:** só no Jellyfin, com um script de backup e importação dos JSONs do v1 (recomendado), ou num plugin C# com os arquivos como fonte da verdade.
-2. **Níveis:** achatar as pastas no cliente ou convertê-los em tags.
+2. ~~**Níveis**~~ — **decidido (13/11/2026): não existem no Croma.** Os níveis (`Nivel_N`) eram do conteúdo do disco Worm Hole, que saiu do escopo (aplicação dedicada). As bibliotecas de Fotos e de vídeos caseiros continuam existindo no Croma, mas sem esse conteúdo e sem níveis.
 3. **Escopo:** tags só em Fotos ou em todas as bibliotecas.
 
-A varredura estruturada que resolveria os níveis e as tags de uma vez era a das bibliotecas Vídeos e Galeria do acervo, que saíram do Croma (09/11/2026, aplicação dedicada por privacidade). Os níveis precisam de outra solução, se ainda fizerem sentido.
+A varredura estruturada que resolveria os níveis e as tags de uma vez era a das bibliotecas Vídeos e Galeria do acervo, que saíram do Croma (09/11/2026, aplicação dedicada por privacidade). Os níveis não vão existir no Croma (decisão de 13/11/2026).
