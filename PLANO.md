@@ -207,9 +207,9 @@ Feito: OSD (pranchas 11 e 12), painel de legendas e áudio (36), tela de carrega
 Testes:
 
 - [x] **U** código do episódio e barra da contagem (`upNext.test.ts`); janela do botão de pular (`skipWindow.test.ts`).
-- [ ] **E** do que já existe: tocar, pausar, −10 e +30, capítulos, buscar, sair e voltar no ponto; painel (trocar legenda e áudio, tamanho, fundo, atraso, fechar com Esc); carregando com a rede lenta.
+- [~] **E** `test_player.py` (13/11/2026): tocar, pausar, −10 e +30, capítulo seguinte e anterior, buscar, sair e voltar no ponto (a página mostra "Do início"; o teste baixa `MinResumeDurationSeconds` porque a mídia tem 40 s e limpa o ponto no fim). Painel de legendas e áudio e carregando já tinham testes. Falta: tamanho/fundo/atraso das legendas e fechar o painel pelo botão.
 - [x] **E** `test_proximo_episodio.py`: cartão do próximo com código e foco, "Assistir agora" abre o próximo, ocultar cancela, pular a abertura (o terceiro episódio da mídia de teste tem 620 s porque o Jellyfin só mostra o cartão em vídeos de 10 min ou mais). Falta o fim natural do episódio.
-- [ ] **E** reprodução direta (navegador com H.264), conversão só de áudio e conversão de vídeo: os selos e os chips certos em cada caso.
+- [~] **E** chips de reprodução direta (MP4 H.264: selo "Reprodução direta") e de conversão (HEVC: "Convertendo no servidor") feitos em `test_player.py`. Falta a conversão só do áudio (precisa de mídia com áudio que o navegador não toca).
 
 ### D07 · App desktop: primeira versão
 
