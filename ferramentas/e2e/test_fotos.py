@@ -61,3 +61,40 @@ def test_abrir_uma_foto(pagina, ir, biblioteca):
 def test_visual_da_galeria_de_fotos(pagina, ir, biblioteca, conferir):
     _abrir(pagina, ir, biblioteca)
     conferir('galeria-fotos')
+
+
+def _abrir_visualizador(pagina, ir, item, nome='foto-1'):
+    ir(f'details?id={item("Photo", nome)}')
+    pagina.locator('#itemDetailPage:not(.hide) .btnPlay').first.click()
+    pagina.locator('.slideshowDialog.cromaViewer').wait_for()
+    pagina.locator('[data-testid="viewer-strip"] .cromaViewerThumb').first.wait_for()
+
+
+def test_visualizador_diz_onde_esta_e_mostra_a_fita(pagina, ir, item):
+    _abrir_visualizador(pagina, ir, item)
+    kicker = pagina.locator('[data-testid="viewer-kicker"]')
+    assert kicker.inner_text().upper().startswith('FOTOS · 1 DE ')
+    miniaturas = pagina.locator('[data-testid="viewer-strip"] .cromaViewerThumb')
+    assert 1 <= miniaturas.count() <= 9
+    assert pagina.locator('[data-testid="viewer-strip"] [aria-current="true"]').count() == 1
+
+
+def test_visualizador_avanca_e_a_fita_acompanha(pagina, ir, item):
+    _abrir_visualizador(pagina, ir, item)
+    total = int(pagina.locator('[data-testid="viewer-kicker"]').text_content().split(' de ')[1].split(' ')[0])
+    pagina.keyboard.press('ArrowRight')
+    pagina.wait_for_function("document.querySelector('[data-testid=\"viewer-kicker\"]').textContent.includes('2 de')")
+    assert pagina.locator('[data-testid="viewer-strip"] [aria-current="true"]').get_attribute('data-index') == '1'
+    # clicar numa miniatura leva a ela
+    ultima = pagina.locator('[data-testid="viewer-strip"] .cromaViewerThumb').last
+    indice = int(ultima.get_attribute('data-index'))
+    ultima.click()
+    pagina.wait_for_function(f"document.querySelector('[data-testid=\"viewer-kicker\"]').textContent.includes('{indice + 1} de {total}')")
+    assert pagina.locator('[data-testid="viewer-strip"] [aria-current="true"]').get_attribute('data-index') == str(indice)
+
+
+def test_visual_do_visualizador_de_fotos(pagina, ir, item, conferir):
+    _abrir_visualizador(pagina, ir, item)
+    pagina.wait_for_timeout(1200)
+    pagina.mouse.move(5, 5)  # o ponteiro parado fora da foto: sem os botões que aparecem ao mexer
+    conferir('visualizador-fotos')

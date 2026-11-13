@@ -180,7 +180,7 @@ Feito: fita de episódios e kicker no detalhe da série. O leitor do Baú para s
 
 Testes:
 
-- [ ] **U** fita com especiais e com temporada sem episódios (o modelo já tem 7 testes).
+- [x] **U** fita com especiais e com temporada sem episódios (`episodeStrip.test.ts`, 10 testes; 13/11/2026).
 - [~] **E** feitos (`test_series.py`): série sem nada visto, pela metade e toda vista; "Próximo: T1 E02"; kicker e arquivo do episódio. Falta o episódio novo depois da última vez que a pessoa assistiu.
 - [~] **V** referências `grade-series`, `detalhe-serie` e `detalhe-episodio`; falta compará-las com as pranchas 10 e 29.
 
@@ -315,12 +315,12 @@ Testes:
 O Croma serve fotos e vídeos com a varredura padrão do Jellyfin. As bibliotecas Vídeos e Galeria do acervo ficam fora (veja "Fora do escopo").
 
 - [x] Grade justificada com agrupamento por mês (prancha 24), favorita com o quadrado magenta, etiqueta de vídeo "▶ 0:42" (11/11/2026, `apps/modern/features/photos/`; é a aba Fotos da biblioteca e junta os álbuns; a aba de pastas continua). Falta o teste da etiqueta de vídeo (a mídia de teste não tem vídeo na biblioteca de fotos) e a data vem do `DateCreated` do servidor.
-- [ ] Visualizador com a fita de miniaturas (prancha 25).
+- [~] Visualizador (prancha 25, 13/11/2026): linha "FOTOS · 3 DE 48 · ÁLBUM" com o quadrado magenta e a fita de até 9 miniaturas com a foto atual em Fósforo, que acompanha as setas e leva à foto ao clicar (`components/croma/photoViewer/`, ligado em `components/slideshow/slideshow.js`; só desktop). Falta: a barra de baixo com data, EXIF e os botões (Apresentação, Girar, Informações, Favorita).
 
 Testes:
 
 - [x] **U** a conta da grade justificada e o agrupamento por mês (`justified.test.ts`, `months.test.ts`).
-- [~] **E** `test_fotos.py`: grade por mês, fileiras fecham a largura, favorita, abrir uma foto. Falta o visualizador e avançar.
+- [~] **E** `test_fotos.py`: grade por mês, fileiras fecham a largura, favorita, abrir uma foto. Visualizador e avançar: feitos (`test_fotos.py`).
 - [~] **V** referência `galeria-fotos`; falta comparar com a prancha 24 e fazer a 25.
 
 ### D15 · Tags
