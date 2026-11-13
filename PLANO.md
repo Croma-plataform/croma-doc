@@ -349,7 +349,7 @@ Testes:
 
 ### D17 · Ajustes e calibração
 
-- [~] **Ajustes** (prancha 34): alternância com o trilho Fósforo/Linha e botão de calibrar (11/11/2026). Componentes da prancha: linha "Calibrar a tela" com as barras e "Abrir ›" (`CalibrationRow`), seleção segmentada (`SegmentedField`, usada no modo de exibição) e seletor de passo (`StepperField`, usado no tempo do descanso), em `apps/modern/features/preferences/` (12/11/2026). A página inteira ainda segue o formulário do Jellyfin: faltam o menu lateral Conta/Reprodução/Legendas/Imagem… e os demais campos nesse formato.
+- [~] **Ajustes** (prancha 34): alternância com o trilho Fósforo/Linha e botão de calibrar (11/11/2026). Componentes da prancha: linha "Calibrar a tela" com as barras e "Abrir ›" (`CalibrationRow`), seleção segmentada (`SegmentedField`, usada no modo de exibição) e seletor de passo (`StepperField`, usado no tempo do descanso), em `apps/modern/features/preferences/` (12/11/2026). **Menu lateral** (13/11/2026): Perfil, Reprodução, Legendas, Exibição, Tela inicial e Controles, fixo ao lado da barra lateral nas telas de ajustes (`SettingsMenu`, `utils/settingsMenu.ts`, montado no `AppLayout`; só no desktop; testes `settingsMenu.test.ts` e `test_ajustes_menu.py`, referência `ajustes-menu`). A prancha tem também Áudio, Descanso de tela, Servidor e Sobre, que ainda não são telas separadas no Jellyfin (ficam em Reprodução e Exibição). Falta: os demais campos no formato da prancha.
 - [x] **Tela de calibração** (prancha 03, 11/11/2026, `apps/modern/features/calibration/` e rota `/calibration`, aberta por "Calibrar a tela" nos ajustes de exibição): Brilho (PLUGE), Contraste e Cor (só azul), com as cores reais do padrão.
 
 Testes:
