@@ -215,7 +215,7 @@ Testes:
 
 Objetivo: o Croma abrindo no app, com o player do Croma tocando pelo mpv, o quanto antes.
 
-- [~] Compilar o `croma-desktop` no Linux. Escrito `dev/linux/setup-fedora.sh` (lista traduzida de `debian/control`, **não testada**; o libmpv vem do RPM Fusion). **Ação do usuário:** rodar `! croma-desktop/dev/linux/setup-fedora.sh` (usa `sudo dnf`) e depois `dev/linux/build.sh`; a máquina não tem cmake, g++ nem mpv.
+- [x] Compilar o `croma-desktop` no Linux (feito até 12/11/2026: `build/src/croma-desktop` roda e `ctest` passa, 4 de 4). Falta abri-lo com janela e servidor para conferir (item abaixo). Acervo de Filmes está em `/dev/sdd1` montado `rw`; remontar só leitura: `sudo mount -o remount,ro /dev/sdd1`.
 - [~] Marca mínima (11/11/2026, commit `d057f42` do croma-desktop): nome "Croma" (`NameConfiguration.cmake`, `nativeshell.js`), logotipo e cores na tela de conexão. Falta o ícone do app (`resources/`, `deployment/`) e conferir tudo compilado.
 - [x] **Desligar o aviso de atualização**: `native/updatePlugin.js` ficou sem consulta (11/11/2026; não compilado ainda).
 - [ ] Conferir o player do Croma com o `mpvVideoPlayer.js`:
