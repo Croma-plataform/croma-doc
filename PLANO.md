@@ -255,7 +255,7 @@ Testes:
 
 ### D10 · Coleções
 
-- [ ] **Rever a `specs/colecoes.md` antes** (S04): ela fala em bibliotecas e guarda o dono em tags reservadas.
+- [x] **Rever a `specs/colecoes.md` antes** (S04, 12/11/2026): o dono é campo do modelo, não tag reservada.
 - [ ] Coleção com dono; "Adicionar à coleção" só lista as do dono do item; sem tela global; modo de exibição por biblioteca e por coleção; coleções do Baú com dono.
 
 Testes:
@@ -413,7 +413,7 @@ Testes:
 | S01 | Subtipo da biblioteca | todos | feito |
 | S02 | Padrão Baú: filmes e séries | D03, D04 | feito, testes de ponta a ponta feitos |
 | S03 | Padrão Baú: músicas | acervo de música no D11 | feito |
-| S04 | Coleções com dono | D10 | a fazer |
+| S04 | Coleções com dono | D10 | feito |
 | S05 | Marcações de abertura e trickplay | D06 | decisão |
 | S06 | Servidor no Windows (CintraMan) | D20 | a fazer |
 | S07 | Atualização para uma versão nova do Jellyfin | todas | ensaio a fazer |
@@ -421,7 +421,7 @@ Testes:
 - **S01** — [x] testes: editar o subtipo (`400` quando não combina) e biblioteca antiga sem o campo, em `ferramentas/e2e_servidor/test_bau.py` (servidor descartável na porta 8098, passa no `verificar.sh`).
 - **S02** — testes que faltam: [x] `BauCollectionsPostScanTask` (cria, acha pelo `uuid`, não duplica ao renomear, tira o item posto à mão, não apaga quando o arquivo some; `e2e_servidor/test_bau.py`); [x] `BauEpisodeProvider` (achado pelo `file`, vídeo fora da lista, especiais; `e2e_servidor/test_bau.py`); [x] varredura de uma pasta Baú de mentira de ponta a ponta (filmes e séries); [x] **somente leitura:** (conferido para filmes e séries em `test_bau.py`: a árvore fica idêntica depois de varrer) varrer e atualizar uma cópia e conferir que nenhum arquivo dela mudou.
 - **S03** — [x] faixa (`BauAudioProvider`), capas da faixa e da coleção (`BauImageProvider`) e coleções a partir do `playlist.json` (`BauCollectionsPostScanTask`), 12/11/2026. Artista e álbum seguem as tags das faixas (o Baú não tem arquivo próprio deles). Testes: `BauMusicTests` e `e2e_servidor/test_bau.py`; conferido com uma cópia da coleção `avicii`. Detalhes em `specs/varredura-bau.md`.
-- **S04** — [ ] decidir onde mora o dono da coleção. A convenção de 07/11/2026 pede o modelo do servidor, não tags reservadas. Testes **S** no D10.
+- **S04** — [x] dono da coleção como campo do modelo (12–13/11/2026): `BoxSet.OwnerLibraryId`, DTO, `POST /Collections?ownerLibraryId=`, recusa (400) de item de outra biblioteca, `GET /Collections?ownerLibraryId=` (lista por dono), modo de exibição por coleção (`POST /Collections/{id}/DisplayMode?useThumbnails=`, `CollectionUseThumbnails` no DTO), Baú preenche o dono e `BoxSetOwnerPostScanTask` dá dono às coleções feitas à mão (biblioteca com a maioria dos itens). Testes em `e2e_servidor/test_bau.py`. Falta só a migração do banco real do usuário, que roda sozinha na próxima varredura.
 - **S05** — [ ] abertura: de onde vêm as marcações (capítulos do arquivo, plugin ou marcação à mão); [ ] trickplay: só se as miniaturas ficarem fora da pasta da mídia, confirmado no código e testado numa cópia.
 - **S06** — [ ] .NET SDK 10 no Windows, migrar a pasta para o layout novo, compilar, `jellyfin-ffmpeg`, trocar o binário oficial pelo fork. Teste **M**: subir, varrer uma biblioteca de teste, tocar.
 - **S07** — [ ] ensaiar o rebase da branch `croma` numa versão nova, com o `croma-web` junto, e rodar o `verificar.sh`.
@@ -506,7 +506,6 @@ Testes da etapa:
 |---|---|
 | Remontar o acervo só leitura | D00 |
 | Aprovar a estrutura das bibliotecas de música no acervo | S03 (as telas não dependem) |
-| Onde mora o dono da coleção (modelo do servidor ou tags reservadas) | S04, D10 |
 | De onde vêm as marcações de abertura; aceitar trickplay fora do acervo | S05, D06 |
 | Conteúdo da aba Imagem do painel; manter ou ajustar a prancha 38 | I02, D06 |
 | Legenda no app: aplicar o estilo no mpv ou esconder as opções | D07, D20 |

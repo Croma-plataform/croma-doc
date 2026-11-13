@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -153,6 +154,111 @@ def test_arquivo_da_colecao_some_e_a_colecao_fica(servidor, acervo):
     c = colecao(servidor)
     assert isinstance(c, dict) and c['Name'] == 'Saga Renomeada'
     assert filhos(servidor, c['Id']) == {'Filme A', 'Filme B'}
+
+
+def id_da_biblioteca(token, nome):
+    return next(v['ItemId'] for v in st.api('GET', '/Library/VirtualFolders', token=token) if v['Name'] == nome)
+
+
+def filme_da_saga(token):
+    saga = next(c for c in itens(token, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO)
+    return st.api('GET', f'/Items?ParentId={saga["Id"]}', token=token)['Items'][0]
+
+
+def test_colecao_do_bau_tem_a_biblioteca_como_dona(servidor, musica):
+    """S04: o dono é um campo do BoxSet; cada coleção guarda a biblioteca de onde veio."""
+    filmes = id_da_biblioteca(servidor, 'Filmes Bau')
+    saga = next(c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO)
+    detalhe = st.api('GET', f'/Items?Ids={saga["Id"]}', token=servidor)['Items'][0]
+    assert detalhe['OwnerLibraryId'].replace('-', '') == filmes.replace('-', '')
+    discos = next(c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_MUSICA)
+    assert discos['OwnerLibraryId'].replace('-', '') != filmes.replace('-', '')
+
+
+def test_colecao_com_dono_recusa_item_de_outra_biblioteca(servidor, musica):
+    saga = next(c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO)
+    faixa = itens(servidor, 'Audio')[0]
+    antes = filhos(servidor, saga['Id'])
+    with pytest.raises(st.Erro, match='400'):
+        st.api('POST', f'/Collections/{saga["Id"]}/Items?ids={faixa["Id"]}', token=servidor)
+    assert filhos(servidor, saga['Id']) == antes
+
+
+def test_colecao_criada_pela_api_com_dono_aceita_so_a_biblioteca_dela(servidor, musica):
+    filmes = id_da_biblioteca(servidor, 'Filmes Bau')
+    filme = filme_da_saga(servidor)
+    faixa = itens(servidor, 'Audio')[0]
+    nova = st.api('POST', f'/Collections?name=Dona%20Api&ownerLibraryId={filmes}&ids={filme["Id"]}', token=servidor)
+    detalhe = st.api('GET', f'/Items?Ids={nova["Id"]}', token=servidor)['Items'][0]
+    assert detalhe['OwnerLibraryId'].replace('-', '') == filmes.replace('-', '')
+    with pytest.raises(st.Erro, match='400'):
+        st.api('POST', f'/Collections/{nova["Id"]}/Items?ids={faixa["Id"]}', token=servidor)
+
+
+def test_colecao_sem_dono_continua_aceitando_qualquer_item(servidor, musica):
+    faixa = itens(servidor, 'Audio')[0]
+    filme = filme_da_saga(servidor)
+    # sem itens na criação, a coleção fica sem dono (com itens ela toma a biblioteca do primeiro)
+    nova = st.api('POST', '/Collections?name=Sem%20Dono', token=servidor)
+    st.api('POST', f'/Collections/{nova["Id"]}/Items?ids={filme["Id"]}', token=servidor)
+    st.api('POST', f'/Collections/{nova["Id"]}/Items?ids={faixa["Id"]}', token=servidor)
+    detalhe = st.api('GET', f'/Items?Ids={nova["Id"]}', token=servidor)['Items'][0]
+    assert not detalhe.get('OwnerLibraryId')
+
+
+def test_listar_colecoes_por_dono(servidor, musica):
+    filmes = id_da_biblioteca(servidor, 'Filmes Bau')
+    nomes = {c['Name'] for c in st.api('GET', f'/Collections?ownerLibraryId={filmes}', token=servidor)['Items']}
+    assert {'Saga Renomeada', 'Dona Api'} <= nomes
+    assert 'Artista de Teste' not in nomes
+
+
+def test_listar_as_colecoes_que_aceitam_um_item(servidor, musica):
+    filme = filme_da_saga(servidor)
+    nomes = {c['Name'] for c in st.api('GET', f'/Collections?itemId={filme["Id"]}', token=servidor)['Items']}
+    assert 'Saga Renomeada' in nomes and 'Artista de Teste' not in nomes
+    faixa = itens(servidor, 'Audio')[0]
+    nomes = {c['Name'] for c in st.api('GET', f'/Collections?itemId={faixa["Id"]}', token=servidor)['Items']}
+    assert 'Artista de Teste' in nomes and 'Saga Renomeada' not in nomes
+    with pytest.raises(st.Erro, match='400'):
+        st.api('GET', '/Collections', token=servidor)
+
+
+def test_colecao_criada_com_itens_toma_a_biblioteca_do_primeiro(servidor, musica):
+    faixa = itens(servidor, 'Audio')[0]
+    nova = st.api('POST', f'/Collections?name=So%20Musica&ids={faixa["Id"]}', token=servidor)
+    detalhe = st.api('GET', f'/Items?Ids={nova["Id"]}', token=servidor)['Items'][0]
+    filmes = id_da_biblioteca(servidor, 'Filmes Bau')
+    assert detalhe['OwnerLibraryId'].replace('-', '') != filmes.replace('-', '')
+
+
+def test_modo_de_exibicao_da_colecao(servidor, musica):
+    saga = next(c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO)
+
+    def modo():
+        return st.api('GET', f'/Items?Ids={saga["Id"]}', token=servidor)['Items'][0]['CollectionUseThumbnails']
+
+    assert modo() is False
+    st.api('POST', f'/Collections/{saga["Id"]}/DisplayMode?useThumbnails=true', token=servidor)
+    assert modo() is True
+    st.api('POST', f'/Collections/{saga["Id"]}/DisplayMode?useThumbnails=false', token=servidor)
+    assert modo() is False
+
+
+def test_varredura_da_dono_a_colecao_feita_a_mao(servidor, musica):
+    filme = filme_da_saga(servidor)
+    nova = st.api('POST', '/Collections?name=Feita%20a%20Mao', token=servidor)
+    st.api('POST', f'/Collections/{nova["Id"]}/Items?ids={filme["Id"]}', token=servidor)
+    antes = st.api('GET', f'/Items?Ids={nova["Id"]}', token=servidor)['Items'][0]
+    assert not antes.get('OwnerLibraryId')
+    escanear(servidor)
+    filmes = id_da_biblioteca(servidor, 'Filmes Bau')
+    for _ in range(15):
+        depois = st.api('GET', f'/Items?Ids={nova["Id"]}', token=servidor)['Items'][0]
+        if depois.get('OwnerLibraryId'):
+            break
+        time.sleep(2)
+    assert depois['OwnerLibraryId'].replace('-', '') == filmes.replace('-', '')
 
 
 def test_biblioteca_sem_o_campo_usa_o_subtipo_padrao_e_editar_recusa_incompativel(servidor, acervo):
