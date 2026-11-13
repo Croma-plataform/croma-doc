@@ -256,13 +256,13 @@ Testes:
 ### D10 · Coleções
 
 - [x] **Rever a `specs/colecoes.md` antes** (S04, 12/11/2026): o dono é campo do modelo, não tag reservada.
-- [~] Coleção com dono (13/11/2026): [x] aba Coleções lista só as da biblioteca (`GET /Collections?ownerLibraryId=`), [x] "Nova coleção" cria com a biblioteca, [x] "Adicionar à coleção" só lista as do dono do item, [x] coleções do Baú com dono. Falta: [ ] tirar a tela global `/boxsets` do menu e do Início, [ ] seletor do modo de exibição (pôster ou miniatura) por biblioteca e por coleção, com a arte de reserva (o servidor já guarda o modo da coleção).
+- [~] Coleção com dono (13/11/2026): [x] aba Coleções lista só as da biblioteca (`GET /Collections?ownerLibraryId=`), [x] "Nova coleção" cria com a biblioteca, [x] "Adicionar à coleção" só lista as do dono do item, [x] coleções do Baú com dono. [x] seletor "Exibir como: Pôster | Miniatura" na página da coleção (só para quem gerencia coleções; o modo fica gravado no servidor; álbuns e faixas continuam quadrados; `components/croma/collectionDisplay/`). Falta: [ ] tirar a tela global `/boxsets` do menu e do Início, [ ] modo de exibição por biblioteca na aba Coleções (campo da biblioteca no servidor), [ ] capa gerada como último recurso nos cartões horizontais (a ordem Thumb, Backdrop, capa já está em `pickThumbnailArt`, ainda não ligada aos cartões).
 
 Testes:
 
 - [ ] **S** gravação, validação e consulta por dono; migração numa cópia do banco.
-- [ ] **U** escolha do formato (pôster ou miniatura) e a ordem de arte de reserva (Thumb, Backdrop, capa gerada).
-- [~] **E** `test_colecoes.py` (lista da biblioteca, itens do dono, recusa de outra biblioteca) passa; falta mudar o modo de exibição e os formatos nunca misturados.
+- [x] **U** escolha do formato (pôster ou miniatura) e a ordem de arte de reserva (`collectionDisplay.test.ts`).
+- [~] **E** `test_colecoes.py` (lista da biblioteca, itens do dono, recusa de outra biblioteca) passa, inclusive mudar o modo da coleção, gravá-lo e esconder o seletor de quem não gerencia; falta o modo por biblioteca.
 
 ### D11 · Músicas
 

@@ -98,9 +98,10 @@ def pagina(navegador, sessoes, layout, base, request):
 @pytest.fixture
 def ir(pagina, base):
     """`ir('home')` abre uma rota da interface (`#/rota`) e espera a tela assentar."""
-    def _ir(rota: str, espera=1500):
+    def _ir(rota: str, espera=1500, rede_ociosa=True):
+        # rede_ociosa=False: telas que consultam a internet (o catálogo de plugins) não podem esperar a rede calar
         pagina.goto(base + '#/' + rota)
-        pagina.wait_for_load_state('networkidle')
+        pagina.wait_for_load_state('networkidle' if rede_ociosa else 'domcontentloaded')
         pagina.wait_for_timeout(espera)
     return _ir
 

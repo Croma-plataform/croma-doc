@@ -19,7 +19,8 @@ def sem_jellyfin(pagina, rota):
 def test_tela_sem_jellyfin(pagina, ir, layout, rota):
     if rota == 'mypreferencesmenu' or rota.startswith('mypreferences'):
         rota = f'{rota}?userId=x' if False else rota
-    ir(rota)
+    # o catálogo de plugins consulta o repositório na internet: não esperar a rede ficar ociosa
+    ir(rota, espera=4000 if rota == 'dashboard/plugins' else 1500, rede_ociosa=rota != 'dashboard/plugins')
     sem_jellyfin(pagina, rota)
 
 
@@ -30,7 +31,8 @@ def test_tela_sem_jellyfin(pagina, ir, layout, rota):
 def test_painel_sem_jellyfin(pagina, ir, layout, rota):
     if layout == 'tv':
         pytest.skip('painel só no desktop')
-    ir(rota)
+    # o catálogo de plugins consulta o repositório na internet: não esperar a rede ficar ociosa
+    ir(rota, espera=4000 if rota == 'dashboard/plugins' else 1500, rede_ociosa=rota != 'dashboard/plugins')
     sem_jellyfin(pagina, rota)
 
 

@@ -51,3 +51,32 @@ def test_servidor_recusa_item_de_outra_biblioteca_na_coleção(api_admin, estado
     with pytest.raises(urllib.error.HTTPError) as erro:
         api_admin(f'Collections/{colecoes["Saga E2E"]}/Items?ids={faixa}', metodo='POST')
     assert erro.value.code == 400
+
+
+def _abrir_colecao(pagina, ir, id_):
+    ir(f'details?id={id_}')
+    pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .card').first.wait_for()
+
+
+@pytest.mark.usuario('admin')
+def test_mudar_o_modo_de_exibicao_da_colecao_e_ele_fica_gravado(pagina, ir, api_admin, colecoes):
+    id_ = colecoes['Saga E2E']
+    _abrir_colecao(pagina, ir, id_)
+    cartao = pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .card').first
+    assert 'portraitCard' in cartao.get_attribute('class')
+    pagina.get_by_test_id('collection-display-switch').get_by_role('radio', name='Miniatura').click()
+    pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .backdropCard').first.wait_for()
+    assert pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .portraitCard').count() == 0
+    assert api_admin(f'Items?Ids={id_}')['Items'][0]['CollectionUseThumbnails'] is True
+    pagina.reload()
+    pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .backdropCard').first.wait_for()
+    marcado = pagina.get_by_test_id('collection-display-switch').get_by_role('radio', name='Miniatura')
+    assert marcado.get_attribute('aria-checked') == 'true'
+
+
+def test_quem_nao_gerencia_colecoes_ve_o_modo_mas_nao_muda(pagina, ir, api_admin, colecoes):
+    id_ = colecoes['Saga E2E']
+    api_admin(f'Collections/{id_}/DisplayMode?useThumbnails=true', metodo='POST')
+    _abrir_colecao(pagina, ir, id_)
+    pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .backdropCard').first.wait_for()
+    assert pagina.get_by_test_id('collection-display-switch').count() == 0
