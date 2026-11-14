@@ -66,7 +66,7 @@ def test_movimento_reduzido_deixa_o_carregando_parado(pagina, ir):
 
 def test_mostruario_tem_todos_os_componentes(pagina, ir, conferir):
     ir('mostruario')
-    assert pagina.locator('[data-testid="generated-cover"]').count() == 3
+    assert pagina.locator('[data-testid="generated-cover"]').count() == 7
     assert pagina.locator('[data-testid="card-skeletons"]').count() == 1
     assert pagina.locator('[data-testid="empty-state"]').count() == 1
     pagina.wait_for_timeout(500)

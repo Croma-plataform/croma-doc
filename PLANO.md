@@ -275,7 +275,7 @@ Nada feito no visual do Croma. O Jellyfin já tem as bibliotecas, a fila e as le
 - [ ] **Tocando agora** (prancha 18) com a fila.
 - [~] **Analisador de espectro** (11/11/2026: `components/croma/analyzer/`, canvas de 32 colunas com cor pela frequência e marca de pico na tela Tocando agora; o `htmlAudioPlayer` agora sempre monta o grafo Web Audio com um `AnalyserNode`). Funciona no navegador; **no app falta a ponte** do mpv. O web não tinha nenhum. No navegador sai do Web Audio; **no app o som passa pelo mpv**, que não entrega as amostras à interface: precisa de uma ponte nativa ou de outra saída (decidir depois do D07).
 - [~] **Mini player** fixo embaixo, com o progresso em espectro (11/11/2026: linha do tempo em espectro e volume em Fósforo, sem o azul do Jellyfin, na barra e na tela Tocando agora). Falta o layout da prancha.
-- [ ] Capas de playlist geradas.
+- [x] Capas de playlist geradas (14/11/2026, `generatedCover/spectrum.ts`, 7 testes): 7 barras com as cores de uma faixa do espectro a 75% e placa Sinal com o nome e `λ 590–700 nm`. Decisão minha, a confirmar: as faixas do manual (Mix Croma, Graves, Foco, Verde) valem pelo nome; as demais playlists ganham uma faixa de 100 a 200 nm calculada do nome (estável). Vale para `Playlist` e para coleção com a tag `playlist` (só quando o cartão traz `Tags`). Falta decidir como cada faixa musical entra numa "playlist Croma" por faixa do espectro (o bloco embaixo da capa do álbum, prancha 17): não há regra especificada.
 
 Testes:
 
