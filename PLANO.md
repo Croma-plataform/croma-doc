@@ -175,6 +175,7 @@ Feito: fita de episódios e kicker no detalhe da série. O leitor do Baú para s
 - [ ] Biblioteca de Séries do acervo criada e varrida.
 - [~] Galeria de séries (prancha 10): a etiqueta `+N` já aparece (11/11/2026). Falta o formato 16:9 do manual: hoje o cartão sem arte sai quadrado e a capa gerada só tem 2:3 e 1:1.
 - [ ] Resto do detalhe da série e a página da temporada no visual do manual.
+- [ ] **Música tema ao abrir a série ou a temporada** (ideia do usuário, 14/11/2026; é como o Plex faz): ao entrar na página da série ou da temporada, toca baixinho o tema dela, com entrada e saída suaves, e para ao sair da página ou ao dar play. O Jellyfin já tem a base: o ajuste "Tocar músicas tema" (`enableThemeSongs`, **desligado por padrão**) e `components/themeMediaPlayer.js`, que usa o `theme.mp3` da pasta da série. A fazer: ligar por padrão no Croma; volume baixo e fade; não tocar quando já há algo tocando; deixar o botão de silenciar na página; decidir de onde vem o arquivo do tema (o padrão Baú ainda não prevê `theme.mp3`: perguntar ao DL_HERMES). Teste e2e: abre a página da série e o tema começa; dar play o silencia.
 - [~] **Detalhe do episódio** (prancha 29, 11/11/2026): kicker `EPISÓDIO · T1 E02`, imagem 16:9 na moldura e "Mais da temporada". Falta a lista com o episódio atual em Grafite.
 - [x] Faixa de baixo (ficha técnica e arquivo) para o episódio (11/11/2026; sem "Parecidos na biblioteca").
 
