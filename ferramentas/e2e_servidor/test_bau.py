@@ -121,6 +121,28 @@ def test_varrer_le_os_metadados_sem_gravar_na_pasta(servidor, acervo):
     assert fotografar(acervo) == antes, 'a varredura mexeu na pasta da mídia'
 
 
+def test_filtro_de_tags_qualquer_ou_todas(servidor, acervo):
+    """Croma: `tagsMatchAll=true` exige todas as tags; sem ele o filtro segue o padrão do Jellyfin (qualquer uma)."""
+    from urllib.parse import quote
+    escanear(servidor)
+    filmes = {f"Filme {chr(64 + i['ProductionYear'] - 2000)}": i['Id'] for i in itens(servidor, 'Movie')}
+    for nome, tags in (('Filme A', ['praia', 'família']), ('Filme B', ['praia']), ('Filme C', [])):
+        completo = st.api('GET', f'/Items/{filmes[nome]}', token=servidor)
+        completo['Tags'] = tags
+        st.api('POST', f'/Items/{filmes[nome]}', completo, servidor)
+
+    def nomes(consulta):
+        consulta = quote(consulta, safe='=&|')
+        achados = st.api('GET', f'/Items?Recursive=true&IncludeItemTypes=Movie&{consulta}', token=servidor)['Items']
+        return {f"Filme {chr(64 + i['ProductionYear'] - 2000)}" for i in achados}
+
+    assert nomes('tags=praia|família') == {'Filme A', 'Filme B'}
+    assert nomes('tags=praia|família&tagsMatchAll=true') == {'Filme A'}
+    assert nomes('tags=família|viagem&tagsMatchAll=true') == set()
+    assert nomes('tags=FAMILIA|praia&tagsMatchAll=true') in ({'Filme A'}, set())   # o filtro do Jellyfin não ignora acento
+    assert nomes('tags=praia&tagsMatchAll=true') == {'Filme A', 'Filme B'}
+
+
 def test_colecao_criada_pelo_uuid_com_os_itens_do_arquivo(servidor):
     c = colecao(servidor)
     assert isinstance(c, dict), f'esperava uma coleção, veio {c}'
@@ -428,3 +450,4 @@ def test_varrer_musica_nao_grava_na_pasta(servidor, musica):
     raiz, antes = musica
     escanear(servidor)
     assert fotografar(raiz) == antes, 'a varredura mexeu na pasta da música'
+
