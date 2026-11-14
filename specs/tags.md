@@ -33,6 +33,6 @@ Levar para TypeScript, no `croma-web`, a lógica pura do v1, trocando só a cama
 
 1. ~~**Onde as tags ficam salvas**~~ — **decidido (13/11/2026): só no Jellyfin**, com um script de backup e importação dos JSONs do v1. Sem plugin.
 2. ~~**Níveis**~~ — **decidido (13/11/2026): não existem no Croma.** Os níveis (`Nivel_N`) eram do conteúdo do disco Worm Hole, que saiu do escopo (aplicação dedicada). As bibliotecas de Fotos e de vídeos caseiros continuam existindo no Croma, mas sem esse conteúdo e sem níveis.
-3. **Escopo:** tags só em Fotos ou em todas as bibliotecas.
+3. ~~**Escopo**~~ — **decidido (13/11/2026): todas as bibliotecas** (o Jellyfin já guarda `Tags` em qualquer item).
 
 A varredura estruturada que resolveria os níveis e as tags de uma vez era a das bibliotecas Vídeos e Galeria do acervo, que saíram do Croma (09/11/2026, aplicação dedicada por privacidade). Os níveis não vão existir no Croma (decisão de 13/11/2026).

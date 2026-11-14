@@ -79,7 +79,7 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 | D12 | Falado: podcasts e audiolivros | D11, I01 | G | a fazer |
 | D13 | Leitura | D02, I01 | G | a fazer |
 | D14 | Fotos | D02 | M | feito (falta comparar a grade com a prancha 24) |
-| D15 | Tags | 1 decisão do usuário (escopo) | M | quase destravado |
+| D15 | Tags | — | M | a fazer (decisões tomadas) |
 | D16 | Entrada e conta | D02 | M | em parte |
 | D17 | Ajustes e calibração | D02 | M | em parte |
 | D18 | Espera e erro | D02 | M | em parte |
@@ -325,7 +325,7 @@ Testes:
 
 ### D15 · Tags
 
-Falta uma decisão de `specs/tags.md` (o escopo). **Onde ficam salvas: só no Jellyfin** (13/11/2026). **Níveis: decidido em 13/11/2026, não existem no Croma** (eram do conteúdo do disco Worm Hole, fora do escopo). A spec precisa de revisão: ela se apoiava nas bibliotecas que saíram do Croma.
+Decisões de `specs/tags.md` tomadas em 13/11/2026: **salvas só no Jellyfin**, **em todas as bibliotecas**, sem níveis. Pode ser implementado. **Níveis: decidido em 13/11/2026, não existem no Croma** (eram do conteúdo do disco Worm Hole, fora do escopo). A spec precisa de revisão: ela se apoiava nas bibliotecas que saíram do Croma.
 
 - [ ] Depois das decisões: levar a lógica do v1 para TypeScript, modo "todas", edição em massa, trava do campo Tags.
 
@@ -430,7 +430,7 @@ Testes:
 
 | Módulo | O quê | Quem depende |
 |---|---|---|
-| I01 | Pranchas novas: páginas das seções com o Resumo, Documentários, página de programa de podcast, player falado, leitor de HQ e mangá | D05, D12, D13 |
+| I01 | (descrições em `specs/pranchas-a-desenhar.md`, 13/11/2026; falta gerar as imagens) Pranchas novas: páginas das seções com o Resumo, Documentários, página de programa de podcast, player falado, leitor de HQ e mangá | D05, D12, D13 |
 | I02 | Decisões de prancha: conteúdo da aba Imagem do painel; prancha 38 sem tempo estimado nem velocidade da rede (o servidor não informa) | D06 |
 | I03 | Teste dos geradores: rodar os scripts do zero e conferir que as pranchas saem iguais às versionadas. **Feito em parte** (13/11/2026): `ferramentas/test_geradores.py`, numa cópia temporária, confere os ícones SVG, os PNG dos SVG e os ícones do app (entra no `verificar.sh` completo). **Achado:** os tiles da TV versionados (`logos/app/tv/tile-*.png`: símbolo com a faixa embaixo e a palavra CROMA) não são o que o `gerar_icones_app.py` desenha (7 barras cheias); decidir qual vale. O `gerar_logotipo.py` fica de fora (precisa da fonte Archivo em TTF e do `fontTools`) | — |
 
