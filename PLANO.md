@@ -328,13 +328,13 @@ Testes:
 Decisões de `specs/tags.md` tomadas em 13/11/2026: **salvas só no Jellyfin**, **em todas as bibliotecas**, sem níveis. Pode ser implementado. **Níveis: decidido em 13/11/2026, não existem no Croma** (eram do conteúdo do disco Worm Hole, fora do escopo). A spec precisa de revisão: ela se apoiava nas bibliotecas que saíram do Croma.
 
 - [x] Lógica pura portada do v1 para `croma-web/src/components/croma/tags/` (13/11/2026): normalização, sugestões (`tagPicker`), edição em massa (`bulkEdit`), modo "todas" no cliente, URL da pesquisa e trava do campo Tags (`tagsApi.ts`: `withTags` põe `Tags` em `LockedFields`).
-- [ ] Interface: seletor de tags no editor de metadados, edição em massa na seleção de itens, filtro por duas tags nas bibliotecas. Depende de build do web (4,5 GB de RAM): só com memória livre.
+- [x] Interface (14/11/2026): **editar tags** no menu da seleção (segurar o botão do mouse sobre um cartão; só administrador): mostra as tags em comum, adiciona/remove para todos, com sugestões e a trava do campo Tags (`components/croma/tags/tagsEditor.js`). **Filtro por tags** com a opção "Ter todas as tags escolhidas" (`Filters.TagsMatchAll`, enviado como `tagsMatchAll`; servidor: `InternalItemsQuery.TagsMatchAll`). Falta: sugestões no editor de metadados de um item só (hoje usa a lista padrão do Jellyfin) e o script de backup e importação dos JSONs do v1.
 
 Testes:
 
 - [x] **U** `tags.test.ts` e `tagsApi.test.ts` (18 testes: normalização, sugestões, edição em massa, trava, modo todas/qualquer, URL).
-- [ ] **S** atualizar metadados não sobrescreve as tags editadas.
-- [ ] **E** marcar vários itens, filtrar por duas tags.
+- [~] **S** filtro de tags qualquer/todas (`e2e_servidor/test_bau.py`). Falta: atualizar metadados não sobrescreve as tags editadas (a trava `LockedFields` é conferida no e2e).
+- [x] **E** `test_tags.py`: filtrar por duas tags (qualquer e todas) e editar as tags de dois filmes de uma vez (14/11/2026).
 
 ### D16 · Entrada e conta
 
