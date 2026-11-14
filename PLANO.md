@@ -270,6 +270,7 @@ Testes:
 Nada feito no visual do Croma. O Jellyfin já tem as bibliotecas, a fila e as letras.
 
 - [x] Abas e Resumo da seção **Áudios** (já vinham do D01; referência `galeria-albuns`).
+- [~] **Página do álbum** (14/11/2026, prancha 17): kicker `ÁLBUM · λ 530 nm` com o quadrado verde, título em Archivo Expandida, informações `1973 · 10 faixas · 42:52` em mono, botões Tocar / Aleatório / Rádio do álbum (`isAlbumDetail`, `cromaDetailAudio`). Falta a lista de faixas (número em mono `01`, atual em verde com o mini equalizador), as playlists por faixa do espectro embaixo da capa e o `FLAC 24/96` (o servidor não dá o formato do álbum). Pode-se testar com a biblioteca de músicas real do usuário (disco só leitura).
 - [ ] Galeria, álbum e artista (pranchas 17, 20 e 21): capa na moldura, faixa tocando com o mini equalizador, capa de artista (foto, mosaico ou capa) com a etiqueta de origem.
 - [ ] **Tocando agora** (prancha 18) com a fila.
 - [~] **Analisador de espectro** (11/11/2026: `components/croma/analyzer/`, canvas de 32 colunas com cor pela frequência e marca de pico na tela Tocando agora; o `htmlAudioPlayer` agora sempre monta o grafo Web Audio com um `AnalyserNode`). Funciona no navegador; **no app falta a ponte** do mpv. O web não tinha nenhum. No navegador sai do Web Audio; **no app o som passa pelo mpv**, que não entrega as amostras à interface: precisa de uma ponte nativa ou de outra saída (decidir depois do D07).

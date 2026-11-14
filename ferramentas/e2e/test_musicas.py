@@ -43,3 +43,14 @@ def test_analisador_desenha_enquanto_toca(pagina, ir, item):
         const d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data;
         let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++; return n; }''')
     assert pintado > 200
+
+
+def test_pagina_do_album_tem_kicker_info_e_botoes_com_texto(pagina, ir, item):
+    ir(f'details?id={item("MusicAlbum", "Album Um")}')
+    pagina.locator('.detailKicker').wait_for()
+    assert ' '.join(pagina.locator('.detailKicker').inner_text().split()) == 'ÁLBUM · λ 530 nm'
+    assert pagina.locator('.itemMiscInfo-primary').first.inner_text().split() == ['3', 'faixas', '0:24']
+    rotulos = pagina.locator('.mainDetailButtons .detailButton:visible .detailButton-label:visible')
+    # a ordem na tela (da esquerda para a direita), não a do HTML
+    lidos = sorted((rotulos.nth(i).bounding_box()['x'], rotulos.nth(i).inner_text().strip()) for i in range(rotulos.count()))
+    assert [r for _, r in lidos] == ['Tocar', 'Aleatório', 'Rádio do álbum']
