@@ -200,14 +200,14 @@ Testes:
 Feito: OSD (pranchas 11 e 12), painel de legendas e áudio (36), tela de carregando (38).
 
 - [~] **Próximo episódio** (prancha 37, 11/11/2026, `components/upnextdialog/` + `components/croma/upNext/`): cartão em Sinal com a moldura Fósforo, kicker `PRÓXIMO · T2 E01`, barra de contagem na cor da série que esvazia, "Assistir agora" em foco. Falta o vídeo encolher para a moldura e a contagem usa o tempo que o Jellyfin dá (30 a 40 s), não 8 s.
-- [~] **Pular abertura** (11/11/2026, `components/playback/skipsegment.ts` + `components/croma/skip/`): botão claro em Fósforo, já em foco também no desktop, some 1 s depois do fim da abertura. Falta decidir **de onde vêm as marcações** (S05); o teste simula a resposta do servidor.
+- [~] **Pular abertura** (11/11/2026, `components/playback/skipsegment.ts` + `components/croma/skip/`): botão claro em Fósforo, já em foco também no desktop, some 1 s depois do fim da abertura. As marcações vêm do plugin Intro Skipper (S05, confirmado em 13/11/2026 no servidor real). O botão sobe acima da linha do tempo quando a barra do player está aberta (`skip-button-container-osd`); falta o teste e2e dessa posição; o teste simula a resposta do servidor.
 - [ ] **Aba Imagem** do painel: o manual não define o conteúdo (I02).
 - [ ] Miniatura na busca: depende do trickplay fora do acervo (S05).
 
 Testes:
 
 - [x] **U** código do episódio e barra da contagem (`upNext.test.ts`); janela do botão de pular (`skipWindow.test.ts`).
-- [~] **E** `test_player.py` (13/11/2026): tocar, pausar, −10 e +30, capítulo seguinte e anterior, buscar, sair e voltar no ponto (a página mostra "Do início"; o teste baixa `MinResumeDurationSeconds` porque a mídia tem 40 s e limpa o ponto no fim). Painel de legendas e áudio e carregando já tinham testes. Falta: tamanho/fundo/atraso das legendas e fechar o painel pelo botão.
+- [~] **E** `test_player.py` (13/11/2026): tocar, pausar, −10 e +30, capítulo seguinte e anterior, buscar, sair e voltar no ponto (a página mostra "Do início"; o teste baixa `MinResumeDurationSeconds` porque a mídia tem 40 s e limpa o ponto no fim). Painel de legendas e áudio e carregando já tinham testes. O painel já tem tamanho, fundo e atraso das legendas; falta só o teste e2e deles e de fechar o painel pelo botão.
 - [x] **E** `test_proximo_episodio.py`: cartão do próximo com código e foco, "Assistir agora" abre o próximo, ocultar cancela, pular a abertura (o terceiro episódio da mídia de teste tem 620 s porque o Jellyfin só mostra o cartão em vídeos de 10 min ou mais). Falta o fim natural do episódio.
 - [~] **E** chips de reprodução direta (MP4 H.264: selo "Reprodução direta") e de conversão (HEVC: "Convertendo no servidor") feitos em `test_player.py`. Falta a conversão só do áudio (precisa de mídia com áudio que o navegador não toca).
 
