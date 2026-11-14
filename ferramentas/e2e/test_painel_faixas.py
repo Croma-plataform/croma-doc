@@ -64,3 +64,33 @@ def test_painel_na_tv(pagina, tocar, osd, layout):
         pagina.keyboard.press(tecla)
         pagina.wait_for_timeout(250)
         assert pagina.evaluate(dentro), f'o foco saiu do painel em {tecla}'
+
+
+def test_clicar_fora_fecha_e_o_video_volta_a_tocar(pagina, tocar, osd, layout):
+    if layout == 'tv':
+        pytest.skip('o clique do mouse é do desktop')
+    tocar('Movie', 'Barras Faixas (2003)')
+    abrir_painel(pagina, osd)
+
+    pagina.mouse.click(20, 20)     # no vídeo escurecido, fora do painel
+    pagina.wait_for_selector('.cromaPanel', state='detached', timeout=5000)
+    pagina.wait_for_function('document.querySelector("video").paused === false', timeout=10000)
+
+
+def test_atraso_da_legenda_muda_de_0_1_em_0_1(pagina, tocar, osd, layout):
+    if layout == 'tv':
+        pytest.skip('o clique do mouse é do desktop')
+    tocar('Movie', 'Barras Faixas (2003)')
+    abrir_painel(pagina, osd)
+
+    opcoes = pagina.locator('.cromaPanelOption[data-kind="subtitle"]')
+    opcoes.nth(opcoes.count() - 1).click()
+    atraso = pagina.locator('.cromaPanelOffset')
+    atraso.wait_for(timeout=5000)
+    assert atraso.inner_text() == '+0,0 s'
+    mais = pagina.locator('.cromaPanelChoice[data-kind="offset"][data-value="0.1"]')
+    mais.click()
+    mais.click()
+    assert atraso.inner_text() == '+0,2 s'
+    pagina.locator('.cromaPanelChoice[data-kind="offset"][data-value="-0.1"]').click()
+    assert atraso.inner_text() == '+0,1 s'

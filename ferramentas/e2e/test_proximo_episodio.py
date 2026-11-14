@@ -44,8 +44,7 @@ def test_ocultar_cancela_a_contagem(pagina, tocar):
     pagina.wait_for_function("() => getComputedStyle(document.querySelector('.upNextContainer')).opacity === '0'")
 
 
-def test_pular_abertura_aparece_em_foco_e_some_1_s_depois_do_fim(pagina, ir, item):
-    """As marcações vêm do servidor (S05): aqui a resposta é simulada com uma abertura de 2 s a 5 s."""
+def _simular_abertura(pagina, item):
     id_ep = item('Episode', 'Serie de Teste - S02E01 - Episodio 1')
     segmento = {'Items': [{'Id': 'a' * 32, 'ItemId': id_ep, 'Type': 'Intro',
                            'StartTicks': 2 * 10_000_000, 'EndTicks': 5 * 10_000_000}], 'TotalRecordCount': 1}
@@ -58,6 +57,12 @@ def test_pular_abertura_aparece_em_foco_e_some_1_s_depois_do_fim(pagina, ir, ite
             fonte['HasSegments'] = True
         rota.fulfill(response=resposta, json=corpo)
     pagina.route('**/PlaybackInfo*', com_segmentos)
+    return id_ep
+
+
+def test_pular_abertura_aparece_em_foco_e_some_1_s_depois_do_fim(pagina, ir, item):
+    """As marcações vêm do servidor (S05): aqui a resposta é simulada com uma abertura de 2 s a 5 s."""
+    id_ep = _simular_abertura(pagina, item)
     ir(f'details?id={id_ep}')
     pagina.locator('#itemDetailPage:not(.hide) .btnPlay').first.click()
     botao = pagina.locator('.skip-button:not(.hide):not(.skip-button-hidden)')
@@ -68,3 +73,16 @@ def test_pular_abertura_aparece_em_foco_e_some_1_s_depois_do_fim(pagina, ir, ite
     botao.click()
     pagina.wait_for_function('document.querySelector("video").currentTime >= 5')
     pagina.wait_for_selector('.skip-button-hidden, .skip-button.hide', state='attached', timeout=8000)
+
+
+def test_botao_de_pular_fica_acima_da_linha_do_tempo_com_a_barra_aberta(pagina, ir, item, osd):
+    id_ep = _simular_abertura(pagina, item)
+    ir(f'details?id={id_ep}')
+    pagina.locator('#itemDetailPage:not(.hide) .btnPlay').first.click()
+    pagina.locator('.skip-button:not(.hide):not(.skip-button-hidden)').wait_for(timeout=30000)
+    osd()
+    pagina.wait_for_selector('.skip-button-container-osd', state='attached')
+    pagina.wait_for_timeout(400)  # a subida é animada
+    botao = pagina.locator('.skip-button').bounding_box()
+    linha = pagina.locator('.cromaOsdTimeline .sliderContainer').first.bounding_box()
+    assert botao['y'] + botao['height'] <= linha['y'], 'o botão cobre a linha do tempo'
