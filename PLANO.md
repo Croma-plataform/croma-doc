@@ -79,7 +79,7 @@ Tamanho: **P** (pequeno), **M** (médio), **G** (grande). É só para comparar o
 | D12 | Falado: podcasts e audiolivros | D11, I01 | G | a fazer |
 | D13 | Leitura | D02, I01 | G | a fazer |
 | D14 | Fotos | D02 | M | feito (falta comparar a grade com a prancha 24) |
-| D15 | Tags | 2 decisões do usuário (níveis já decidido) | M | bloqueado |
+| D15 | Tags | 1 decisão do usuário (escopo) | M | quase destravado |
 | D16 | Entrada e conta | D02 | M | em parte |
 | D17 | Ajustes e calibração | D02 | M | em parte |
 | D18 | Espera e erro | D02 | M | em parte |
@@ -325,7 +325,7 @@ Testes:
 
 ### D15 · Tags
 
-Bloqueado em duas decisões de `specs/tags.md` (onde ficam salvas e escopo). **Níveis: decidido em 13/11/2026, não existem no Croma** (eram do conteúdo do disco Worm Hole, fora do escopo). A spec precisa de revisão: ela se apoiava nas bibliotecas que saíram do Croma.
+Falta uma decisão de `specs/tags.md` (o escopo). **Onde ficam salvas: só no Jellyfin** (13/11/2026). **Níveis: decidido em 13/11/2026, não existem no Croma** (eram do conteúdo do disco Worm Hole, fora do escopo). A spec precisa de revisão: ela se apoiava nas bibliotecas que saíram do Croma.
 
 - [ ] Depois das decisões: levar a lógica do v1 para TypeScript, modo "todas", edição em massa, trava do campo Tags.
 
