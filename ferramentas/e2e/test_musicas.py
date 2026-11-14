@@ -54,3 +54,21 @@ def test_pagina_do_album_tem_kicker_info_e_botoes_com_texto(pagina, ir, item):
     # a ordem na tela (da esquerda para a direita), não a do HTML
     lidos = sorted((rotulos.nth(i).bounding_box()['x'], rotulos.nth(i).inner_text().strip()) for i in range(rotulos.count()))
     assert [r for _, r in lidos] == ['Tocar', 'Aleatório', 'Rádio do álbum']
+
+
+@pytest.mark.usuario('tocador')
+def test_lista_de_faixas_do_album_numera_em_mono_e_marca_a_que_toca(pagina, ir, item):
+    ir(f'details?id={item("MusicAlbum", "Album Um")}')
+    linhas = pagina.locator('.cromaTrackList .listItem')
+    linhas.first.wait_for()
+    assert linhas.count() == 3
+    assert [linhas.nth(i).locator('.listItem-indexnumberleft').inner_text() for i in range(3)] == ['01', '02', '03']
+    assert pagina.locator('.cromaTrackCurrent').count() == 0
+
+    _tocar_album(pagina, ir, item)
+    atual = pagina.locator('.cromaTrackCurrent')
+    atual.wait_for()
+    assert atual.count() == 1
+    assert atual.locator('.cromaEqualizer i').count() == 3
+    assert atual.locator('.listItem-indexnumberleft').evaluate('e => getComputedStyle(e).color') == 'rgb(0, 192, 0)'
+    pagina.screenshot(path='/tmp/claude-1000/album-faixas.png')
