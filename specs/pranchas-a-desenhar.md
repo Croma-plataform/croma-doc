@@ -6,6 +6,8 @@ Regras que valem para todas (manual v0.1): cantos vivos; fundo Sinal `#0B0B0C` c
 
 Cores das seções (75%): Audiovisual amarelo `#C0C000`, Áudios verde `#00C000`, Leitura azul `#0000C0` (em elemento pequeno, `#3B3BFF`), Fotos magenta `#C000C0`.
 
+**Protótipos gerados em 14/11/2026 (aguardam aprovação):** `croma-identidade/v0.1-barras/imagens/40` a `53`, por `fontes/gerar_pranchas_novas.py`. Mapa: 1 → 40 e 41; 2 → 42 e 43; 3 → 44 (e fileiras nos resumos); 4 → 45 e 46; 5 → 47, 48, 49 e 50; 6 → 51; 7 → 52 e 53. As capas e páginas dos protótipos são artes abstratas (sem imagens de terceiros). Decisões minhas a confirmar: faixa do espectro das playlists por nome, Fotos sem comprimento de onda (magenta é não espectral, manual) e a aba Temas com contagens de exemplo.
+
 ---
 
 ## 1. Podcasts: aba e página do programa (Áudios, verde)

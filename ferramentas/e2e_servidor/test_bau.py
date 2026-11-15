@@ -258,13 +258,24 @@ def test_modo_de_exibicao_da_colecao(servidor, musica):
     saga = next(c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO)
 
     def modo():
-        return st.api('GET', f'/Items?Ids={saga["Id"]}', token=servidor)['Items'][0]['CollectionUseThumbnails']
+        return st.api('GET', f'/Items?Ids={saga["Id"]}', token=servidor)['Items'][0]['CollectionDisplayShape']
 
-    assert modo() is False
-    st.api('POST', f'/Collections/{saga["Id"]}/DisplayMode?useThumbnails=true', token=servidor)
-    assert modo() is True
-    st.api('POST', f'/Collections/{saga["Id"]}/DisplayMode?useThumbnails=false', token=servidor)
-    assert modo() is False
+    assert modo() == 'Poster'
+    for escolhido in ('Thumbnail', 'Square', 'Poster'):
+        st.api('POST', f'/Collections/{saga["Id"]}/DisplayMode?shape={escolhido}', token=servidor)
+        assert modo() == escolhido
+
+
+def test_colecao_de_musica_vem_quadrada_e_aceita_trocar(servidor, musica):
+    faixa = itens(servidor, 'Audio')[0]
+    nova = st.api('POST', f'/Collections?name=Quadrada&ids={faixa["Id"]}', token=servidor)
+
+    def modo():
+        return st.api('GET', f'/Items?Ids={nova["Id"]}', token=servidor)['Items'][0]['CollectionDisplayShape']
+
+    assert modo() == 'Square'
+    st.api('POST', f'/Collections/{nova["Id"]}/DisplayMode?shape=Poster', token=servidor)
+    assert modo() == 'Poster'
 
 
 def test_varredura_da_dono_a_colecao_feita_a_mao(servidor, musica):

@@ -267,6 +267,8 @@ Testes:
 
 ### D11 · Músicas
 
+- [x] **Coleções da biblioteca de músicas em formato quadrado** (14/11/2026, pedido do usuário): a aba Coleções de uma biblioteca de músicas (playlists, trilhas, artistas) usa o cartão quadrado do álbum, com pôster ou miniatura (`getCollectionShape(…, isMusicLibrary)`, `ItemsView.tsx`; teste unitário). Falta conferir no navegador depois do próximo build.
+- [x] **Visão quadrada nas coleções** (14/11/2026, pedido do usuário): o controle "Exibir como" de cada coleção ganhou **Quadrado**, além de Pôster e Miniatura, e vem como padrão nas coleções de biblioteca de músicas. Servidor: `CollectionDisplayShape` (`BoxSet.DisplayShape`, `GetCollectionDisplayShape`, `POST /Collections/{id}/DisplayMode?shape=`, `CollectionDisplayShape` no DTO); web: `displaySwitch.ts` e `getCollectionItemsShape`. Testes passando: unitários do web (`collectionDisplay.test.ts`), e2e do servidor (`test_bau.py`, 24, com o padrão quadrado em música) e do web (`test_colecoes.py`, com o botão Quadrado). Servidor publicado em `compilado/` e web com build novo. Sem contador sobre a capa das coleções de músicas.
 Nada feito no visual do Croma. O Jellyfin já tem as bibliotecas, a fila e as letras.
 
 - [x] Abas e Resumo da seção **Áudios** (já vinham do D01; referência `galeria-albuns`).
@@ -287,7 +289,7 @@ Testes:
 
 ### D12 · Falado: podcasts e audiolivros
 
-Depende das pranchas novas (I01).
+Pranchas 40 a 44 aprovadas (14/11/2026). **Bloqueio de dados:** o padrão do Baú para podcasts e audiolivros ainda não existe; propostas em `DL_HERMES/docs/bibliotecas/podcasts.md` e `audiolivros.md` (pendências P21 e P22), esperando decisão do usuário. A interface pode seguir com mídia de teste.
 
 - [ ] Abas Podcasts e Audiolivros; **página do programa** com os episódios do mais novo ao mais antigo, com "ouvido" e progresso.
 - [ ] **Player falado:** pulos de 15 s e 30 s, velocidade de 0,8× a 2×, capítulos ou notas, temporizador para dormir, linha do tempo em espectro com os capítulos, sem analisador.
@@ -300,7 +302,7 @@ Testes:
 
 ### D13 · Leitura
 
-A prancha do leitor de HQ e mangá ainda não existe (I01).
+Pranchas 45 e 46 (leitor de HQ e mangá) aprovadas em 14/11/2026. **Bloqueio de dados:** o padrão do Baú para livros, HQs e mangás ainda não existe; propostas em `DL_HERMES/docs/bibliotecas/livros.md`, `hqs.md` e `mangas.md` (pendências P23 a P25), esperando decisão do usuário. A interface pode seguir com mídia de teste.
 
 - [ ] Abas Livros, HQs e Mangás, com as grades agrupadas por série, e o Resumo ("vol. 3 · p. 45 de 180").
 - [ ] Leitor de EPUB e de PDF (prancha 27): temas Escuro e Papel, coluna de 1040 px, progresso azul com página e tempo restante.
@@ -433,7 +435,7 @@ Testes:
 
 | Módulo | O quê | Quem depende |
 |---|---|---|
-| I01 | (descrições em `specs/pranchas-a-desenhar.md`, 13/11/2026; falta gerar as imagens) Pranchas novas: páginas das seções com o Resumo, Documentários, página de programa de podcast, player falado, leitor de HQ e mangá | D05, D12, D13 |
+| I01 | (descrições em `specs/pranchas-a-desenhar.md`, 13/11/2026; protótipos 40 a 53 gerados em 14/11/2026 e **aprovados pelo usuário** como visual, detalhes depois de implementado) Pranchas novas: páginas das seções com o Resumo, Documentários, página de programa de podcast, player falado, leitor de HQ e mangá | D05, D12, D13 |
 | I02 | Decisões de prancha: conteúdo da aba Imagem do painel; prancha 38 sem tempo estimado nem velocidade da rede (o servidor não informa) | D06 |
 | I03 | Teste dos geradores: rodar os scripts do zero e conferir que as pranchas saem iguais às versionadas. **Feito em parte** (13/11/2026): `ferramentas/test_geradores.py`, numa cópia temporária, confere os ícones SVG, os PNG dos SVG e os ícones do app (entra no `verificar.sh` completo). **Achado:** os tiles da TV versionados (`logos/app/tv/tile-*.png`: símbolo com a faixa embaixo e a palavra CROMA) não são o que o `gerar_icones_app.py` desenha (7 barras cheias); decidir qual vale. O `gerar_logotipo.py` fica de fora (precisa da fonte Archivo em TTF e do `fontTools`) | — |
 
@@ -484,6 +486,8 @@ Testes da etapa:
 ## Etapa 4 — Depois
 
 - [ ] Podcasts por assinatura de feed (plugin próprio no servidor; `specs/secoes.md`, decisão D2).
+- [ ] **Calibração ampliada na TV** (ideia de 14/11/2026, **só documentada, não implementar por enquanto**): a calibração do desktop (D17, prancha 03) já existe. Para a QN90B, acrescentar a conferência da **margem segura** (96 px nas laterais, 54 px em cima e embaixo), a escala de cinzas e o **teste de áudio** (canal esquerdo e direito). Entra no T10, quando chegar a etapa da TV.
+- [ ] Usos extras das telas especiais (ideia de 14/11/2026, sem prazo): varredura da biblioteca com as barras enchendo, fim do temporizador de dormir dos podcasts e página 404 no estilo do "Sem sinal" (prancha 07). O "Sem sinal" e o descanso de tela (pranchas 05 a 07) ficam como estão (D18).
 - [ ] **Verificação da qualidade dos arquivos** (pedido do usuário, 09/11/2026; só depois do core): funcionalidades que conferem a qualidade dos arquivos do acervo. O escopo vai ser definido com o usuário e a spec vai para `specs/`. O bloco Arquivo do detalhe do filme já mostra parte desses dados.
 
 ---

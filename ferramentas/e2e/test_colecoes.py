@@ -67,16 +67,27 @@ def test_mudar_o_modo_de_exibicao_da_colecao_e_ele_fica_gravado(pagina, ir, api_
     pagina.get_by_test_id('collection-display-switch').get_by_role('radio', name='Miniatura').click()
     pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .backdropCard').first.wait_for()
     assert pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .portraitCard').count() == 0
-    assert api_admin(f'Items?Ids={id_}')['Items'][0]['CollectionUseThumbnails'] is True
+    assert api_admin(f'Items?Ids={id_}')['Items'][0]['CollectionDisplayShape'] == 'Thumbnail'
     pagina.reload()
     pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .backdropCard').first.wait_for()
     marcado = pagina.get_by_test_id('collection-display-switch').get_by_role('radio', name='Miniatura')
     assert marcado.get_attribute('aria-checked') == 'true'
 
 
+@pytest.mark.usuario('admin')
+def test_modo_quadrado_da_colecao_fica_gravado(pagina, ir, api_admin, colecoes):
+    id_ = colecoes['Saga E2E']
+    _abrir_colecao(pagina, ir, id_)
+    pagina.get_by_test_id('collection-display-switch').get_by_role('radio', name='Quadrado').click()
+    pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .squareCard').first.wait_for()
+    assert pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .portraitCard').count() == 0
+    assert api_admin(f'Items?Ids={id_}')['Items'][0]['CollectionDisplayShape'] == 'Square'
+    api_admin(f'Collections/{id_}/DisplayMode?shape=Poster', metodo='POST')
+
+
 def test_quem_nao_gerencia_colecoes_ve_o_modo_mas_nao_muda(pagina, ir, api_admin, colecoes):
     id_ = colecoes['Saga E2E']
-    api_admin(f'Collections/{id_}/DisplayMode?useThumbnails=true', metodo='POST')
+    api_admin(f'Collections/{id_}/DisplayMode?shape=Thumbnail', metodo='POST')
     _abrir_colecao(pagina, ir, id_)
     pagina.locator('#itemDetailPage:not(.hide) .collectionItemsContainer .backdropCard').first.wait_for()
     assert pagina.get_by_test_id('collection-display-switch').count() == 0

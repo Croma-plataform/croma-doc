@@ -6,10 +6,11 @@ No Jellyfin, as coleções são globais: moram na biblioteca virtual "Coleções
 - **Só itens da própria biblioteca:** uma coleção de Filmes não aceita séries. "Adicionar à coleção" lista só as coleções da biblioteca do item.
 - **Listar:** `GET /Collections?ownerLibraryId=<biblioteca>` devolve as coleções da biblioteca que o usuário enxerga.
 - **Sem tela global:** a biblioteca "Coleções" (`/boxsets`) sai do Início e do menu. Toda biblioteca tem a aba "Coleções", inclusive Vídeos e Clipes.
-- **Dois controles de exibição, pôster (vertical) ou miniatura (horizontal):**
+- **Dois controles de exibição, pôster (vertical), miniatura (horizontal) ou quadrado (capa de álbum):**
   1. **Por biblioteca:** vale para a aba "Coleções" daquela biblioteca. Todos os cartões de coleção têm o mesmo formato.
-  2. **Por coleção:** vale para os itens dentro dela. Todos os itens têm o mesmo formato. Fica gravado no `BoxSet` (`UseThumbnails`, `CollectionUseThumbnails` no DTO; `POST /Collections/{id}/DisplayMode`; por padrão é pôster).
-  - Nunca há formatos misturados na mesma tela. O padrão é pôster.
+  2. **Por coleção:** vale para os itens dentro dela. Todos os itens têm o mesmo formato. Fica gravado no `BoxSet` (`DisplayShape`: `Poster`, `Thumbnail` ou `Square`; `CollectionDisplayShape` no DTO; `POST /Collections/{id}/DisplayMode?shape=…`). Sem escolha salva, vale o padrão da biblioteca dona: **quadrado nas coleções de uma biblioteca de músicas** (playlists, trilhas, artistas) e pôster nas demais. O antigo `UseThumbnails` só é lido quando não há `DisplayShape`.
+  3. **Aba Coleções de uma biblioteca de músicas:** sempre quadrada e sem contador de não ouvidos sobre a capa (14/11/2026).
+  - Nunca há formatos misturados na mesma tela. O padrão é pôster (quadrado em músicas).
   - A configuração fica no servidor, não no `localStorage`, para valer igual no desktop e na TV.
   - Miniatura sem arte horizontal (Thumb) usa o fundo (Backdrop) e, sem nenhum dos dois, a capa gerada.
 - **Tags reservadas:** as que começam com `croma-` não aparecem nas telas de tags.
