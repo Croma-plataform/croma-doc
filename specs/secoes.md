@@ -158,6 +158,9 @@ Comparação entre o que o Jellyfin v12.4 (servidor e `croma-web`) já faz e o q
 O Jellyfin não tem tipo "documentário". Um filme documental é um `Movie`; uma série documental é uma `Series`. Decidido (D3): **bibliotecas próprias.**
 
 - **Bibliotecas próprias (escolhido):** uma biblioteca `movies` e/ou uma `tvshows` marcadas como subtipo Documentários. Os itens delas aparecem só em Documentários, não em Filmes nem em Séries.
+- **Uma biblioteca só (decisão do usuário, 20/11/2026; item 2 da seção 7 do `documentarios.md` do DL_HERMES):** o acervo tem `Documentarios/movies/` e `Documentarios/series/`, e as duas pastas formam **uma** biblioteca do Croma. Hoje só existe `movies/` (1 documentário), então a biblioteca é do tipo `movies`. Quando chegar a primeira série documental, o servidor precisa ler as duas pastas na mesma biblioteca (o Jellyfin tem um tipo por biblioteca); resolver no leitor do Baú nessa hora, sem criar uma segunda biblioteca.
+- **Temas (`themes`):** viram os **gêneros** do item (decisão do usuário, 20/11/2026), na ordem do arquivo (o primeiro é o principal, a etiqueta do pôster), com os nomes da lista fechada (`ciencia` → Ciência). Num documentário, as `tags` ficam todas como tags, para "Documentário" não aparecer entre os temas. A aba Temas usa os filtros de gênero que o Jellyfin já tem.
+- **Criar biblioteca (decisão do usuário, 20/11/2026):** o diálogo pergunta primeiro a **seção** e depois o **tipo** dela (o subtipo). O tipo de biblioteca do Jellyfin não aparece: sai do catálogo do servidor (o primeiro compatível; Podcasts → `books`, Documentários → `movies`). O campo de subtipo continua no editor de uma biblioteca que já existe.
 - **Alternativa descartada:** usar o gênero "Documentário" que vem dos metadados (TMDb). Não exige separar pastas, mas depende da qualidade dos metadados e o item apareceria nos dois lugares.
 
 ### Podcasts

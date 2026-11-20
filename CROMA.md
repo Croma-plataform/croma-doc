@@ -62,6 +62,25 @@ git -C croma-android remote add upstream https://github.com/jellyfin/jellyfin-an
 
 O passo a passo (compilar o servidor com o .NET SDK 10, ou usar o binário oficial na transição, build do `croma-web` e script de inicialização) fica no [`croma/README.md` do `croma-servidor`](https://github.com/Croma-plataform/croma-servidor/blob/croma/croma/README.md).
 
+**Servidor em uso (Linux, desde 20/11/2026):** o Croma roda como serviço do systemd do usuário (`croma.service`) e sobe junto com o computador (o `linger` do usuário está ligado, então não depende do login).
+
+- **Instalar ou atualizar:** `croma-servidor/croma/scripts/instalar-servico.sh`. Ele copia o `compilado/` e o `croma-web/dist` para `~/.local/share/croma/`, gera a unidade e reinicia o serviço. Recompilar não mexe no servidor em uso: só rodar o script de novo passa a versão nova para ele.
+- **Dados:** os mesmos de sempre, em `croma-servidor/dados/` (não mova a pasta).
+- **Comandos:** `systemctl --user status croma`, `systemctl --user restart croma`, `systemctl --user stop croma`, `journalctl --user -u croma -f`.
+- **Discos do acervo:** antes de subir, o serviço espera até 2 minutos pelo `Black_hole` e pelo `Cosmos` (montados pelo `fstab` com `nofail`).
+- **Desenvolvimento:** o `iniciar-servidor.sh` usa a mesma porta 8096; pare o serviço antes de usá-lo. O servidor de teste (8097) e o descartável (8098) rodam ao lado do serviço sem conflito.
+
+### Acesso pelo Tailscale
+
+Configurado em 20/11/2026 na máquina Linux (tailnet do usuário, a mesma do Fôlego). O servidor continua só em HTTP local (8096) e o `tailscale serve` publica o HTTPS com certificado válido no nome MagicDNS:
+
+- **Endereço:** `https://fedora.tail9af647.ts.net:10000` (só dentro da tailnet; nada de Funnel). Serve para o navegador, o `croma-desktop`, a TV e o celular, dentro e fora de casa.
+- **Porta 10000** porque o `tailscale serve` só publica HTTPS nas portas 443, 8443 e 10000, e as duas primeiras já são do Fôlego (8780 e 8770).
+- **Comandos:** `tailscale serve --bg --https=10000 http://127.0.0.1:8096` (liga; fica gravado e volta sozinho com o `tailscaled`), `tailscale serve --https=10000 off` (desliga), `tailscale serve status`.
+- **Jellyfin:** nada mudou no `network.xml`. O pedido chega de `127.0.0.1`, então conta como rede local com `EnableRemoteAccess=false`. Não ponha `127.0.0.1` em `KnownProxies`: o servidor passaria a ver o IP `100.x` do Tailscale, que não é rede local, e recusaria o acesso (ou exigiria ligar o acesso remoto).
+- Conferido com o servidor de teste: `/System/Info/Public`, a interface em `/web/` e o login respondem pelo endereço HTTPS.
+- **Mais serviços na tailnet:** as três portas HTTPS do `tailscale serve` estão ocupadas (443 e 8443 do Fôlego, 10000 do Croma). Até migrar, um serviço novo entra por caminho numa porta existente (`--set-path`, se ele aceitar subcaminho) ou em HTTP noutra porta. **Migração planejada (adiada pelo usuário, 20/11/2026):** os "Tailscale Services", um nome por serviço (`https://croma.tail9af647.ts.net`, `https://folego.tail9af647.ts.net`). Exige pôr uma tag no computador (`tag:servidor`; um aparelho de usuário não pode hospedar), `tagOwners`, um grant para `svc:croma` e `svc:folego` na porta 443 e definir os serviços no painel (página Services); depois `tailscale serve --service=svc:croma --https=443 http://127.0.0.1:8096`. A versão instalada (1.104.5) atende (mínimo 1.86). Antes de pôr a tag, conferir como o Fôlego usa a identidade do Tailscale; a documentação não diz se o plano gratuito tem o recurso.
+
 ### Outros repositórios de referência
 
 | Repositório | Para quê |

@@ -3,7 +3,7 @@
 O acervo do usuário já é organizado num padrão próprio, o **Baú**, documentado no repositório **DL_HERMES** (`~/Documentos/Projetos/Codes/DL_HERMES`). Cada item guarda os seus dados ao lado do arquivo de mídia: `metadata/metadata.json`, `metadata/images/` e `metadata/subs/`. O Croma lê esse padrão direto, sem depender da identificação pela internet.
 
 - **Fonte da verdade:** o padrão é definido no DL_HERMES. Este documento só diz como o servidor lê o padrão. Se os dois divergirem, vale o DL_HERMES, e o leitor precisa ser corrigido.
-- **Situação:** **Filmes** (`docs/bibliotecas/filmes.md`) e **Séries** (`docs/bibliotecas/series.md`), ambos no `schema_version` 2, estão implementados. **Músicas** (`docs/bibliotecas/musicas.md`, `schema_version` 2) também está implementado (12/11/2026). Vídeos e Galeria ficam fora do Croma (decisão do usuário, 09/11/2026): por privacidade, terão uma aplicação dedicada.
+- **Situação:** **Filmes** (`docs/bibliotecas/filmes.md`) e **Séries** (`docs/bibliotecas/series.md`), ambos no `schema_version` 2, estão implementados. **Músicas** (`docs/bibliotecas/musicas.md`, `schema_version` 2) também está implementado (12/11/2026), assim como **Podcasts** e **Livros** (20/11/2026). Vídeos e Galeria ficam fora do Croma (decisão do usuário, 09/11/2026): por privacidade, terão uma aplicação dedicada.
 - **O servidor só lê:** nada é gravado nas pastas do acervo. Quem escreve nelas são os scripts e pipelines do Baú.
 
 ## Filmes
@@ -63,6 +63,17 @@ Formato em `docs/bibliotecas/musicas.md` do DL_HERMES. A biblioteca aponta para 
 - **Coleção** (`BauCollectionsPostScanTask`): cada `playlist.json` vira uma coleção (BoxSet) travada, achada pelo `uuid`, com título, descrição, o `type` como tag (`playlist`, `soundtrack`, `artist`), a capa `metadata/cover.<ext>` e as faixas na ordem do arquivo; as regras são as de filmes e séries (item posto à mão sai na varredura, arquivo que some não apaga a coleção). Música usa BoxSet e não Playlist do Jellyfin porque a playlist tem dono (usuário), e o dono das coleções é a decisão em aberto do S04.
 - **Artista e álbum:** o Jellyfin os cria das tags das faixas, como sempre; não há leitor próprio, porque o Baú não tem arquivo de artista nem de álbum.
 - **Testes:** `BauMusicTests` (unidade) e `ferramentas/e2e_servidor/test_bau.py` (varredura de uma pasta de mentira, coleção, capa, `_management` ignorada e pasta da mídia intacta). Conferido também com uma cópia da coleção `avicii` do acervo real (8 faixas, capas e coleção lidas).
+
+## Podcasts e Livros (20/11/2026, S08)
+
+Formatos em `docs/bibliotecas/podcasts.md` e `livros.md` do DL_HERMES (aplicados no acervo em 15/11/2026). Diferente de Filmes e Séries, a biblioteca é a **pasta inteira** (`Cosmos/Podcasts`, `Cosmos/Livros`), do tipo `books` com o subtipo Podcasts ou Livros, e as coleções ficam **dentro** dela, em `collections/<slug>/collection.json`.
+
+- **Episódio** (`BauPodcastProvider`, `ILocalMetadataProvider<AudioBook>`): `programa/episodes/<id>.mp3`, achado pelo `file` em `episodes[]` do `programa/metadata/program.json`. Título, notas, data de publicação (`PremiereDate` e ano), número sem a letra da parte (`028a` → 28, em `IndexNumber`), temporada, participantes como artistas (o Jellyfin une com o `TPE1` da tag, que é o autor), o programa como álbum, o autor como estúdio e o `uuid` do episódio (o que as coleções citam; o `BAU_UUID` do MP3 é o do arquivo). Episódio sem data fica sem `PremiereDate` (os 8 de RPG do NerdCast, decisão do usuário de 20/11/2026) e vai para o fim da lista. Os capítulos do JSON ainda não são lidos (nenhum episódio do acervo tem).
+- **Programa** (o mesmo provedor, `ILocalMetadataProvider<Folder>`): a pasta `programa/` com `metadata/program.json` ganha título, descrição, autor (estúdio), tags e `uuid`; é a pasta que o web abre como página do programa.
+- **Livro** (`BauBookProvider`, `ILocalMetadataProvider<Book>`): `autor/titulo/titulo.epub` com `metadata/book.json` ao lado. Título, título original, subtítulo (`Tagline`), série e posição (`SeriesName` e `IndexNumber`; posição fracionária fica sem número), ano, sinopse, tags, editora (estúdio), autores e tradutores (pessoas `Author` e `Translator`), ISBN e `uuid`. O arquivo precisa estar em `files`.
+- **Imagens** (`BauImageProvider`): capa do episódio em `metadata/covers/<id>.*` (como a faixa de música), do programa e do livro em `metadata/cover.*`.
+- **Coleções** (`BauCollectionsPostScanTask`): nas bibliotecas `books`, lidas de `collections/` dentro da biblioteca, com episódios e livros como itens. A pasta `collections/` não vira item da biblioteca (`BauCollectionsIgnoreRule`, no `Emby.Server.Implementations`), senão apareceria como um programa ou uma estante vazia.
+- **Testes:** `BauPodcastAndBookTests` (unidade) e `ferramentas/e2e_servidor/test_bau.py` (pastas de mentira com os nomes do acervo real, coleções, capas, `collections/` fora da biblioteca e a pasta intacta depois de varrer).
 
 ## Coleções
 
