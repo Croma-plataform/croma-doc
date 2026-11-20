@@ -16,6 +16,7 @@ def so_desktop(layout):
 def _definir_tags(api_admin, item_id, tags):
     completo = api_admin(f'Items/{item_id}')
     completo['Tags'] = tags
+    completo.pop('Trickplay', None)  # o servidor não lê de volta o Trickplay (HTTP 500)
     api_admin(f'Items/{item_id}', completo, 'POST')
 
 
@@ -85,3 +86,17 @@ def test_editar_as_tags_de_dois_filmes_de_uma_vez(pagina, ir, biblioteca, api_ad
         completo = _tags_de(api_admin, i)
         assert set(completo['Tags']) == esperado
         assert 'Tags' in completo['LockedFields']
+
+
+@pytest.mark.usuario('admin')
+def test_editor_de_um_item_oferece_as_tags_que_existem(pagina, ir, item, api_admin):
+    id_ = item('Movie', 'Barras Direto (2001)')
+    ir(f'metadata?id={id_}')
+    secao = pagina.locator('#tagsCollapsible')
+    secao.locator('.btnAddTextItem').click()
+    campo = pagina.locator('.cromaTagPrompt .txtNewTag')
+    campo.wait_for()
+    assert pagina.locator('.cromaTagPrompt datalist').count() == 1
+    campo.fill('  Tag Nova  ')
+    pagina.locator('.cromaTagPrompt .btnAddTag').click()
+    secao.locator('.textValue', has_text='tag nova').wait_for()

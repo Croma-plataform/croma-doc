@@ -52,3 +52,33 @@ def test_trocar_o_subtipo_muda_a_secao_e_a_aba_na_interface(pagina, ir):
         abrir_editor(pagina, ir, 'Mangás', 'Comics')
         pagina.locator('#selectLibrarySubtype').select_option(value='Manga')
         salvar(pagina)
+
+
+def test_criar_biblioteca_escolhe_a_secao_e_depois_o_tipo(pagina, ir):
+    """O diálogo de criar pergunta a seção e depois o tipo dela; o tipo do Jellyfin e o subtipo saem dessa escolha."""
+    ir('dashboard/libraries')
+    pagina.get_by_role('button', name='Adicionar Biblioteca de Mídia').click()
+    secao = pagina.locator('#selectLibrarySection')
+    tipo = pagina.locator('#selectLibraryKind')
+    expect(secao.locator('option', has_text='Leitura')).to_have_count(1)
+    opcoes = [o.strip() for o in secao.locator('option').all_inner_texts() if o.strip()]
+    assert opcoes == ['Audiovisual', 'Áudios', 'Leitura', 'Fotos']
+    expect(tipo).to_be_disabled()
+    # o campo de subtipo do editor de opções não aparece: a escolha é a de cima
+    expect(pagina.locator('.dlg-librarycreator .fldLibrarySubtype')).to_be_hidden()
+
+    secao.select_option(label='Áudios')
+    opcoes = [o.strip() for o in tipo.locator('option').all_inner_texts() if o.strip()]
+    assert opcoes == ['Músicas', 'Podcasts', 'Audiolivros']
+    expect(pagina.locator('.dlg-librarycreator .libraryOptions')).to_be_hidden()
+
+    tipo.select_option(label='Podcasts')
+    expect(pagina.locator('#txtValue')).to_have_value('Podcasts')
+    expect(pagina.locator('.dlg-librarycreator .libraryOptions')).to_be_visible()
+    # podcasts são uma biblioteca de livros no Jellyfin: sem as opções de vídeo
+    expect(pagina.locator('.dlg-librarycreator .trickplaySettingsSection')).to_be_hidden()
+
+    secao.select_option(label='Fotos')
+    expect(tipo).to_have_value('Photos')
+    expect(pagina.locator('#txtValue')).to_have_value('Fotos')
+    pagina.keyboard.press('Escape')

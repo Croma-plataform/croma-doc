@@ -94,3 +94,23 @@ def test_atraso_da_legenda_muda_de_0_1_em_0_1(pagina, tocar, osd, layout):
     assert atraso.inner_text() == '+0,2 s'
     pagina.locator('.cromaPanelChoice[data-kind="offset"][data-value="-0.1"]').click()
     assert atraso.inner_text() == '+0,1 s'
+
+
+def test_aba_imagem_troca_a_proporcao_do_video_e_restaura(pagina, tocar, osd, layout):
+    """I02 (prancha 52): a aba Imagem tem só a proporção no navegador; Restaurar volta ao Original."""
+    if layout == 'tv':
+        pytest.skip('o clique do mouse é do desktop')
+    tocar('Movie', 'Barras Faixas (2003)')
+    abrir_painel(pagina, osd)
+
+    pagina.locator('.cromaPanelTab', has_text='Imagem').click()
+    assert pagina.locator('.cromaPanelChoice[data-kind="aspect"]').all_inner_texts() == ['Original', 'Preencher', 'Esticar']
+    assert pagina.locator('.cromaPanelChoice-selected[data-kind="aspect"]').inner_text() == 'Original'
+
+    pagina.locator('.cromaPanelChoice[data-kind="aspect"]', has_text='Esticar').click()
+    pagina.wait_for_function('() => getComputedStyle(document.querySelector("video")).objectFit === "fill"')
+    assert pagina.locator('.cromaPanelChoice-selected[data-kind="aspect"]').inner_text() == 'Esticar'
+
+    pagina.locator('.cromaPanelResetButton').click()
+    pagina.wait_for_function('() => getComputedStyle(document.querySelector("video")).objectFit !== "fill"')
+    assert pagina.locator('.cromaPanelChoice-selected[data-kind="aspect"]').inner_text() == 'Original'

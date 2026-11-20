@@ -56,6 +56,7 @@ def _editar(api_admin, id_item, **campos):
     dto = api_admin(f'Items/{id_item}')
     antigos = {k: dto.get(k) for k in campos}
     dto.update(campos)
+    dto.pop('Trickplay', None)  # o servidor não lê de volta o Trickplay (HTTP 500)
     api_admin(f'Items/{id_item}', dto, 'POST')
     return antigos
 

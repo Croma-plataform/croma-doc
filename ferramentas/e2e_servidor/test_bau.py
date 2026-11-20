@@ -182,6 +182,26 @@ def id_da_biblioteca(token, nome):
     return next(v['ItemId'] for v in st.api('GET', '/Library/VirtualFolders', token=token) if v['Name'] == nome)
 
 
+def test_tags_editadas_sobrevivem_a_atualizar_os_metadados(servidor, acervo):
+    """D15: a trava do campo Tags (`LockedFields`) impede que "Substituir metadados existentes" apague as tags editadas."""
+    import time
+    filmes = {f"Filme {chr(64 + i['ProductionYear'] - 2000)}": i['Id'] for i in itens(servidor, 'Movie')}
+    id_ = filmes['Filme B']
+    completo = st.api('GET', f'/Items/{id_}', token=servidor)
+    completo['Tags'] = ['minha-tag', 'outra-tag']
+    completo['LockedFields'] = sorted(set(completo.get('LockedFields') or []) | {'Tags'})
+    st.api('POST', f'/Items/{id_}', completo, servidor)
+
+    st.api('POST', f'/Items/{id_}/Refresh?Recursive=false&MetadataRefreshMode=FullRefresh&ImageRefreshMode=None'
+                   '&ReplaceAllMetadata=true', token=servidor)
+    for _ in range(30):
+        time.sleep(1)
+        tags = st.api('GET', f'/Items/{id_}', token=servidor)['Tags']
+        if sorted(tags) != ['minha-tag', 'outra-tag']:
+            break
+    assert sorted(st.api('GET', f'/Items/{id_}', token=servidor)['Tags']) == ['minha-tag', 'outra-tag']
+
+
 def filme_da_saga(token):
     saga = next(c for c in itens(token, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO)
     return st.api('GET', f'/Items?ParentId={saga["Id"]}', token=token)['Items'][0]
@@ -462,3 +482,179 @@ def test_varrer_musica_nao_grava_na_pasta(servidor, musica):
     escanear(servidor)
     assert fotografar(raiz) == antes, 'a varredura mexeu na pasta da música'
 
+
+
+# S08: podcasts e livros. As duas bibliotecas são a pasta inteira (Podcasts/, Livros/), com as coleções dentro.
+UUID_PROGRAMA = '019a5f3c-0000-7000-8000-0000000000f0'
+UUID_EP_LOST = '019a5f3c-0000-7000-8000-0000000000f1'
+UUID_EP_GRINCH = '019a5f3c-0000-7000-8000-0000000000f2'
+UUID_COLECAO_PODCAST = '019a5f3c-0000-7000-8000-0000000000f9'
+
+
+def ignorar(pasta: Path) -> None:
+    pasta.mkdir(parents=True, exist_ok=True)
+    (pasta / '.ignore').write_text('*\n*/*\n')
+
+
+def capa(caminho: Path, cor: str) -> None:
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', f'color=c={cor}:s=300x300', '-frames:v', '1',
+                    str(caminho)], check=True)
+
+
+@pytest.fixture(scope='module')
+def podcasts(servidor, acervo):
+    """Podcasts/ no padrão Baú: programa/episodes/<id>.mp3, programa/metadata/program.json e collections/."""
+    raiz = acervo.parent / 'Podcasts'
+    programa = raiz / 'nerdcast'
+    # nomes como os do acervo real: número com a letra da parte e sem número
+    mp3(programa / 'episodes' / '028a-lost.mp3', 'tag 28a', 'Jovem Nerd', 'NerdCast')
+    mp3(programa / 'episodes' / '241-como-o-grinch.mp3', 'tag 241', 'Jovem Nerd', 'NerdCast')
+    mp3(programa / 'episodes' / '251-rpg.mp3', 'tag 251', 'Jovem Nerd', 'NerdCast')
+    ignorar(programa / 'metadata')
+    capa(programa / 'metadata' / 'cover.jpg', 'yellow')
+    capa(programa / 'metadata' / 'covers' / '028a-lost.jpg', 'red')
+    episodio = {'description': None, 'season': None, 'duration_s': 2.0, 'chapters': [], 'guid': None, 'cover': None}
+    (programa / 'metadata' / 'program.json').write_text(json.dumps({
+        'schema_version': 2, 'uuid': UUID_PROGRAMA, 'id': 'nerdcast', 'title': 'NerdCast do Bau',
+        'description': 'Um programa de teste.', 'author': 'Jovem Nerd', 'language': 'pt', 'tags': [],
+        'feed_url': None, 'source': 'manual', 'cover': 'metadata/cover.jpg', 'status': 'active',
+        'episodes': [
+            {**episodio, 'uuid': UUID_EP_LOST, 'id': '028a-lost', 'file': '028a-lost.mp3', 'title': 'Lost, parte 1',
+             'description': 'Notas do episódio.', 'number': '028a', 'participants': ['Alottoni', 'Azaghâl'],
+             'published_at': '2006-11-24', 'cover': 'metadata/covers/028a-lost.jpg'},
+            {**episodio, 'uuid': UUID_EP_GRINCH, 'id': '241-como-o-grinch', 'file': '241-como-o-grinch.mp3',
+             'title': 'Como o Grinch roubou o NerdCast', 'number': '241', 'participants': ['Alottoni'],
+             'published_at': '2010-12-24'},
+            # data que o usuário ainda vai digitar (como os episódios de RPG do acervo)
+            {**episodio, 'uuid': UUID_EP_LOST[:-1] + '3', 'id': '251-rpg', 'file': '251-rpg.mp3', 'title': 'RPG',
+             'number': '251', 'participants': [], 'published_at': None}],
+        'files': []}), encoding='utf-8')
+    colecao = raiz / 'collections' / 'lost'
+    colecao.mkdir(parents=True)
+    (colecao / 'collection.json').write_text(json.dumps({
+        'schema_version': 2, 'uuid': UUID_COLECAO_PODCAST, 'id': 'lost', 'name': 'Lost', 'description': None,
+        'tags': [], 'items': [UUID_EP_LOST], 'files': []}), encoding='utf-8')
+    ignorar(raiz / '_management')
+    (raiz / '_management' / 'lixo.mp3').write_bytes(b'x')
+    st.api('POST', '/Library/VirtualFolders?name=Podcasts%20Bau&collectionType=books&refreshLibrary=false',
+           {'LibraryOptions': st.opcoes_biblioteca(raiz, 'Podcasts')}, servidor)
+    antes = fotografar(raiz)
+    escanear(servidor)
+    return raiz, antes
+
+
+def test_podcast_le_os_episodios_pelo_program_json(servidor, podcasts):
+    episodios = {e['Name']: e for e in st.api(
+        'GET', '/Items?Recursive=true&IncludeItemTypes=AudioBook&Fields=ProviderIds,Overview,Studios,PremiereDate',
+        token=servidor)['Items']}
+    assert set(episodios) == {'Lost, parte 1', 'Como o Grinch roubou o NerdCast', 'RPG'}, episodios.keys()
+    lost = episodios['Lost, parte 1']
+    assert lost['ProviderIds']['Bau'] == UUID_EP_LOST
+    assert lost['Overview'] == 'Notas do episódio.' and lost['Album'] == 'NerdCast do Bau'
+    assert lost['PremiereDate'].startswith('2006-11-24') and lost['ProductionYear'] == 2006
+    assert lost['IndexNumber'] == 28
+    assert {'Alottoni', 'Azaghâl'} <= set(lost['Artists'])
+    assert [s['Name'] for s in lost['Studios']] == ['Jovem Nerd']
+    assert lost['ImageTags'].get('Primary'), 'a capa do episódio (metadata/covers) não foi lida'
+    assert not episodios['RPG'].get('PremiereDate', '').startswith('2'), 'episódio sem data ganhou uma'
+
+
+def test_podcast_programa_e_a_pasta_com_titulo_capa_e_autor(servidor, podcasts):
+    biblioteca = id_da_biblioteca(servidor, 'Podcasts Bau')
+    raiz = st.api('GET', f'/Items?ParentId={biblioteca}&Fields=ProviderIds,Overview,Studios', token=servidor)['Items']
+    # só o programa: a pasta collections/ e a _management ficam de fora
+    assert [i['Name'] for i in raiz] == ['NerdCast do Bau'], [i['Name'] for i in raiz]
+    programa = raiz[0]
+    assert programa['Type'] == 'Folder' and programa['ProviderIds']['Bau'] == UUID_PROGRAMA
+    assert programa['Overview'] == 'Um programa de teste.'
+    assert [s['Name'] for s in programa['Studios']] == ['Jovem Nerd']
+    assert programa['ImageTags'].get('Primary'), 'a capa do programa (metadata/cover) não foi lida'
+
+
+def test_podcast_colecao_do_bau_com_os_episodios(servidor, podcasts):
+    colecoes = [c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO_PODCAST]
+    assert len(colecoes) == 1
+    assert filhos(servidor, colecoes[0]['Id']) == {'Lost, parte 1'}
+
+
+def test_varrer_podcasts_nao_grava_na_pasta(servidor, podcasts):
+    raiz, antes = podcasts
+    escanear(servidor)
+    assert fotografar(raiz) == antes, 'a varredura mexeu na pasta dos podcasts'
+
+
+UUID_LIVRO = '019a5f3c-0000-7000-8000-0000000000d0'
+UUID_COLECAO_LIVROS = '019a5f3c-0000-7000-8000-0000000000d9'
+
+
+def epub(caminho: Path, titulo: str) -> None:
+    """Um EPUB mínimo, com o OPF que o Jellyfin lê (título diferente do book.json, para ver quem vence)."""
+    import zipfile
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(caminho, 'w') as z:
+        z.writestr('mimetype', 'application/epub+zip', compress_type=zipfile.ZIP_STORED)
+        z.writestr('META-INF/container.xml', '<?xml version="1.0"?><container version="1.0" '
+                   'xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile '
+                   'full-path="content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>')
+        z.writestr('content.opf', '<?xml version="1.0"?><package xmlns="http://www.idpf.org/2007/opf" version="2.0" '
+                   'unique-identifier="id"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/">'
+                   f'<dc:title>{titulo}</dc:title><dc:identifier id="id">x</dc:identifier><dc:language>pt-BR'
+                   '</dc:language></metadata><manifest><item id="c" href="c.xhtml" media-type="application/xhtml+xml"/>'
+                   '</manifest><spine><itemref idref="c"/></spine></package>')
+        z.writestr('c.xhtml', '<html xmlns="http://www.w3.org/1999/xhtml"><body><p>Oi.</p></body></html>')
+
+
+@pytest.fixture(scope='module')
+def livros(servidor, acervo):
+    """Livros/ no padrão Baú: autor/titulo/titulo.epub, autor/titulo/metadata/book.json e collections/."""
+    raiz = acervo.parent / 'Livros'
+    pasta = raiz / 'j-r-r-tolkien' / 'a-sociedade-do-anel'
+    epub(pasta / 'a-sociedade-do-anel.epub', 'Titulo do OPF')
+    ignorar(pasta / 'metadata')
+    capa(pasta / 'metadata' / 'cover.jpg', 'purple')
+    (pasta / 'metadata' / 'book.json').write_text(json.dumps({
+        'schema_version': 2, 'uuid': UUID_LIVRO, 'id': 'a-sociedade-do-anel', 'title': 'A Sociedade do Anel',
+        'subtitle': None, 'original_title': 'The Fellowship of the Ring', 'authors': ['J. R. R. Tolkien'],
+        'translators': ['Lenita Esteves'], 'series': 'O Senhor dos Anéis', 'series_index': 1, 'year': 2019,
+        'language': 'pt-BR', 'publisher': 'HarperCollins Brasil', 'isbn': '9788595084759', 'page_count': None,
+        'description': 'Primeira parte.', 'tags': ['fantasia'], 'google_books_id': None, 'audiobook_uuid': None,
+        'cover': 'metadata/cover.jpg',
+        'files': [{'file': 'a-sociedade-do-anel.epub', 'uuid': UUID_LIVRO[:-1] + '1'}]}), encoding='utf-8')
+    colecao = raiz / 'collections' / 'terra-media'
+    colecao.mkdir(parents=True)
+    (colecao / 'collection.json').write_text(json.dumps({
+        'schema_version': 2, 'uuid': UUID_COLECAO_LIVROS, 'id': 'terra-media', 'name': 'Terra-média',
+        'description': None, 'tags': [], 'items': [UUID_LIVRO], 'files': []}), encoding='utf-8')
+    st.api('POST', '/Library/VirtualFolders?name=Livros%20Bau&collectionType=books&refreshLibrary=false',
+           {'LibraryOptions': st.opcoes_biblioteca(raiz, 'Books')}, servidor)
+    antes = fotografar(raiz)
+    escanear(servidor)
+    return raiz, antes
+
+
+def test_livro_le_o_book_json(servidor, livros):
+    achados = st.api('GET', '/Items?Recursive=true&IncludeItemTypes=Book&Fields=ProviderIds,Overview,Tags,People,'
+                            'Studios,OriginalTitle', token=servidor)['Items']
+    livro = next(b for b in achados if b['ProviderIds'].get('Bau') == UUID_LIVRO)
+    assert livro['Name'] == 'A Sociedade do Anel' and livro['OriginalTitle'] == 'The Fellowship of the Ring'
+    assert livro['SeriesName'] == 'O Senhor dos Anéis' and livro['IndexNumber'] == 1
+    assert livro['ProductionYear'] == 2019 and livro['Overview'] == 'Primeira parte.' and livro['Tags'] == ['fantasia']
+    assert livro['ProviderIds'].get('ISBN') == '9788595084759'
+    assert [s['Name'] for s in livro['Studios']] == ['HarperCollins Brasil']
+    pessoas = {(p['Name'], p['Type']) for p in livro['People']}
+    assert ('J. R. R. Tolkien', 'Author') in pessoas and ('Lenita Esteves', 'Translator') in pessoas
+    assert livro['ImageTags'].get('Primary'), 'a capa (metadata/cover) não foi lida'
+
+
+def test_livros_colecao_do_bau_e_pasta_collections_fora_da_estante(servidor, livros):
+    colecoes = [c for c in itens(servidor, 'BoxSet') if c['ProviderIds'].get('Bau') == UUID_COLECAO_LIVROS]
+    assert len(colecoes) == 1 and filhos(servidor, colecoes[0]['Id']) == {'A Sociedade do Anel'}
+    biblioteca = id_da_biblioteca(servidor, 'Livros Bau')
+    assert filhos(servidor, biblioteca) == {'j-r-r-tolkien'}
+
+
+def test_varrer_livros_nao_grava_na_pasta(servidor, livros):
+    raiz, antes = livros
+    escanear(servidor)
+    assert fotografar(raiz) == antes, 'a varredura mexeu na pasta dos livros'

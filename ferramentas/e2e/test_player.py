@@ -138,3 +138,35 @@ def test_chip_de_conversao_quando_o_navegador_nao_toca_o_video(pagina, tocar, os
     chips = _chips(pagina, tocar, osd, 'Barras HEVC (2002)')
     assert 'Convertendo no servidor' in chips
     assert pagina.locator('.cromaOsdChip-transcode').count() == 1
+
+
+def _ligar_trickplay(api_admin):
+    pasta = next(b for b in api_admin('Library/VirtualFolders') if b['Name'] == 'Filmes')
+    opcoes = {**pasta['LibraryOptions'], 'EnableTrickplayImageExtraction': True}
+    api_admin('Library/VirtualFolders/LibraryOptions', {'Id': pasta['ItemId'], 'LibraryOptions': opcoes}, 'POST')
+    return pasta, pasta['LibraryOptions']
+
+
+def test_miniatura_da_linha_do_tempo_aparece_ao_passar_o_mouse(pagina, tocar, osd, api_admin, item):
+    """S05: o trickplay gerado pelo servidor vira a miniatura sobre a linha do tempo (a pasta da mídia não é tocada)."""
+    import time
+    pasta, antes = _ligar_trickplay(api_admin)
+    try:
+        id_ = item('Movie', 'Barras Capitulos (2004)')
+        tarefa = next(t for t in api_admin('ScheduledTasks') if t['Key'] == 'RefreshTrickplayImages')
+        api_admin(f'ScheduledTasks/Running/{tarefa["Id"]}', metodo='POST')
+        for _ in range(60):
+            time.sleep(2)
+            if api_admin(f'Items?Ids={id_}&Fields=Trickplay')['Items'][0].get('Trickplay'):
+                break
+        assert api_admin(f'Items?Ids={id_}&Fields=Trickplay')['Items'][0].get('Trickplay'), 'o servidor não gerou o trickplay'
+
+        tocar('Movie', 'Barras Capitulos (2004)')
+        osd()
+        barra = pagina.locator('.cromaOsdTimeline .sliderContainer').first.bounding_box()
+        pagina.mouse.move(barra['x'] + barra['width'] * 0.5, barra['y'] + barra['height'] / 2)
+        miniatura = pagina.locator('.chapterThumbContainer, .trickplayBubble').first
+        miniatura.wait_for(state='visible', timeout=10000)
+        pagina.screenshot(path='/tmp/claude-1000/trickplay.png')
+    finally:
+        api_admin('Library/VirtualFolders/LibraryOptions', {'Id': pasta['ItemId'], 'LibraryOptions': antes}, 'POST')
