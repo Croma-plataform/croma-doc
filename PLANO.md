@@ -6,8 +6,9 @@ Atualizado em 10/11/2026. Este é o roteiro do Croma, organizado em **etapas por
 - **"Desktop"** aqui é a interface web no layout de desktop (no navegador e no app) mais a casca `croma-desktop` (Qt WebEngine com mpv), para Windows.
 - Marque as tarefas feitas neste arquivo. Marcas: `[x]` feito, `[ ]` a fazer, `[?]` a conferir contra o manual.
 
-## Onde paramos (20/11/2026)
+## Onde paramos (21/11/2026)
 
+- **Uso no web e no celular** (21/11, pedidos do usuário usando o Croma): listas de músicas em linhas (capa pequena, título, duração; artista só quando a lista mistura artistas) em coleções, playlists, aba Músicas, busca e "Mais disso"; tocar uma faixa continua nas seguintes e respeita o aleatório ligado; página da música sem imagem de fundo. Celular (390 px): detalhe empilhado, abas que rolam, sem índice alfabético, cabeçalho curto (só o nome da seção, uma linha com tocar/aleatório/contagem/"Opções de exibição", recolhe ao rolar) e "Tocando agora" em uma coluna. E2E: 237 passaram (novo `test_lista_musicas.py`); unidade 534. Publicado no serviço (8096); a interface anterior ficou em `~/.local/share/croma/web.anterior`. Commits `1f19b21471`, `62b980844c` e `ecb9b12800` no `croma-web`. Nada visto num celular de verdade nem no acervo real (a conta `teste` não entra mais no servidor real).
 - **Croma em uso** (20/11): o usuário vai usar a versão web por um tempo antes da etapa da TV (Tizen). O servidor roda como serviço (`croma.service`, sobe com o computador; `croma-servidor/croma/scripts/instalar-servico.sh`) e pelo Tailscale (`https://fedora.tail9af647.ts.net:10000`). Feito também: criar biblioteca por seção e tipo, e temas dos documentários como gêneros.
 - **E2E do desktop verde** (20/11): 224 passaram na rodada inteira; as 4 falhas que sobravam eram os testes (e o `ferramentas/tags_v1.py`) mandando o `Trickplay` de volta ao salvar um item pela API, corrigido e conferido (17 passam em `test_tags` e `test_detalhe_filme`). O visual do Início e a aba Imagem passaram.
 - **S08 podcasts e livros** feitos no servidor (veja S08); **S09 Tailscale** feito. Servidor real publicado com o S08 e religado.
